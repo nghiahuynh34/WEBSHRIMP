@@ -1,0 +1,359 @@
+/* Reset CSS */
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* Global Styles */
+body {
+  color: #374151;
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Navigation Styles */
+.nav__default {
+  width: 100%;
+  padding: 0 40px;
+  min-height: 96px;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+  background-color: #7f14f3;
+}
+
+.nav__logo {
+  height: 48px;
+  max-width: 120px;
+}
+
+.nav__main {
+  order: 0;
+  align-self: auto;
+  align-items: center;
+  display: flex;
+}
+
+.w-dropdown {
+  text-align: left;
+  z-index: 900;
+  margin-left: auto;
+  margin-right: auto;
+  display: inline-block;
+  position: relative;
+}
+
+.nav__text {
+  padding: 20px;
+  color: #ffffff;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+}
+
+.nav__text a {
+  color: #fff;
+  text-decoration: none;
+}
+.nav__text a:hover {
+  text-decoration: underline;
+}
+
+.nav__main__actions {
+  text-align: center;
+  align-self: center;
+  align-items: center;
+  display: flex;
+}
+
+.nav__main__actions a {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav__main__actions:hover a {
+  background-color: rgba(255, 255, 255, 0.4);
+  text-decoration: none;
+}
+
+.rf-button-white {
+  border: 1px solid var(--white);
+  background-color: var(--white);
+  color: #000;
+  text-align: center;
+  border-radius: 4px;
+  padding: 13px 20px;
+  margin-left: 10px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+/*  */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+#wrapper {
+  position: fixed;
+  height: 64px;
+  right: 0;
+  left: 0;
+  top: 0; /* Stick to the top of the container */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow */
+  background-color: #f6f4fe; /* Background color, adjust as needed */
+  color: #374151;
+  z-index: 100;
+}
+#navbarContainer .menu-buttons {
+  width: 100%;
+  height: 28px;
+  display: flex;
+}
+.menu-buttons {
+  margin-left: 40px;
+}
+.navbar .roboflow {
+  position: relative;
+  top: 15px;
+  left: 30px;
+  padding: 6px 6px 6px 12px;
+  width: 106px;
+  height: 28px;
+}
+.navbar-dropdown {
+  margin: 0 0 0 120px;
+}
+.navbar-dropdown a {
+  position: relative;
+  bottom: 12px;
+  line-height: 14px;
+  font-family: sans-serif;
+  font-size: 14px;
+  margin-right: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #374151;
+  border: 1px solid #f1f9fd;
+  border-radius: 5px;
+  margin-left: 20px;
+  transition: transform 0.3s ease;
+}
+
+.navbar-dropdown a:hover {
+  border: 1px none #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  color: #a351fb;
+  background-color: #f2e6fe;
+  transform: scale(1);
+}
+
+.navbar-dropdown .project {
+  color: #a351fb;
+}
+.navbar-dropdown .project:hover {
+  background-color: #f2e6fe;
+}
+
+/* CONTENT */
+#content {
+  background-color: #f1f2f4;
+  display: flex;
+}
+#projectContainer {
+  background-color: #f1f2f4;
+}
+
+#sidebarContainer {
+  width: 15%;
+}
+
+#projectContainer {
+  margin-top: 60px;
+  width: 90%;
+}
+.project-sidebar {
+  background-color: #ffffff;
+}
+#uploadPage .pageHeader .pageTitle {
+  text-align: center;
+}
+#drop-area {
+  width: 70%;
+  height: 350px;
+  border: 2px dashed #ccc;
+  text-align: center;
+  padding: 10px;
+  margin: 20px auto;
+  cursor: pointer;
+  text-align: center;
+  background-color: #ffffff;
+}
+#drop-area,
+#drop-area p,
+.result_title {
+  font-size: 30px;
+  color: #a351fb;
+}
+
+#sidebarContainer {
+  text-align: center;
+  background-color: #ccc;
+}
+#sidebarContainer {
+  background-color: #ffffff;
+}
+.workspaceName {
+  margin-top: 15px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 12px;
+}
+.cover-photo.empty i {
+  --tw-text-opacity: 1;
+  color: rgba(209, 213, 219, var(--tw-text-opacity));
+  font-size: 6rem;
+  line-height: 1;
+  opacity: 0.7;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+}
+.upload_part .upload_button {
+  margin: 20px 0 10px 0;
+  background-color: #ffffff;
+  color: black;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.upload_hint {
+  color: #374151;
+}
+
+.youtubeUpload {
+  margin-top: 30px;
+}
+
+.label {
+  color: red;
+}
+.form_upload_url #textInput {
+  height: 30px;
+  width: 70%;
+  margin-left: 30px;
+}
+.inputWrapper {
+  margin-top: 10px;
+  justify-content: center;
+}
+
+/* RESULT */
+#resultContainer {
+  text-align: center;
+  width: 70%;
+  height: 600px;
+  border: 2px dashed #ccc;
+  text-align: center;
+  padding: 10px;
+  margin: 20px auto;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+.result_title,
+.result_id {
+  margin: 10px 0 20px 0;
+}
+.upload_hint {
+  color: #374151;
+  font-weight: 600;
+  font-size: 14px;
+}
+#video {
+  display: none;
+  width: 100%;
+  max-width: 640px;
+  margin: auto;
+}
+.hidden {
+  display: none;
+}
+/* Styling for the webcam container */
+#webcam-container {
+  position: relative;
+  width: 100%;
+  max-width: 560px; /* Adjust the max-width as needed */
+  margin: auto;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* Styling for the webcam container */
+#webcam-container {
+  position: relative;
+  width: 100%;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 30px;
+}
+
+#webcam {
+  width: 80%; /* Chiếm toàn bộ chiều rộng của webcam-container */
+  height: auto;
+  border-radius: 30px;
+  display: block;
+  margin: 0 auto; /* Đưa webcam vào giữa chiều ngang */
+}
+
+/* Style for the webcam toggle button */
+#webcam_button {
+border-radius: 10px;
+    margin: 10px;
+  padding: 10px 15px;
+  background-color: #4caf50; /* Màu xanh lá cây, bạn có thể thay đổi */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Hover effect for the webcam toggle button */
+#webcam_button:hover {
+  background-color: #45a049; /* Màu xanh lá cây đậm hơn khi di chuột qua */
+}
+
+/* Infor */
+.bottomInfo {
+  margin-top: 50px;
+}
+.user-setting {
+  position: relative;
+}
+#hiddenDiv {
+  position: absolute;
+  display: inline-block;
+  margin-top: 140px;
+  width: 160px;
+  height: 100px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+#hiddenDiv li {
+  list-style: none;
+}
+#hiddenDiv li a {
+  line-height: 50px;
+}
+#hiddenDiv li:hover {
+  background-color: rgba(127, 20, 243, 1);
+}
+#hiddenDiv li:hover a {
+  color: #fff;
+}
+#hiddenDiv li a {
+  border: none;
+  color: #000;
+  list-style: none;
+}

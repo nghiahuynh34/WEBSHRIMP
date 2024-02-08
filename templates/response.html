@@ -1,0 +1,21 @@
+<p><b>{{ msg }}</b></p>
+{% if not is_video %}
+
+<div style=" text-align: center">
+    {% for filename in filenames %}
+
+    <img width="70%" src="/static/yolov8/{{ filename }}" />
+
+    {% endfor %}
+</div>
+{% else %}
+
+<div style=" text-align: center">
+    {% for filename in filenames %}
+ <video width="50%" height="50%" controls >
+        <source src="{{ filename }}" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+    {% endfor %}
+</div>
+    {% endif %}

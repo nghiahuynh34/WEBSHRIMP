@@ -1,0 +1,338 @@
+.navbar #menu-buttons .bg-mobile-dropdown {
+    align-items: center;
+    background-color: transparent;
+    border-style: none;
+    flex-direction: row;
+    gap: 0.25rem;
+    height: auto;
+    left: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    position: relative;
+    top: 0;
+}
+.navbarContainer {
+    position: sticky;
+    background-color: rgb(18, 43, 82);
+    margin-bottom: 30px;
+}
+.sidebarNavigation {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(18, 43, 82);
+    margin-bottom: 30px;
+}
+.logomark {
+    max-width: 50px;
+}
+
+.brand-name {
+    color: aliceblue;
+}
+.nav-link {
+    font-size: 0.75rem !important;
+    color: aliceblue !important;
+}
+.nav-link:hover {
+    border-radius: 0.375rem;
+    background-color: rgb(87, 120, 175);
+}
+.sbm {
+    font-size: 0.75rem;
+    color: rgb(255, 255, 255);
+    padding: 10px;
+    margin: 5px;
+}
+.si:hover {
+    border-radius: 0.375rem;
+    background-color: rgb(87, 120, 175);
+}
+.ca {
+    background-color: rgb(26, 73, 160);
+    padding: 10px;
+    border-radius: 0.375rem;
+}
+.ca:hover {
+    background-color: rgb(66, 96, 152);
+    padding: 10px;
+    border-radius: 0.375rem;
+}
+.title {
+    font-size: 14px;
+    font-family: Inter, sans-serif;
+    font-weight: 700;
+}
+.tl2 {
+    max-width: 24px;
+    text-align: center;
+}
+.tl3 {
+    color: rgb(255, 255, 255);
+}
+.text_bt {
+    font-size: 12px;
+    font-family: Inter, sans-serif;
+    text-align: center;
+}
+.active {
+    border-radius: 0.375rem;
+    background-color: rgb(87, 120, 175);
+}
+/*----------------------SlideNav------------------------*/
+.photo {
+    max-width: 70%;
+
+    max-width: 80%;
+    height: auto;
+    margin: 10px 10%;
+    border-radius: 3px;
+}
+.label {
+    display: inline;
+}
+.icon {
+    float: left;
+}
+.count {
+    float: right;
+}
+/*--------------------------------------------------Header--------------------------------*/
+
+.tool {
+    width: 21%;
+    float: left;
+}
+.train_1 {
+    border: 2px solid rgb(18, 43, 82);
+    border-radius: 5px;
+    margin: 20px 0;
+    box-shadow: 5px 5px 10px 2px rgba(1, 1, 20, 0.4);
+}
+.layout_img {
+    max-width: 100%;
+    text-align: center;
+}
+.img_sample {
+    list-style: none;
+    padding: 0 !important;
+    margin: 5px auto;
+}
+.s_img {
+    width: 20%;
+    display: inline;
+    border: 1px solid rgba(59, 130, 246, 0.5);
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.result {
+    width: 70%;
+}
+
+.train_2 {
+    width: 80%;
+    height: auto;
+    border: 2px dotted rgb(18, 43, 82);
+    margin: 10px auto;
+}
+
+input {
+    margin-top: 1rem;
+}
+
+input::file-selector-button {
+    font-weight: bold;
+    color: rgb(68, 68, 68);
+    padding: 0.5em;
+    border: thin solid grey;
+    border-radius: 3px;
+}
+input[type='submit'] {
+    background-color: rgb(18, 43, 82);
+    border-radius: 3px;
+}
+input[type='submit']:hover {
+    background-color: rgb(66, 96, 152);
+    border-radius: 0.375rem;
+}
+/*---------------------------------Xử lý dữ liệu ảnh-------------------*/
+.bground {
+    max-width: 100%;
+    padding: 0;
+    height: auto;
+}
+.process_img {
+    width: 50%;
+    overflow-y: scroll;
+    height: 650px;
+    background-color: rgb(255, 255, 255);
+    float: left;
+    border: 2px solid rgb(18, 43, 82);
+    box-shadow: 5px 5px 10px 2px rgba(1, 1, 20, 0.4);
+    border-radius: 3px;
+}
+
+#img_prc {
+    max-width: 80%;
+    height: auto;
+    margin: 10px 10%;
+}
+
+#displayedImage {
+    max-width: 80%;
+    height: auto;
+    margin: 10px 10%;
+}
+/*---------------------Input Link-------------------*/
+.input-link {
+    max-width: 80%;
+    height: auto;
+    padding: 2px !important;
+    margin: 10px 1px 10px 3px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    padding: 12px 20px 12px 12px;
+}
+.fa-link {
+    margin-left: 10px;
+}
+.input_file {
+    text-align: center;
+    padding: 4px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin: 7px;
+}
+.input_file:hover {
+    background-color: rgb(111, 111, 111);
+    color: aliceblue;
+    text-align: center;
+    padding: 4px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    margin: 7px;
+}
+.frame_i {
+    width: 100%;
+    height: 25px;
+    text-align: center;
+}
+
+.smI {
+    font-size: 12px;
+    font-family: Inter, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    padding: 2px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+}
+/*---------------------------------Trả về KQ dữ liệu ảnh-------------------*/
+.result {
+    width: 21%;
+
+    float: left;
+}
+.text-xs {
+    margin-bottom: 50px;
+}
+.text-xs {
+    width: 20px;
+    font-size: 12px;
+    line-height: 1rem;
+    display: inline;
+}
+.gap-2 {
+    text-align: center;
+    margin: 10px;
+}
+#confidenceSlider {
+    margin-top: 0;
+}
+/*---------------------CSS FOOTER--------------*/
+.ct-ft {
+    color: #ccc;
+    background-color: rgb(18, 43, 82);
+}
+.container-ft {
+    margin-top: 50px;
+}
+.ftx {
+    padding: 20px;
+    text-align: center;
+}
+.ft-text-center {
+    text-align: center;
+    color: #ccc;
+    padding: 20px;
+    background-color: rgb(12, 29, 56) !important;
+}
+/*---------------------CSS Login--------------*/
+body {
+    height: 100vh;
+    background-color: rgb(18, 43, 82);
+}
+.btn-md {
+    background-color: rgb(18, 43, 82);
+}
+.pt-51 {
+    color: rgb(18, 43, 82);
+}
+.text-info1 {
+    color: rgb(18, 43, 82);
+}
+.btn-info1 {
+    background-color: rgb(18, 43, 82);
+    color: #ccc;
+    padding: 10px;
+    border-radius: 0.375rem;
+}
+
+.btn-info1:hover {
+    background-color: rgb(66, 96, 152);
+    padding: 10px;
+    border-radius: 0.375rem;
+}
+.flash_mess {
+    font-weight: 700;
+    color: crimson;
+
+    margin-top: 10px;
+}
+
+#login .container #login-row #login-column #login-box {
+    margin-top: 120px;
+    max-width: 800px;
+    height: 320px;
+    border: 1px solid #9c9c9c;
+    background-color: #eaeaea;
+}
+#login .container #login-row #login-column #login-box #login-form {
+    padding: 20px;
+}
+#login
+    .container
+    #login-row
+    #login-column
+    #login-box
+    #login-form
+    #register-link {
+    margin-top: -85px;
+}
+.text-right1 {
+    float: right;
+    margin-top: 10px;
+}
+.confix-margin{
+    margin-left:0 !important;
+    margin-right:0 !important;
+}

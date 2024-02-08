@@ -1,0 +1,347 @@
+{% extends "MainBase.html" %} {% block title %} Classification {% endblock %} {%
+block content %}
+        <div class="container-fluid">
+            <div class="row confix-margin">
+                <div class="col-lg-2">
+                    <div class="train_1 sidebarNavigation">
+                        <span class="title tl3"
+                            >&nbsp;&nbsp;&nbsp;&nbsp;UNIVERSE</span
+                        >
+
+                        <nav class="slidebar">
+                            <img
+                                src="/static/images/taylor_red.jpg"
+                                class="photo"
+                                alt="no found" />
+                            <a
+                                href="/hunh-hu-ngha/adminitrative-subdivision"
+                                class="nav-link">
+                                <div class="label">
+                                    <div class="icon">
+                                        <i
+                                            class="fa fa-book"
+                                            aria-hidden="true"></i>
+                                    </div>
+                                    <span class="text"
+                                        >&nbsp;&nbsp;&nbsp;&nbsp;Overview</span
+                                    >
+                                </div>
+                            </a>
+
+                            <a
+                                href="/hunh-hu-ngha/adminitrative-subdivision/browse"
+                                class="nav-link">
+                                <div class="label">
+                                    <div class="icon">
+                                        <i
+                                            class="fa fa-file-image-o"
+                                            aria-hidden="true"></i>
+                                    </div>
+                                    <span class="text"
+                                        >&nbsp;&nbsp;&nbsp;&nbsp;Images</span
+                                    >
+                                </div>
+                                <span class="count">246</span>
+                            </a>
+
+                            <a
+                                href="/hunh-hu-ngha/adminitrative-subdivision/dataset/1"
+                                class="nav-link">
+                                <div class="label">
+                                    <div class="icon">
+                                        <i
+                                            class="fa fa-folder-open-o"
+                                            aria-hidden="true"></i>
+                                    </div>
+                                    <span class="text"
+                                        >&nbsp;&nbsp;&nbsp;&nbsp;Dataset</span
+                                    >
+                                </div>
+                                <span class="count">1</span>
+                            </a>
+
+                            <a
+                                href="/hunh-hu-ngha/adminitrative-subdivision/model/1"
+                                class="nav-link selected">
+                                <div class="label">
+                                    <div class="icon">
+                                        <i
+                                            class="fa fa-rocket"
+                                            aria-hidden="true"></i>
+                                    </div>
+                                    <span class="text"
+                                        >&nbsp;&nbsp;&nbsp;&nbsp;Model</span
+                                    >
+                                </div>
+                            </a>
+
+                            <a
+                                href="/hunh-hu-ngha/adminitrative-subdivision/model/1/documentation"
+                                class="nav-link">
+                                <div class="label">
+                                    <div class="icon">
+                                        <i
+                                            class="fa fa-code"
+                                            aria-hidden="true"></i>
+                                    </div>
+                                    <span class="text"
+                                        >&nbsp;&nbsp;&nbsp;&nbsp;API Docs</span
+                                    >
+                                </div>
+                            </a>
+
+                            <a
+                                href="/hunh-hu-ngha/adminitrative-subdivision/health"
+                                id="health"
+                                class="nav-link animated">
+                                <div class="label">
+                                    <div class="icon">
+                                        <i
+                                            class="fa fa-heartbeat"
+                                            aria-hidden="true"></i>
+                                    </div>
+                                    <span class="text"
+                                        >&nbsp;&nbsp;&nbsp;&nbsp;Health
+                                        Check</span
+                                    >
+                                </div>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+<!--                <div class="col-lg-1"></div>-->
+                <div class="col-lg-2 tool">
+                    <div class="train_1">
+                        <span class="title"
+                            >&nbsp;&nbsp;&nbsp;&nbsp;Webcam</span
+                        >
+
+                        <div class="layout_img">
+                          <button
+          class="upload_button"
+          id="webcam_button"
+          onclick="toggleWebcam()"
+          >
+            <i class="fa-solid fa-video"></i>
+            Webcam
+          </button>
+                        </div>
+                    </div>
+
+                    <div class="train_1">
+                        <span class="title"
+                            >&nbsp;&nbsp;&nbsp;&nbsp;Upload Files</span
+                        >
+                        <div class="train_2" style="text-align: center"
+                              ondragover="dragOverHandler(event)"
+                              ondrop="dropHandler(event)"
+                              id="drop-area"
+                        >
+                            <span class="title tl2">Drop File Here or</span>
+                            <form
+                                id="uploadImage"
+                                method="post"
+                                action="/project"
+                                enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <input
+                                        type="file"
+                                        name="uploadFile[]"
+                                        multiple="true"
+                                        id="uploadFile"
+                                        accept=".jpg, .png, .mp4"
+                                        hidden="True" />
+                                    <label for="uploadFile" class="input_file">
+                                        Choose file
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <input
+                                        type="submit"
+                                        id="uploadSubmit"
+                                        value="Upload"
+                                        class="btn btn-info" />
+                                </div>
+                            </form>
+                            <!-- <div class="frame_i">
+                                <label
+                                    class="input_file"
+                                    id="fileInputLabel"
+                                    for="uploadFileip">
+                                    <i
+                                        style="text-align: center"
+                                        class="fa fa-upload"
+                                        aria-hidden="true"></i>
+                                    <span class="spbt text_bt"
+                                        >Select File</span
+                                    >
+                                </label>
+                            </div>
+                            <button class="smI" for="uploadSubmitip">
+                                Submit
+                            </button>-->
+                        </div>
+                    </div>
+                    <div class="train_1">
+                        <span class="title">
+                            &nbsp;&nbsp;&nbsp;&nbsp;Paste URL</span
+                        >
+                        <div class="train_2">
+                            <form>
+                                <i class="fa fa-link" aria-hidden="true"></i>
+                                <input
+                                    id="imageURL"
+                                    name="imageURL"
+                                    class="input-link"
+                                    type="text"
+                                    placeholder="Paste a link..." />
+                            </form>
+                            <button class="smI" onclick="downloadImage()">
+                                Download and Display
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- ----------------------------------Row 2 ----------------------------------------- -->
+
+                <div class="col-lg-6 process_img">
+                    <div class="progress">
+                        <div
+                            class="progress-bar progress-bar-striped bg-success"
+                            role="progressbar"
+                            aria-valuenow="0"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                        ></div>
+                    </div>
+                    <div id="targetLayer" style="display: none">
+                        <img src="" id="webcam" autoplay style="margin-top: 40px;" />
+                    </div>
+                    <img id="displayedImage" src="{{url_for('static', filename = 'image/logo/logoshrimp.jpg')}}" alt="Downloaded Image" />
+                </div>
+
+                <!-- ----------------------------------Row 3----------------------------------------- -->
+
+                <div class="col-lg-2 result">
+                    <div class="train_1">
+                        <span class="title"
+                            >&nbsp;&nbsp;&nbsp;&nbsp;Confidence Threshold:</span
+                        >
+                        <div class="flex items-center flex-row gap-2">
+                            <p class="font-mono text-xs">0%</p>
+                            <input
+                                type="range"
+                                min="1"
+                                max="99"
+                                value="50"
+                                class="slider"
+                                id="confidenceSlider" />
+                            <p class="font-mono text-xs">100%</p>
+                        </div>
+                    </div>
+                    <div class="train_1" id="inferenceJson" style="height: 550px; overflow: auto">
+                        <!-- <h2 style="font-family: Georgia">Sample</h2> -->
+
+
+                    </div>
+                </div>
+                <div class="col-lg-1"></div>
+            </div>
+        </div>
+
+        <div class="container-ft">
+            <div class="row ct-ft confix-margin">
+                <div class="col-lg-4 ftx ft1">
+                    <h5>ABOUT COMPANY</h5>
+                    <p>
+                        At vero eos et accusamus et iusto odio dignissimos
+                        ducimus qui blanditiis praesentium voluptatum deleniti
+                        atque corrupti. Blanditiis praesentium voluptatum
+                        deleniti atque corrupti quos dolores et quas molestias.
+                    </p>
+                </div>
+                <div class="col-lg-4 ftx ft2"></div>
+                <div class="col-lg-4 ftx ft3"></div>
+            </div>
+            <div class="ft-text-center">
+                © 2024 Copyright:
+                <a class="text-white" href="https://www.instagram.com/tedvkieu/"
+                    >tedvkieu</a
+                >
+            </div>
+            <!-- Copyright -->
+        </div>
+        <script>
+
+ $(document).ready(function () {
+                $('#uploadImage').submit(function (event) {
+                $('#inferenceJson').empty().append("");
+                    if ($('#uploadFile').val()) {
+                        event.preventDefault();
+                        $('#displayedImage').show();
+                        $('#targetLayer').hide();
+                        $(this).ajaxSubmit({
+                            target: '#targetLayer',
+                            beforeSubmit: function () {
+                                $('.progress-bar').width('50%');
+                            },
+                            uploadProgress: function (
+                                event,
+                                position,
+                                total,
+                                percentageComplete
+                            ) {
+                                $('.progress-bar').animate(
+                                    {
+                                        width: percentageComplete + '%',
+                                    },
+                                    {
+                                        duration: 1000,
+                                    }
+                                );
+                            },
+                            success: function (data) {
+                                $('#displayedImage').hide();
+                                $('#targetLayer').show();
+                                $('#targetLayer').append(data.htmlresponse);
+                                var InfoOfResult = data.Info.map((val, index) =>
+    "<pre class='jsonOutput'>" + JSON.stringify({ ["Image"+(index+1)]: val }, null, 2) + "</pre>"
+);
+
+$('#inferenceJson').append(InfoOfResult.join(''));
+                            },
+                            resetForm: true,
+                        });
+                    }
+                    return false;
+                });
+            });
+
+
+function downloadImage() {
+  var imageURL = document.getElementById("imageURL").value;
+    document.getElementById('inferenceJson').innerHTML="";
+  fetch("/download", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ url: imageURL }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        document.getElementById("displayedImage").src = data.file_path;
+       document.getElementById('inferenceJson').innerHTML = `<pre class='jsonOutput'>${JSON.stringify({ "Image1": data.Info }, null, 2)}</pre>`;
+      } else {
+        alert("Error downloading image. Please check the URL.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("An unexpected error occurred.");
+    });
+}
+        </script>
+<!--     <script src="{{url_for('static', filename='js/script.js')}}"></script>-->
+{% endblock %}
