@@ -23,7 +23,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best (3)1686_71.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686.pt")
 
 # Hàm xử lý request
 @app.route("/")
@@ -296,4 +296,4 @@ def color():
 def random_color():
     return tuple(random.randint(0, 255) for _ in range(3))
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=False)
+    app.run( debug=False)
