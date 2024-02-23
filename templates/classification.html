@@ -129,8 +129,7 @@ block content %}
                     </div>
 
                     <div class="train_1">
-                        <span class="title"
-                            >&nbsp;&nbsp;&nbsp;&nbsp;Upload Files</span
+                        <span class="title">&nbsp;&nbsp;&nbsp;&nbsp;Upload Files</span
                         >
                         <div class="train_2" style="text-align: center"
                               ondragover="dragOverHandler(event)"
@@ -274,7 +273,7 @@ block content %}
         <script>
 
  $(document).ready(function () {
-                $('#uploadImage').submit(function (event) {
+                $('#uploadSubmit').submit(function (event) {
                 $('#inferenceJson').empty().append("");
                     if ($('#uploadFile').val()) {
                         event.preventDefault();

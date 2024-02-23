@@ -12,7 +12,6 @@ import cv2
 import random
 import imghdr
 import requests
-import json
 # import magic
 # import string
 
@@ -24,13 +23,8 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best (3)1686_71.pt")
 
-
-# if tf.test.gpu_device_name():
-#     print('GPU found')
-# else:
-#     print("No GPU found. Using CPU.")
 # Hàm xử lý request
 @app.route("/")
 def home_page():
