@@ -68,6 +68,7 @@
     max-width: 24px;
     text-align: center;
 }
+
 .tl3 {
     color: rgb(255, 255, 255);
 }
@@ -134,8 +135,9 @@
 .train_2 {
     width: 80%;
     height: auto;
-    border: 2px dotted rgb(18, 43, 82);
+    border: 2px dashed #ccc;
     margin: 10px auto;
+    padding: 20px 10px;
 }
 
 input {
@@ -187,10 +189,8 @@ input[type='submit']:hover {
 }
 /*---------------------Input Link-------------------*/
 .input-link {
-    max-width: 80%;
+    max-width: 90%;
     height: auto;
-    padding: 2px !important;
-    margin: 10px 1px 10px 3px;
     box-sizing: border-box;
     border: 2px solid #ccc;
     border-radius: 4px;
@@ -199,7 +199,10 @@ input[type='submit']:hover {
     background-position: 10px 10px;
     background-repeat: no-repeat;
     padding: 12px 20px 12px 12px;
+    justify-content: center;
+    align-items: center;
 }
+
 .fa-link {
     margin-left: 10px;
 }
@@ -211,11 +214,11 @@ input[type='submit']:hover {
     margin: 7px;
 }
 .input_file:hover {
-    background-color: rgb(111, 111, 111);
+    background-color: #9290c3;
     color: aliceblue;
     text-align: center;
     padding: 4px;
-    border: 2px solid #ccc;
+    border: 2px solid #9290c3;
     border-radius: 5px;
     margin: 7px;
 }
@@ -224,22 +227,34 @@ input[type='submit']:hover {
     height: 25px;
     text-align: center;
 }
+.form_url {
+    text-align: center; /* Canh giữa các phần tử trong form */
+}
+
+.centered-elements {
+    justify-content: center;
+    align-items: center;
+}
 
 .smI {
+    background-color: #535c91;
+    color: aliceblue;
     font-size: 12px;
     font-family: Inter, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px auto;
-    padding: 2px;
-    border: 2px solid #ccc;
+    margin: 10px auto;
+    padding: 10px;
+    border: 0;
     border-radius: 5px;
+}
+.smI:hover {
+    background-color: #9290c3;
 }
 /*---------------------------------Trả về KQ dữ liệu ảnh-------------------*/
 .result {
     width: 21%;
-
     float: left;
 }
 .text-xs {
@@ -296,6 +311,14 @@ body {
     padding: 10px;
     border-radius: 0.375rem;
 }
+#uploadSubmit {
+    background-color: #535c91;
+    border-radius: 0.375rem;
+}
+#uploadSubmit:hover {
+    background-color: #9290c3;
+    border-radius: 0.375rem;
+}
 
 .btn-info1:hover {
     background-color: rgb(66, 96, 152);
@@ -332,7 +355,7 @@ body {
     float: right;
     margin-top: 10px;
 }
-.confix-margin{
-    margin-left:0 !important;
-    margin-right:0 !important;
+.confix-margin {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }

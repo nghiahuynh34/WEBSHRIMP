@@ -25,7 +25,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1660_15.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1614_100.pt")
 
 
 # if tf.test.gpu_device_name():
