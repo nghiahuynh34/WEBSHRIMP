@@ -139,14 +139,7 @@ block content %}
                                 accept=".jpg, .png, .mp4"
                                 hidden="True" />
                             <label for="uploadFile" class="input_file">
-                                <i
-                                    style="
-                                        font-weight: 500;
-                                        padding: 0 20px;
-                                        border-radius: 5px;
-                                    "
-                                    class="fa fa-cloud-upload"
-                                    aria-hidden="true"></i>
+                                Choose file
                             </label>
                         </div>
                         <div class="form-group">
@@ -157,24 +150,36 @@ block content %}
                                 class="btn btn-info" />
                         </div>
                     </form>
+                    <!-- <div class="frame_i">
+                                <label
+                                    class="input_file"
+                                    id="fileInputLabel"
+                                    for="uploadFileip">
+                                    <i
+                                        style="text-align: center"
+                                        class="fa fa-upload"
+                                        aria-hidden="true"></i>
+                                    <span class="spbt text_bt"
+                                        >Select File</span
+                                    >
+                                </label>
+                            </div>
+                            <button class="smI" for="uploadSubmitip">
+                                Submit
+                            </button>-->
                 </div>
             </div>
             <div class="train_1">
                 <span class="title"> &nbsp;&nbsp;&nbsp;&nbsp;Paste URL</span>
                 <div class="train_2">
-                    <form class="form_url">
-                        <div class="centered-elements">
-                            <i
-                                style="align-items: center"
-                                class="fa fa-link"
-                                aria-hidden="true"></i>
-                            <input
-                                id="imageURL"
-                                name="imageURL"
-                                class="input-link"
-                                type="text"
-                                placeholder="Paste a link..." />
-                        </div>
+                    <form>
+                        <i class="fa fa-link" aria-hidden="true"></i>
+                        <input
+                            id="imageURL"
+                            name="imageURL"
+                            class="input-link"
+                            type="text"
+                            placeholder="Paste a link..." />
                     </form>
                     <button class="smI" onclick="downloadImage()">
                         Download and Display
@@ -182,77 +187,6 @@ block content %}
                 </div>
             </div>
         </div>
-
-        <!--               Cho Mobile -->
-        <div class="container tool-mb train_2">
-            <div class="row up_normal">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
-                    <form
-                        id="uploadImage"
-                        method="post"
-                        action="/project"
-                        enctype="multipart/form-data">
-                        <div class="form-group">
-                            <input
-                                type="file"
-                                name="uploadFile[]"
-                                multiple="true"
-                                id="uploadFile"
-                                accept=".jpg, .png, .mp4"
-                                hidden="True" />
-                            <label for="uploadFile" class="input_file">
-                                <i
-                                    style="
-                                        font-weight: 300;
-                                        padding: 0 10px;
-                                        border-radius: 5px;
-                                    "
-                                    class="fa fa-cloud-upload"
-                                    aria-hidden="true"></i>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <input
-                                type="submit"
-                                id="uploadSubmit"
-                                value="Upload"
-                                class="btn btn-info" />
-                        </div>
-                    </form>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-6 wbc">
-                    <button
-                        class="upload_button"
-                        id="webcam_button"
-                        onclick="toggleWebcam()">
-                        <i class="fa-solid fa-video"></i>
-                        Webcam
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-10">
-                    <form class="form_url">
-                        <div class="centered-elements">
-                            <i
-                                style="align-items: center"
-                                class="fa fa-link"
-                                aria-hidden="true"></i>
-                            <input
-                                id="imageURL"
-                                name="imageURL"
-                                class="input-link"
-                                type="text"
-                                placeholder="Paste a link..." />
-                        </div>
-                    </form>
-                </div>
-                <div class="col-2 smI_button">
-                    <button class="smI" onclick="downloadImage()">UP</button>
-                </div>
-            </div>
-        </div>
-
         <!-- ----------------------------------Row 2 ----------------------------------------- -->
 
         <div

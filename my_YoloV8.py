@@ -39,7 +39,7 @@ class YOLOv8_ObjectDetector:
     """
 
     def __init__(self, model_file='yolov8n.pt',
-                 labels=None, classes=None,conf=0.5, iou=0.55):
+                 labels=None, classes=None,conf=0.55, iou=0.55):
 
         self.classes = classes
         self.conf = conf

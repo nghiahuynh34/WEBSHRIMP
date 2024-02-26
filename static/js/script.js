@@ -67,7 +67,7 @@ document.getElementById('targetLayer').style.display="block";
   if(isWebcamVisible){
  $("#webcam").attr("src","")
   }else{
-  $("#webcam").attr("src","/video_feed",)
+  $("#webcam").attr("src","/video_feed")
   }
   // Sử dụng jQuery để thay đổi thuộc tính display của video từ webcam
   $("#webcam").toggle();
