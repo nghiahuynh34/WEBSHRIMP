@@ -4,7 +4,6 @@ from urllib.parse import urlparse
 from flask import Flask, render_template, request, redirect, jsonify, Response
 from flask_cors import CORS
 import os
-import tensorflow as tf
 from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 
@@ -13,7 +12,6 @@ import cv2
 import random
 import imghdr
 import requests
-import json
 # import magic
 # import string
 
@@ -25,13 +23,9 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1614_100.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1660_15.pt")
 
 
-# if tf.test.gpu_device_name():
-#     print('GPU found')
-# else:
-#     print("No GPU found. Using CPU.")
 # Hàm xử lý request
 @app.route("/")
 def home_page():
@@ -43,10 +37,6 @@ def classification():
 @app.route("/video_feed")
 def video_feed():
     return Response(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
-
-@app.route('/webcam')
-def webcam():
-    return render_template('webcam.html')
 
 @app.route('/classify', methods=['POST'])
 def upload_file():
@@ -97,7 +87,6 @@ def upload_file():
                 results_pre.clear()
             results_pre.extend(results_pre_temp)
             results_pre_temp.clear()
-        print(results_pre)
         return jsonify({'htmlresponse': render_template('response.html',is_video=is_video, msg=msg, filenames=file_names),
                         "Info":results_pre,
                         'success': True,})
@@ -194,10 +183,60 @@ def download():
         return jsonify({'success': False, 'error': f"An error occurred: {str(e)}"})
 # Function to generate video frames
 #
+# def generate():
+#     cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+#     # path = os.path.join()
+#     shrimp_detection_model = YOLO("best1631_100.pt")
+#     while True:
+#         ret, frame = cap.read()
+#
+#         if ret:
+#             detections = shrimp_detection_model(frame, stream=True)
+#             class_names = shrimp_detection_model.names
+#
+#             for detection in detections:
+#                 boxes = detection.boxes
+#
+#                 for box in boxes:
+#                     x1, y1, x2, y2 = box.xyxy[0]
+#                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+#
+#
+#
+#                     # Draw rectangle on frame
+#                     rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
+#
+#                     class_index = int(box.cls)
+#                     label = class_names[class_index]
+#
+#                     # Add label to the rectangle
+#                     cv2.putText(
+#                         frame,
+#                         label,
+#                         (x1, y1),
+#                         cv2.FONT_HERSHEY_COMPLEX,
+#                         0.4,
+#                         (0, 0, 255),
+#                         1,
+#                         cv2.LINE_AA,
+#                     )
+#                     (flag, encodedImage) = cv2.imencode(".jpg", frame)
+#                     if not flag:
+#                         continue
+#                     yield (
+#                         b"--frame\r\n"
+#                         b"Content-Type: image/jpeg\r\n\r\n"
+#                         + bytearray(encodedImage)
+#                         + b"\r\n"
+#                     )
+#     cap.release()
 def generate():
-    cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
-    # path = os.path.join()
-    shrimp_detection_model = YOLO("best1631_100.pt")
+    video_path = "425829183_1136951220663492_7818978619242109427_n.jpg"
+    cap = cv2.VideoCapture(video_path)
+
+    shrimp_detection_model = YOLO("best1686.pt")
+
+
     while True:
         ret, frame = cap.read()
 
@@ -211,8 +250,6 @@ def generate():
                 for box in boxes:
                     x1, y1, x2, y2 = box.xyxy[0]
                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-
-
 
                     # Draw rectangle on frame
                     rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
@@ -241,75 +278,6 @@ def generate():
                         + b"\r\n"
                     )
     cap.release()
-# def generate():
-#     video_path = "GA67XBluaYotwT4DAA_3CBFm4wlRbmdjAAAF.mp4"
-#     cap = cv2.VideoCapture(video_path)
-#
-#     # Load YOLO model using TensorFlow
-#     yolo_model = tf.keras.models.load_model("best1614_100_2.pt")
-#
-#     while True:
-#         ret, frame = cap.read()
-#
-#         if not ret:
-#             break
-#
-#         # Preprocess frame for YOLO model
-#         input_image = cv2.resize(frame, (416, 416))  # Adjust size according to your YOLO model input size
-#         input_image = input_image / 255.0
-#         input_image = tf.expand_dims(input_image, 0)
-#
-#         # Perform inference using YOLO TensorFlow model
-#         detections = yolo_model.predict(input_image)
-#         class_names = yolo_model.names
-#         # Process and draw bounding boxes as before
-#         # ...
-#         for detection in detections:
-#             boxes = detection.boxes
-#             for box in boxes:
-#                 x1, y1, x2, y2 = box.xyxy[0]
-#                 x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-#
-#                 # Draw rectangle on frame
-#                 rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
-#
-#                 class_index = int(box.cls)
-#                 label = class_names[class_index]
-#
-#                 # Add label to the rectangle
-#                 cv2.putText(
-#                     frame,
-#                     label,
-#                     (x1, y1),
-#                     cv2.FONT_HERSHEY_COMPLEX,
-#                     0.4,
-#                     (0, 0, 255),
-#                     1,
-#                     cv2.LINE_AA,
-#                 )
-#                 (flag, encodedImage) = cv2.imencode(".jpg", frame)
-#                 if not flag:
-#                     continue
-#                 yield (
-#                         b"--frame\r\n"
-#                         b"Content-Type: image/jpeg\r\n\r\n"
-#                         + bytearray(encodedImage)
-#                         + b"\r\n"
-#                 )
-#
-#         # Encoding frame to JPEG format
-#         (flag, encodedImage) = cv2.imencode(".jpg", frame)
-#         if not flag:
-#             continue
-#
-#         yield (
-#             b"--frame\r\n"
-#             b"Content-Type: image/jpeg\r\n\r\n"
-#             + bytearray(encodedImage)
-#             + b"\r\n"
-#         )
-#
-#     cap.release()
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -329,4 +297,4 @@ def color():
 def random_color():
     return tuple(random.randint(0, 255) for _ in range(3))
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=False)
+    app.run( debug=False)
