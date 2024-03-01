@@ -10,7 +10,9 @@ body {
     font-size: 16px;
     line-height: 1.6;
 }
-
+.spaceX {
+    margin-top: 10%;
+}
 /* Navigation Styles */
 .nav__default {
     width: 100%;
@@ -94,8 +96,11 @@ body {
     background-attachment: scroll, scroll;
     grid-template-rows: auto;
     display: block;
+    padding: 0 !important;
 }
-
+.pt {
+    display: none;
+}
 .home-hero-section {
     background-repeat: no-repeat, no-repeat;
     background-size: 100%, cover;
@@ -210,4 +215,44 @@ body {
     height: auto;
     margin-top: 20px;
     padding: 0px 50px;
+}
+/*-----------------------Login Form-------------------------------------------*/
+.form-outline .form-control {
+    min-height: auto;
+    padding-top: 0.32rem;
+    padding-bottom: 0.32rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    border: 0;
+    background: rgba(0, 0, 0, 0);
+    transition: all 0.2s linear;
+}
+.form-outline .form-control ~ .form-label {
+    position: absolute;
+    top: 0;
+    max-width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    left: 0.75rem;
+    padding-top: 0.37rem;
+    pointer-events: none;
+    transform-origin: 0 0;
+    transition: all 0.2s ease-out;
+    color: var(--mdb-form-control-label-color);
+    margin-bottom: 0;
+}
+.form-outline {
+    position: relative;
+    width: 100%;
+}
+.btn-block {
+    --mdb-btn-margin-top: 0.5rem;
+    display: block;
+    width: 100%;
+}
+INPUT:not(:-webkit-autofill),
+SELECT:not(:-webkit-autofill),
+TEXTAREA:not(:-webkit-autofill) {
+    animation-name: onautofillcancel;
 }

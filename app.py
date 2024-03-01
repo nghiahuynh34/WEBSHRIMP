@@ -1,13 +1,14 @@
 from io import BytesIO
 from urllib.parse import urlparse
 
-from flask import Flask, render_template, request, redirect, jsonify, Response
+from flask import Flask, render_template, request, redirect, jsonify, Response, url_for, session,abort
 from flask_cors import CORS
 import os
 from ultralytics import YOLO
 from werkzeug.utils import secure_filename
-
+from authlib.integrations.flask_client import OAuth
 import my_YoloV8
+import json
 import cv2
 import random
 import imghdr
@@ -23,13 +24,67 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1660_100.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1674_100.pt")
 
 
-# Hàm xử lý request
+appConf = {
+    "OAUTH2_CLIENT_ID": "791126823139-piql3f0tr6ig8l0afd2guaro6td57tal.apps.googleusercontent.com",
+    "OAUTH2_CLIENT_SECRET": "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",
+    "OAUTH2_META_URL": "https://accounts.google.com/.well-known/openid-configuration",
+    "FLASK_SECRET": "432dc545-07c7-4470-aba0-818d7a9cf3db",
+    "FLASK_PORT": 5000
+}
+
+app.secret_key = appConf.get("FLASK_SECRET")
+
+oauth = OAuth(app)
+# list of google scopes - https://developers.google.com/identity/protocols/oauth2/scopes
+oauth.register(
+    "myApp",
+    client_id=appConf.get("OAUTH2_CLIENT_ID"),
+    client_secret=appConf.get("OAUTH2_CLIENT_SECRET"),
+    client_kwargs={
+        "scope": "openid profile email https://www.googleapis.com/auth/user.birthday.read https://www.googleapis.com/auth/user.gender.read",
+        # 'code_challenge_method': 'S256'  # enable PKCE
+    },
+    server_metadata_url=f'{appConf.get("OAUTH2_META_URL")}',
+)
+
+
 @app.route("/")
-def home_page():
-    return render_template('home.html')
+def home():
+    return render_template("home.html", session=session.get("user"),
+                           pretty=json.dumps(session.get("user"), indent=4))
+
+
+@app.route("/signin-google")
+def googleCallback():
+    # fetch access token and id token using authorization code
+    token = oauth.myApp.authorize_access_token()
+
+
+    personDataUrl = "https://people.googleapis.com/v1/people/me?personFields=genders,birthdays"
+    personData = requests.get(personDataUrl, headers={
+        "Authorization": f"Bearer {token['access_token']}"
+    }).json()
+    token["personData"] = personData
+    # set complete user information in the session
+    session["user"] = token
+    return redirect(url_for("home"))
+
+
+@app.route("/google-login")
+def googleLogin():
+    if "user" in session:
+        abort(404)
+    return oauth.myApp.authorize_redirect(redirect_uri=url_for("googleCallback", _external=True))
+
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect(url_for("home"))
+
 
 @app.route("/classification")
 def classification():
@@ -183,60 +238,10 @@ def download():
         return jsonify({'success': False, 'error': f"An error occurred: {str(e)}"})
 # Function to generate video frames
 #
-# def generate():
-#     cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
-#     # path = os.path.join()
-#     shrimp_detection_model = YOLO("best1631_100.pt")
-#     while True:
-#         ret, frame = cap.read()
-#
-#         if ret:
-#             detections = shrimp_detection_model(frame, stream=True)
-#             class_names = shrimp_detection_model.names
-#
-#             for detection in detections:
-#                 boxes = detection.boxes
-#
-#                 for box in boxes:
-#                     x1, y1, x2, y2 = box.xyxy[0]
-#                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-#
-#
-#
-#                     # Draw rectangle on frame
-#                     rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
-#
-#                     class_index = int(box.cls)
-#                     label = class_names[class_index]
-#
-#                     # Add label to the rectangle
-#                     cv2.putText(
-#                         frame,
-#                         label,
-#                         (x1, y1),
-#                         cv2.FONT_HERSHEY_COMPLEX,
-#                         0.4,
-#                         (0, 0, 255),
-#                         1,
-#                         cv2.LINE_AA,
-#                     )
-#                     (flag, encodedImage) = cv2.imencode(".jpg", frame)
-#                     if not flag:
-#                         continue
-#                     yield (
-#                         b"--frame\r\n"
-#                         b"Content-Type: image/jpeg\r\n\r\n"
-#                         + bytearray(encodedImage)
-#                         + b"\r\n"
-#                     )
-#     cap.release()
 def generate():
-    video_path = "425829183_1136951220663492_7818978619242109427_n.jpg"
-    cap = cv2.VideoCapture(video_path)
-
-    shrimp_detection_model = YOLO("best1686.pt")
-
-
+    cap = cv2.VideoCapture(0,cv2.CAP_DSHOW)
+    # path = os.path.join()
+    shrimp_detection_model = YOLO("best1631_100.pt")
     while True:
         ret, frame = cap.read()
 
@@ -250,6 +255,8 @@ def generate():
                 for box in boxes:
                     x1, y1, x2, y2 = box.xyxy[0]
                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+
+
 
                     # Draw rectangle on frame
                     rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
@@ -278,6 +285,55 @@ def generate():
                         + b"\r\n"
                     )
     cap.release()
+    
+# def generate():
+#     video_path = "static/video/video3.mp4"
+#     cap = cv2.VideoCapture(video_path)
+
+#     shrimp_detection_model = YOLO("best1686.pt")
+
+
+#     while True:
+#         ret, frame = cap.read()
+
+#         if ret:
+#             detections = shrimp_detection_model(frame, stream=True)
+#             class_names = shrimp_detection_model.names
+
+#             for detection in detections:
+#                 boxes = detection.boxes
+
+#                 for box in boxes:
+#                     x1, y1, x2, y2 = box.xyxy[0]
+#                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+
+#                     # Draw rectangle on frame
+#                     rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
+
+#                     class_index = int(box.cls)
+#                     label = class_names[class_index]
+
+#                     # Add label to the rectangle
+#                     cv2.putText(
+#                         frame,
+#                         label,
+#                         (x1, y1),
+#                         cv2.FONT_HERSHEY_COMPLEX,
+#                         0.4,
+#                         (0, 0, 255),
+#                         1,
+#                         cv2.LINE_AA,
+#                     )
+#                     (flag, encodedImage) = cv2.imencode(".jpg", frame)
+#                     if not flag:
+#                         continue
+#                     yield (
+#                         b"--frame\r\n"
+#                         b"Content-Type: image/jpeg\r\n\r\n"
+#                         + bytearray(encodedImage)
+#                         + b"\r\n"
+#                     )
+#     cap.release()
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -297,4 +353,5 @@ def color():
 def random_color():
     return tuple(random.randint(0, 255) for _ in range(3))
 if __name__ == '__main__':
-    app.run( debug=False)
+    app.run(host="0.0.0.0", port=appConf.get(
+        "FLASK_PORT"), debug=True)
