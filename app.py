@@ -1,6 +1,8 @@
 from io import BytesIO
 from urllib.parse import urlparse
 
+# import tensorflow as tf
+# import torch
 from flask import Flask, render_template, request, redirect, jsonify, Response
 from flask_cors import CORS
 import os
@@ -12,8 +14,6 @@ import cv2
 import random
 import imghdr
 import requests
-# import magic
-# import string
 
 # from random import random
 # Khởi tạo Flask Server Backend
@@ -23,6 +23,15 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
+# device = "cpu"
+# physical_devices = tf.config.list_physical_devices('GPU')
+# print("Num GPUs:", physical_devices)
+# if(physical_devices):
+#     device = 'cuda:0'
+#     print("ok")
+# if(torch.cuda.is_available()):
+#     device = 'cuda:0'
+#     print(torch.cuda.get_device_name(0))
 model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686.pt")
 
 # Hàm xử lý request
@@ -230,12 +239,12 @@ def download():
 #                     )
 #     cap.release()
 def generate():
-    video_path = "425829183_1136951220663492_7818978619242109427_n.jpg"
+
+    video_path = "GA67XBluaYotwT4DAA_3CBFm4wlRbmdjAAAF.mp4"
     cap = cv2.VideoCapture(video_path)
 
     shrimp_detection_model = YOLO("best1686.pt")
-
-
+    # model.predict_videoStream(video_path)
     while True:
         ret, frame = cap.read()
 
@@ -262,8 +271,8 @@ def generate():
                         label,
                         (x1, y1),
                         cv2.FONT_HERSHEY_COMPLEX,
-                        0.4,
-                        (0, 0, 255),
+                        0.5,
+                        (0, 255, 255),
                         1,
                         cv2.LINE_AA,
                     )
