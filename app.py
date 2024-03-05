@@ -23,7 +23,6 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
-<<<<<<< HEAD
 # device = "cpu"
 # physical_devices = tf.config.list_physical_devices('GPU')
 # print("Num GPUs:", physical_devices)
