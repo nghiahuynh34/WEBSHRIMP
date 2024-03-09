@@ -359,3 +359,76 @@ body {
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
+
+#img_user_log {
+    width: 40px;
+
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border: 2px outset #ffffff;
+}
+/*----------------USER---------------*/
+.name_user_log {
+    color: #ffffff;
+    font-size: 10px !important;
+    font-weight: 600;
+    text-align: center;
+    font-family: sans-serif;
+    margin: 10px 0;
+}
+.user-box {
+    background-color: #535c91;
+    width: 11%;
+    position: relative;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 10px;
+
+    border: 2px dashed #000000;
+}
+
+.user-box img {
+    width: 40px;
+    float: left;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border: 2px outset #ffffff;
+    cursor: pointer;
+}
+
+.user-box .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    border-radius: 10px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    animation: jumpDown 1s forwards;
+}
+
+.user-box .dropdown-content a {
+    display: block;
+    padding: 10px 40px;
+    text-decoration: none;
+    color: #333;
+}
+
+.user-box .dropdown-content a:hover {
+    background-color: #c4c3c3;
+    border-radius: 10px;
+}
+
+@keyframes jumpDown {
+    0% {
+        transform: translateY(0); /* Trạng thái ban đầu, không di chuyển */
+    }
+    50% {
+        transform: translateY(12px); /* Di chuyển xuống 200px */
+    }
+    100% {
+        transform: translateY(12px); /* Dừng lại ở vị trí xuống 200px */
+    }
+}

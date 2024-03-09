@@ -82,18 +82,12 @@ def home():
             CS.execute(f"""SELECT * FROM user where email='{session["user"]["userinfo"]["email"]}'""")
             Executed_DATA = CS.fetchall()
             print(Executed_DATA)
-
-            # # CS.execute('''CREATE TABLE TABLE_NAME (id INTEGER, name VARCHAR(20))''')
-            #
-            # CS.execute('''INSERT INTO user VALUES ('jjfjf', 'jdjdj','jdjdj')''')
-            # # CS.execute('''INSERT INTO TABLE_NAME VALUES (2, 'Arthor')''')
-            # mysql.connection.commit()
-            # return 'Executed successfully'
             return render_template("home.html", session=Executed_DATA,
                                    pretty="")
     else:
         return render_template("home.html", session="",
                                pretty="")
+    # return render_template("home.html")
 
 
 @app.route("/signin-google")
@@ -118,6 +112,9 @@ def googleLogin():
         abort(404)
     return oauth.myApp.authorize_redirect(redirect_uri=url_for("googleCallback", _external=True))
 
+@app.route("/register")
+def register():
+    return render_template('register.html')
 
 @app.route("/logout")
 def logout():
