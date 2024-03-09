@@ -67,7 +67,7 @@ oauth.register(
 
 @app.route("/")
 def home():
-    print()
+    print("ok",session)
     if (session):
         CS = mysql.connection.cursor()
         CS.execute(f"""SELECT * FROM user where email='{session["user"]["userinfo"]["email"]}'""")
@@ -93,6 +93,7 @@ def home():
 @app.route("/signin-google")
 def googleCallback():
     # fetch access token and id token using authorization code
+    print("ok")
     token = oauth.myApp.authorize_access_token()
     personDataUrl = "https://people.googleapis.com/v1/people/me?personFields=genders,birthdays"
     personData = requests.get(personDataUrl, headers={
@@ -341,7 +342,7 @@ def generate():
             class_names = model.names
 
             for detection in detections:
-                boxes = detection.boxes
+                boxes = detection.bogitgxes
 
                 for box in boxes:
                     x1, y1, x2, y2 = box.xyxy[0]
