@@ -7,10 +7,20 @@ block content %}
                 <span class="title tl3">&nbsp;&nbsp;&nbsp;&nbsp;UNIVERSE</span>
 
                 <nav class="slidebar">
-                    <img
+                    <!-- <img
                         src="/static/image/taylor_red.jpg"
                         class="photo"
-                        alt="no found" />
+                        alt="no found" /> -->
+                    <div class="user_info">
+                        <img
+                            class="img_user"
+                            src="{{ session['user']['userinfo']['picture'] }}"
+                            alt="User Image" />
+                        <p class="user_n">
+                            {{ session['user']['userinfo']['name'] }}
+                        </p>
+                    </div>
+
                     <a
                         href="/hunh-hu-ngha/adminitrative-subdivision"
                         class="nav-link">

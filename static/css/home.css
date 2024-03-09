@@ -211,3 +211,174 @@ body {
     margin-top: 20px;
     padding: 0px 50px;
 }
+/*-----------------------------Login Form---------------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+* {
+    /* margin: 0;
+    padding: 0; */
+    font-family: 'poppins', sans-serif;
+}
+
+/* body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    margin: 0; 
+} */
+
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+
+    background-color: #0c2d57;
+    background-position: center;
+    background-size: cover;
+}
+.n1 {
+    padding-top: 10%;
+    text-align: center;
+}
+.form-box {
+    position: relative;
+    width: 400px;
+    height: auto;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+h2 {
+    font-size: 2em;
+    color: #fff;
+    text-align: center;
+}
+.inputbox {
+    position: relative;
+    margin: 30px 0;
+    width: 310px;
+    border-bottom: 2px solid #fff;
+}
+.inputbox label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 1em;
+    pointer-events: none;
+    transition: 0.5s;
+}
+input:focus ~ label,
+input:valid ~ label {
+    top: -5px;
+}
+.inputbox input {
+    width: 100%;
+    height: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    padding: 0 35px 0 5px;
+    color: #fff;
+}
+.inputbox ion-icon {
+    position: absolute;
+    right: 8px;
+    color: #fff;
+    font-size: 1.2em;
+    top: 20px;
+}
+.forget {
+    margin: -15px 0 15px;
+    font-size: 0.9em;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.forget label input {
+    margin-right: 3px;
+}
+.forget label a {
+    color: #fff;
+    text-decoration: none;
+}
+.forget label a:hover {
+    text-decoration: underline;
+}
+button {
+    width: 100%;
+    height: 40px;
+    border-radius: 40px;
+    background: #fff;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    color: #0c2d57;
+}
+.register {
+    font-size: 0.9em;
+    color: #fff;
+    text-align: center;
+    margin: 5px 0 10px;
+}
+.register p a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+}
+.register p a:hover {
+    text-decoration: underline;
+}
+
+.icexit {
+    color: #0c2d57;
+    font-size: 23px;
+    text-align: right;
+    background-color: #fff;
+    border-radius: 50%;
+    /* margin: 5px; */
+    margin-top: 10px;
+}
+.n5 {
+    margin-bottom: 15px;
+}
+
+.icgg {
+    color: #0c2d57;
+    font-size: 30px;
+    border-radius: 50%;
+    margin-top: 5px;
+    text-align: center;
+    margin-right: 10px;
+}
+.n6 {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+.or {
+    display: flex;
+    align-items: center; /* Canh chỉnh các phần tử theo chiều dọc */
+    color: #fff;
+}
+
+.or hr {
+    flex: 1; /* Phần tử <hr> sẽ mở rộng để chiếm hết không gian còn lại */
+    border-color: #fff; /* Đổi màu viền của <hr> nếu cần */
+}
+
+.or p {
+    margin: 0 5px;
+}

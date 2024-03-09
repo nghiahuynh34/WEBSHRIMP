@@ -129,100 +129,63 @@
         <!--  -->
         <div id="footer"></div>
         {% else %}
-        <div class="container">
-            <div class="row spaceX">
-                <div class="col-lg-3"></div>
-                <div class="col-lg-6">
-                    <form>
-                        <!-- Email input -->
-                        <div class="form-outline mb-4">
-                            <input
-                                type="email"
-                                id="form2Example1"
-                                class="form-control" />
-                            <label class="form-label" for="form2Example1"
-                                >Email address</label
-                            >
-                        </div>
-
-                        <!-- Password input -->
-                        <div class="form-outline mb-4">
-                            <input
-                                type="password"
-                                id="form2Example2"
-                                class="form-control" />
-                            <label class="form-label" for="form2Example2"
-                                >Password</label
-                            >
-                        </div>
-
-                        <!-- 2 column grid layout for inline styling -->
-                        <div class="row mb-4">
-                            <div class="col d-flex justify-content-center">
-                                <!-- Checkbox -->
-                                <div class="form-check">
-                                    <input
-                                        class="form-check-input"
-                                        type="checkbox"
-                                        value=""
-                                        id="form2Example31"
-                                        checked />
-                                    <label
-                                        class="form-check-label"
-                                        for="form2Example31">
-                                        Remember me
-                                    </label>
-                                </div>
+        <section>
+            <div class="container n1">
+                <div class="form-box">
+                    <div class="form-value">
+                        <form action="">
+                            <h2 style="color: white; margin-top: 10px">
+                                Login
+                            </h2>
+                            <div class="inputbox">
+                                <ion-icon name="mail-outline"></ion-icon>
+                                <input type="email" />
+                                <label for="">Email</label>
                             </div>
-
-                            <div class="col">
-                                <!-- Simple link -->
-                                <a href="#!">Forgot password?</a>
+                            <div class="inputbox">
+                                <ion-icon name="lock-closed-outline"></ion-icon>
+                                <input type="password" />
+                                <label for="">Password</label>
                             </div>
-                        </div>
-
-                        <!-- Submit button -->
-                        <button
-                            type="button"
-                            class="btn btn-primary btn-block mb-4">
-                            Sign in
-                        </button>
-
-                        <!-- Register buttons -->
-                        <div class="text-center">
-                            <p>Not a member? <a href="#!">Register</a></p>
-                            <p>or sign up with:</p>
-                            <button
-                                type="button"
-                                class="btn btn-link btn-floating mx-1">
-                                <i class="fab fa-facebook-f"></i>
-                            </button>
-
-                            <button
-                                type="button"
-                                class="btn btn-link btn-floating mx-1">
-                                <a href="{{url_for('googleLogin')}}"
-                                    ><i class="fab fa-google"></i
-                                ></a>
-                            </button>
-
-                            <button
-                                type="button"
-                                class="btn btn-link btn-floating mx-1">
-                                <i class="fab fa-twitter"></i>
-                            </button>
-
-                            <button
-                                type="button"
-                                class="btn btn-link btn-floating mx-1">
-                                <i class="fab fa-github"></i>
-                            </button>
-                        </div>
-                    </form>
+                            <div class="forget">
+                                <label for=""
+                                    ><input type="checkbox" />Remember Me
+                                    <a href="#">Forget Password</a></label
+                                >
+                            </div>
+                            <button>Log in</button>
+                            <div class="or">
+                                <hr class="my-2.5" />
+                                <p>or</p>
+                                <hr class="my-2.5" />
+                            </div>
+                            <div class="n5">
+                                <a href="{{url_for('googleLogin')}}">
+                                    <button class="n6">
+                                        <ion-icon
+                                            class="icgg"
+                                            name="logo-google"></ion-icon>
+                                        <span
+                                            style="
+                                                margin-top: 5px;
+                                                color: #0c2d57;
+                                            "
+                                            >Continue with Google</span
+                                        >
+                                    </button>
+                                </a>
+                            </div>
+                            <div class="register">
+                                <p>
+                                    Don't have a account
+                                    <a href="/register">Register</a>
+                                </p>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <div class="col-lg-3"></div>
             </div>
-        </div>
+        </section>
 
         {% endif %}
     </body>
