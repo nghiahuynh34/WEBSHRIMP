@@ -100,7 +100,6 @@ def home():
 def googleCallback():
     # fetch access token and id token using authorization code
     token = oauth.myApp.authorize_access_token()
-
     personDataUrl = "https://people.googleapis.com/v1/people/me?personFields=genders,birthdays"
     personData = requests.get(personDataUrl, headers={
         "Authorization": f"Bearer {token['access_token']}"
@@ -283,16 +282,66 @@ def download():
 
 # Function to generate video frames
 #
+# def generate():
+#     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+#     # path = os.path.join()
+#     shrimp_detection_model = YOLO("best1686.pt")
+#     while True:
+#         ret, frame = cap.read()
+#
+#         if ret:
+#             detections = shrimp_detection_model(frame, stream=True)
+#             class_names = shrimp_detection_model.names
+#
+#             for detection in detections:
+#                 boxes = detection.boxes
+#
+#                 for box in boxes:
+#                     x1, y1, x2, y2 = box.xyxy[0]
+#                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+#
+#                     # Draw rectangle on frame
+#                     rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
+#
+#                     class_index = int(box.cls)
+#                     label = class_names[class_index]
+#
+#                     # Add label to the rectangle
+#                     cv2.putText(
+#                         frame,
+#                         label,
+#                         (x1, y1),
+#                         cv2.FONT_HERSHEY_COMPLEX,
+#                         0.4,
+#                         (0, 0, 255),
+#                         1,
+#                         cv2.LINE_AA,
+#                     )
+#                     (flag, encodedImage) = cv2.imencode(".jpg", frame)
+#                     if not flag:
+#                         continue
+#                     yield (
+#                             b"--frame\r\n"
+#                             b"Content-Type: image/jpeg\r\n\r\n"
+#                             + bytearray(encodedImage)
+#                             + b"\r\n"
+#                     )
+#     cap.release()
+
+
 def generate():
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-    # path = os.path.join()
-    shrimp_detection_model = YOLO("best1686.pt")
+    video_path = "GA67XBluaYotwT4DAA_3CBFm4wlRbmdjAAAF.mp4"
+    cap = cv2.VideoCapture(video_path)
+
+    # shrimp_detection_model = YOLO("best1686.pt")
+
+
     while True:
         ret, frame = cap.read()
 
         if ret:
-            detections = shrimp_detection_model(frame, stream=True)
-            class_names = shrimp_detection_model.names
+            detections = model.predict_img(frame,stream=True)
+            class_names = model.names
 
             for detection in detections:
                 boxes = detection.boxes
@@ -313,71 +362,19 @@ def generate():
                         label,
                         (x1, y1),
                         cv2.FONT_HERSHEY_COMPLEX,
-                        0.4,
-                        (0, 0, 255),
-                        1,
+                        2, (0, 0, 255), 2,
                         cv2.LINE_AA,
                     )
                     (flag, encodedImage) = cv2.imencode(".jpg", frame)
                     if not flag:
                         continue
                     yield (
-                            b"--frame\r\n"
-                            b"Content-Type: image/jpeg\r\n\r\n"
-                            + bytearray(encodedImage)
-                            + b"\r\n"
+                        b"--frame\r\n"
+                        b"Content-Type: image/jpeg\r\n\r\n"
+                        + bytearray(encodedImage)
+                        + b"\r\n"
                     )
     cap.release()
-
-
-# def generate():
-#     video_path = "static/video/video3.mp4"
-#     cap = cv2.VideoCapture(video_path)
-
-#     shrimp_detection_model = YOLO("best1686.pt")
-
-
-#     while True:
-#         ret, frame = cap.read()
-
-#         if ret:
-#             detections = shrimp_detection_model(frame, stream=True)
-#             class_names = shrimp_detection_model.names
-
-#             for detection in detections:
-#                 boxes = detection.boxes
-
-#                 for box in boxes:
-#                     x1, y1, x2, y2 = box.xyxy[0]
-#                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-
-#                     # Draw rectangle on frame
-#                     rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
-
-#                     class_index = int(box.cls)
-#                     label = class_names[class_index]
-
-#                     # Add label to the rectangle
-#                     cv2.putText(
-#                         frame,
-#                         label,
-#                         (x1, y1),
-#                         cv2.FONT_HERSHEY_COMPLEX,
-#                         0.4,
-#                         (0, 0, 255),
-#                         1,
-#                         cv2.LINE_AA,
-#                     )
-#                     (flag, encodedImage) = cv2.imencode(".jpg", frame)
-#                     if not flag:
-#                         continue
-#                     yield (
-#                         b"--frame\r\n"
-#                         b"Content-Type: image/jpeg\r\n\r\n"
-#                         + bytearray(encodedImage)
-#                         + b"\r\n"
-#                     )
-#     cap.release()
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

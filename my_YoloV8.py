@@ -52,7 +52,7 @@ class YOLOv8_ObjectDetector:
         if labels == None:
             self.labels = self.model.names
 
-    def predict_img(self, img, verbose=True):
+    def predict_img(self, img, verbose=True, stream=False):
         """
         Runs object detection on a single image.
 
@@ -74,7 +74,7 @@ class YOLOv8_ObjectDetector:
         """
 
         # Run the model on the input image with the given parameters
-        results = self.model(img, classes=self.classes,conf=self.conf, iou=self.iou,  verbose=verbose)
+        results = self.model(img, classes=self.classes,conf=self.conf, iou=self.iou,  verbose=verbose,stream=stream)
 
         # Save the original image and the results for further analysis if needed
         self.orig_img = img
@@ -437,13 +437,10 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
         if not cap.isOpened():
             print("Error opening video stream or file")
         # Initialize object tracker
-        tracker = sort.Sort(max_age=self.track_max_age, min_hits=self.track_min_hits,
-                            iou_threshold=self.track_iou_threshold)
         # Tracker = tracker.Tracker()
         # Initialize variables for object counting
         totalCount = []
         dictObject = {}
-        currentArray = np.empty((0, 5))
 
         # Read the video frames
         while cap.isOpened():
@@ -457,49 +454,32 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
                 break
 
             # Run object detection on the frame and calculate FPS
-            beg = time.time()
             results = self.predict_img(frame, verbose=False)
             if results == None:
                 print('***********************************************')
-            fps = 1 / (time.time() - beg)
 
-            for box in results.boxes:
+            for boxs in results.boxes:
                 # score = box.conf.item() * 100
-                class_id = int(box.cls.item())
-                x1, y1, x2, y2 = np.squeeze(box.xyxy.numpy()).astype(int)
-                currentArray = np.array([x1, y1, x2, y2,class_id])
-                detections = np.vstack((detections, currentArray))
-
-            # Update object tracker
-            resultsTracker = tracker.update(detections)
+                class_id = int(boxs.cls.item())
+                x1, y1, x2, y2 = np.squeeze(boxs.xyxy.numpy()).astype(int)
             # print(resultsTracker)
-            for result in resultsTracker:
-                # print(type(result))
-                # print(result)
-                # Get the tracker results
-                x1, y1, x2, y2,cl_id, id = result
-                x1, y1, x2, y2, id = int(x1), int(y1), int(x2), int(y2), int(id)
-                w, h = x2 - x1, y2 - y1
-                cx, cy = x1 + w // 2, y1 + h // 2
-                id_txt = f"ID: {str(id)}"
-                # print(id_txt)
-                cv2.putText(frame, id_txt, (cx, cy), 4, 0.5, (0, 0, 255), 1)
+                for result in boxs:
+                    # print(type(result))
+                    # print(result)
+                    # Get the tracker results
+                    x1, y1, x2, y2,cl_id, id = result
+                    x1, y1, x2, y2, id = int(x1), int(y1), int(x2), int(y2), int(id)
+                    w, h = x2 - x1, y2 - y1
+                    cx, cy = x1 + w // 2, y1 + h // 2
+                    id_txt = f"ID: {str(id)}"
+                    # print(id_txt)
+                    cv2.putText(frame, id_txt, (cx, cy), 4, 0.5, (0, 0, 255), 1)
+                    # Display detection results
+                    if display == 'default':
+                        frame = self.default_display(**display_args)
 
-                # if we haven't seen aprticular object ID before, register it in a list
-                if totalCount.count(id) == 0:
-                    # print(id)
-                    totalCount.append(id)
-                    if results.names[cl_id] in dictObject:
-                        dictObject[results.names[cl_id]] += 1
-                    else:
-                        dictObject[results.names[cl_id]] = 1
-
-            # Display detection results
-            if display == 'default':
-                frame = self.default_display(**display_args)
-
-            elif display == 'custom':
-                frame == self.custom_display(**display_args)
+                    elif display == 'custom':
+                        frame == self.custom_display(**display_args)
 
             # # Display FPS on frame
             # frame = cv2.putText(frame, f"FPS : {fps:,.2f}",
@@ -507,17 +487,17 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
             #                     0.5, (0, 255, 255), 1, cv2.LINE_AA)
 
             # Display Counting results
-            count_txt = f"TOTAL COUNT : {len(totalCount)}"
-            cv2.putText(frame, count_txt, (5, 45), cv2.FONT_HERSHEY_COMPLEX, 2, (0, 0, 255), 2)
-            (flag, encodedImage) = cv2.imencode(".jpg", frame)
-            if not flag:
-                continue
-            yield (
-                b"--frame\r\n"
-                                    b"Content-Type: image/jpeg\r\n\r\n"
-                                    + bytearray(encodedImage)
-                                    + b"\r\n"
-                                )
+                    count_txt = f"TOTAL COUNT : {len(totalCount)}"
+                    cv2.putText(frame, count_txt, (5, 45), cv2.FONT_HERSHEY_COMPLEX, 2, (0, 0, 255), 2)
+                    (flag, encodedImage) = cv2.imencode(".jpg", frame)
+                    if not flag:
+                        continue
+                    yield (
+                        b"--frame\r\n"
+                                            b"Content-Type: image/jpeg\r\n\r\n"
+                                            + bytearray(encodedImage)
+                                            + b"\r\n"
+                                        )
 
         # After the loop release the cap
         cap.release()
