@@ -18,9 +18,6 @@
         <title>Homepage</title>
     </head>
     <body>
-        {% if session %}
-        <div class="pt"><pre>{{pretty}}</pre></div>
-
         <div id="wrapper">
             <div class="container-fluid home-hero">
                 <div class="navbar-logo-left">
@@ -52,6 +49,7 @@
                             </div>
                         </div>
                         <div class="nav__main__actions">
+                            {% if session %}
                             <a
                                 href="{{url_for('logout')}}"
                                 class="rf-button-white outline-button mobile-hide">
@@ -60,6 +58,16 @@
                                     ><i class="fa-solid fa-arrow-right"></i
                                 ></span>
                             </a>
+                            {% else %}
+                            <a
+                                href="{{url_for('login')}}"
+                                class="rf-button-white outline-button mobile-hide">
+                                Login
+                                <span
+                                    ><i class="fa-solid fa-arrow-right"></i
+                                ></span>
+                            </a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -128,70 +136,5 @@
         </div>
         <!--  -->
         <div id="footer"></div>
-        {% else %} {{ session }}
-        <section>
-            <div class="container n1">
-                <div class="form-box">
-                    <div class="form-value">
-                        <form>
-                            <h2 style="color: white; margin-top: 10px">
-                                Login
-                            </h2>
-                            <div class="inputbox">
-                                <ion-icon name="mail-outline"></ion-icon>
-                                <input type="email" autocomplete="email" />
-                                <label for="">Email</label>
-                            </div>
-                            <div class="inputbox">
-                                <ion-icon name="lock-closed-outline"></ion-icon>
-                                <input
-                                    type="password"
-                                    autocomplete="password" />
-
-                                <label for="">Password</label>
-                            </div>
-                            <div class="forget">
-                                <label for=""
-                                    ><input
-                                        type="checkbox"
-                                        autocomplete="checkbox" />Remember Me
-                                    <a href="#">Forget Password</a></label
-                                >
-                            </div>
-                            <button>Log in</button>
-                            <div class="or">
-                                <hr class="my-2.5" />
-                                <p>or</p>
-                                <hr class="my-2.5" />
-                            </div>
-                            <div class="n5">
-                                <button class="n6">
-                                    <a href="/google-login">
-                                        <ion-icon
-                                            class="icgg"
-                                            name="logo-google"></ion-icon>
-                                        <span
-                                            style="
-                                                margin-top: 5px;
-                                                color: #0c2d57;
-                                            "
-                                            >Continue with Google</span
-                                        >
-                                    </a>
-                                </button>
-                            </div>
-                            <div class="register">
-                                <p>
-                                    Don't have a account
-                                    <a href="/register">Register</a>
-                                </p>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        {% endif %}
     </body>
 </html>

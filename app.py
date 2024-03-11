@@ -60,39 +60,38 @@ oauth.register(
 )
 
 
-# @app.route("/")
-# def home():   
-#     if (session):   
-#         print("ok")
-#         CS = mysql.connection.cursor()
-#         print(session["user"]["userinfo"]["email"])
-#         CS.execute(f"""SELECT * FROM user where email='{session["user"]["userinfo"]["email"]}'""")
-#         Executed_DATA = CS.fetchall()
-#         print("Executed_DATA",Executed_DATA)
-#         if (Executed_DATA):
-           
-#             return render_template("home.html", session=Executed_DATA, pretty="")
-#         else:
-#             CS.execute(
-#                 f"""INSERT INTO user VALUES ('{session["user"]["userinfo"]["name"]}','{session["user"]["userinfo"]["email"]}','{session["user"]["userinfo"]["picture"]}')""")
-#             # CS.execute('''INSERT INTO TABLE_NAME VALUES (2, 'Arthor')''')
-#             mysql.connection.commit()
-#             CS.execute(f"""SELECT * FROM user where email='{session["user"]["userinfo"]["email"]}'""")
-#             Executed_DATA = CS.fetchall()
-#             print("okokoko",Executed_DATA)
-#             return render_template("home.html", session=Executed_DATA,
-#                                    pretty="")
-#     else:
-#         print("no")
-#         return render_template("home.html", session="",
-#                                pretty="")
-
 @app.route("/")
-def home():
-    if 'email' in session:
-        return render_template('home.html', email = session['email'])
+def home():   
+    if (session):
+           
+        print(session)
+        CS = mysql.connection.cursor()
+        print(session["user"]["email"])
+        CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
+        Executed_DATA = CS.fetchall()
+        print("Executed_DATA",Executed_DATA)
+        if (Executed_DATA):
+            return render_template("home.html", session=Executed_DATA)
+        elif(session["provider"] == "Google"):
+            CS.execute(
+                f"""INSERT INTO user VALUES ('{session["user"]["email"]}','{session["user"]["name"]}','{session["user"]["picture"]}','{session["user"]["picture"]}+{session["user"]["email"]}')""")
+            # CS.execute('''INSERT INTO TABLE_NAME VALUES (2, 'Arthor')''')
+            mysql.connection.commit()
+            CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
+            Executed_DATA = CS.fetchall()
+            print("okokoko",Executed_DATA)
+            return render_template("home.html", session=Executed_DATA
+                               )
     else:
-        return redirect(url_for('login'))
+        print("no")
+        return render_template("home.html", session="")
+
+# @app.route("/")
+# def home():
+#     if 'email' in session:
+#         return render_template('home.html', email = session['email'])
+#     else:
+#         return redirect(url_for('login'))
 
 @app.route("/signin-google")
 def googleCallback():
@@ -104,9 +103,13 @@ def googleCallback():
         "Authorization": f"Bearer {token['access_token']}"
     }).json()
     token["personData"] = personData
+   
     # set complete user information in the session
-    session["user"] = token
+    session["user"] = token["userinfo"]
+    session['provider'] = "Google"
     
+    # print(session["user"])
+    print(session)
     return redirect(url_for("home"))
 
 
@@ -123,11 +126,14 @@ def login():
         email = request.form['email']
         pwd = request.form['password']
         cur = mysql.connection.cursor()
-        cur.execute(f"select email, password from user where email = '{email}'")
+        cur.execute(f"select * from user where email = '{email}'")
         users = cur.fetchone()
         cur.close()
-        if users and pwd == users[1]:
-            session['email'] = users[0]
+        print(users)
+        if users and pwd == users[3]:
+            session['user'] = {"email":users[0]}
+            session["provider"] = "sql"
+            print(session)
             return redirect(url_for('home'))
         else:
             return render_template('login.html', error = 'Invalid email or password')
@@ -141,8 +147,9 @@ def register():
         password = request.form['password']
 
         cur = mysql.connection.cursor()
-
-        cur.execute(f"INSERT INTO user (email, password) VALUES ('{email}','{password}')")
+        user_name = email.split('@')[0]
+        print(user_name)
+        cur.execute(f"INSERT INTO user (email,username, avatar, password) VALUES ('{email}','{user_name}','{'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745'}','{password}')")
         mysql.connection.commit()
         cur.close()
 
@@ -159,7 +166,16 @@ def logout():
 
 @app.route("/classification")
 def classification():
-    return render_template('classification.html')
+    if session:
+        print("olokokok")
+        CS = mysql.connection.cursor()
+        print(session["user"]["email"])
+        CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
+        Executed_DATA = CS.fetchone()
+        print(Executed_DATA[3])
+        return render_template('classification.html', session = Executed_DATA)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route("/video_feed")
