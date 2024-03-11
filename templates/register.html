@@ -22,7 +22,7 @@
             <div class="container n1">
                 <div class="form-box">
                     <div class="form-value">
-                        <form action="">
+                        <form method="POST">
                             <a href="login.html">
                                 <ion-icon
                                     class="icexit"
@@ -33,17 +33,25 @@
 
                             <div class="inputbox">
                                 <ion-icon name="mail-outline"></ion-icon>
-                                <input type="email" required />
-                                <label for="">Email</label>
+                                <input
+                                    id="email"
+                                    type="text"
+                                    name="email"
+                                    required />
+                                <label for="email">Email</label>
                             </div>
                             <div class="inputbox">
                                 <ion-icon name="lock-closed-outline"></ion-icon>
-                                <input type="password" required />
-                                <label for="">Password</label>
+                                <input
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    required />
+                                <label for="password">Password</label>
                             </div>
                             <div class="inputbox">
                                 <ion-icon name="lock-closed-outline"></ion-icon>
-                                <input type="password" required />
+                                <input type="text" type="password" />
                                 <label for="">Verify</label>
                             </div>
                             <div class="forget">

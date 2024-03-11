@@ -17,82 +17,88 @@
         <title>Homepage</title>
     </head>
     <body>
-        {% if session %}
-        <h1>Welcome {{session.userinfo.preferred_username}}!</h1>
-        <p><a href="{{url_for('logout')}}">Logout</a></p>
-        <div><pre>{{pretty}}</pre></div>
-        <form>
-            <!-- Email input -->
-            <div class="form-outline mb-4">
-                <input type="email" id="form2Example1" class="form-control" />
-                <label class="form-label" for="form2Example1"
-                    >Email address</label
-                >
-            </div>
+        {% if error %}
+        <p style="color: red">{{ error}}</p>
+        {% endif %}
+        <section>
+            <div class="container n1">
+                <div class="form-box">
+                    <div class="form-value">
+                        <form method="POST" action="/login">
+                            <h2 style="color: white; margin-top: 10px">
+                                Login
+                            </h2>
+                            <div class="inputbox">
+                                <ion-icon name="mail-outline"></ion-icon>
+                                <input
+                                    type="text"
+                                    id="email"
+                                    name="email"
+                                    autocomplete="email" />
+                                <label for="">Email</label>
+                            </div>
+                            <div class="inputbox">
+                                <ion-icon name="lock-closed-outline"></ion-icon>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    required
+                                    autocomplete="password" />
 
-            <!-- Password input -->
-            <div class="form-outline mb-4">
-                <input
-                    type="password"
-                    id="form2Example2"
-                    class="form-control" />
-                <label class="form-label" for="form2Example2">Password</label>
-            </div>
-
-            <!-- 2 column grid layout for inline styling -->
-            <div class="row mb-4">
-                <div class="col d-flex justify-content-center">
-                    <!-- Checkbox -->
-                    <div class="form-check">
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            value=""
-                            id="form2Example31"
-                            checked />
-                        <label class="form-check-label" for="form2Example31">
-                            Remember me
-                        </label>
+                                <label for="">Password</label>
+                            </div>
+                            <div class="forget">
+                                <label for=""
+                                    ><input
+                                        type="checkbox"
+                                        autocomplete="checkbox" />Remember Me
+                                    <a href="#">Forget Password</a></label
+                                >
+                            </div>
+                            <button>Log in</button>
+                            <div class="or">
+                                <hr class="my-2.5" />
+                                <p>or</p>
+                                <hr class="my-2.5" />
+                            </div>
+                            <div class="n5">
+                                <button class="n6">
+                                    <a href="/google-login">
+                                        <ion-icon
+                                            class="icgg"
+                                            name="logo-google"></ion-icon>
+                                        <span
+                                            style="
+                                                margin-top: 5px;
+                                                color: #0c2d57;
+                                            "
+                                            >Continue with Google</span
+                                        >
+                                    </a>
+                                </button>
+                            </div>
+                            <div class="register">
+                                <p>
+                                    Don't have a account
+                                    <a href="/register">Register</a>
+                                </p>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
-                <div class="col">
-                    <!-- Simple link -->
-                    <a href="#!">Forgot password?</a>
-                </div>
             </div>
-
-            <!-- Submit button -->
-            <button type="button" class="btn btn-primary btn-block mb-4">
-                Sign in
-            </button>
-
-            <!-- Register buttons -->
-            <div class="text-center">
-                <p>Not a member? <a href="#!">Register</a></p>
-                <p>or sign up with:</p>
-                <button type="button" class="btn btn-link btn-floating mx-1">
-                    <i class="fab fa-facebook-f"></i>
-                </button>
-
-                <button type="button" class="btn btn-link btn-floating mx-1">
-                    <i class="fab fa-google"></i>
-                </button>
-
-                <button type="button" class="btn btn-link btn-floating mx-1">
-                    <i class="fab fa-twitter"></i>
-                </button>
-
-                <button type="button" class="btn btn-link btn-floating mx-1">
-                    <i class="fab fa-github"></i>
-                </button>
-            </div>
-        </form>
-
-        <!--  -->
-        <div id="footer"></div>
-        {% else %}
-        <p><a href="{{url_for('googleLogin')}}">Login with Google</a></p>
-        {% endif %}
+        </section>
+        <!--<form method="POST" action="/login">
+            <label for="email">Email: </label>
+            <input type="text" id="email" name="email" required /><br /><br />
+            <label for="password">Password: </label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                required /><br /><br />
+            <input type="submit" value="Login" />
+        </form> -->
     </body>
 </html>

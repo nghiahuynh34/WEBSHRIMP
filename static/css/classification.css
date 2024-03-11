@@ -379,6 +379,7 @@ px .title_wc {
     text-align: center;
 }
 .img_user {
+    max-width: 100px;
     margin: 10px 0;
     border-radius: 50%;
     -moz-border-radius: 50%;

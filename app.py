@@ -8,9 +8,7 @@ from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 from authlib.integrations.flask_client import OAuth
 from flask_mysqldb import MySQL
-# from flask_sqlalchemy import SQLAlchemy
-#
-# from sqlalchemy.sql import func
+
 import my_YoloV8
 import json
 import cv2
@@ -18,8 +16,6 @@ import random
 import imghdr
 import requests
 
-# import magic
-# import string
 
 # from random import random
 # Khởi tạo Flask Server Backend
@@ -30,7 +26,6 @@ CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
 
-app = Flask(__name__)
 
 # app.secret_key = 'dhbsfbsdbc8223bd'
 app.config['MYSQL_HOST'] = 'localhost'
@@ -65,35 +60,44 @@ oauth.register(
 )
 
 
+# @app.route("/")
+# def home():   
+#     if (session):   
+#         print("ok")
+#         CS = mysql.connection.cursor()
+#         print(session["user"]["userinfo"]["email"])
+#         CS.execute(f"""SELECT * FROM user where email='{session["user"]["userinfo"]["email"]}'""")
+#         Executed_DATA = CS.fetchall()
+#         print("Executed_DATA",Executed_DATA)
+#         if (Executed_DATA):
+           
+#             return render_template("home.html", session=Executed_DATA, pretty="")
+#         else:
+#             CS.execute(
+#                 f"""INSERT INTO user VALUES ('{session["user"]["userinfo"]["name"]}','{session["user"]["userinfo"]["email"]}','{session["user"]["userinfo"]["picture"]}')""")
+#             # CS.execute('''INSERT INTO TABLE_NAME VALUES (2, 'Arthor')''')
+#             mysql.connection.commit()
+#             CS.execute(f"""SELECT * FROM user where email='{session["user"]["userinfo"]["email"]}'""")
+#             Executed_DATA = CS.fetchall()
+#             print("okokoko",Executed_DATA)
+#             return render_template("home.html", session=Executed_DATA,
+#                                    pretty="")
+#     else:
+#         print("no")
+#         return render_template("home.html", session="",
+#                                pretty="")
+
 @app.route("/")
 def home():
-    print("ok",session)
-    if (session):
-        CS = mysql.connection.cursor()
-        CS.execute(f"""SELECT * FROM user where email='{session["user"]["userinfo"]["email"]}'""")
-        Executed_DATA = CS.fetchall()
-        if (Executed_DATA):
-            return render_template("home.html", session=Executed_DATA, pretty="")
-        else:
-            CS.execute(
-                f"""INSERT INTO user VALUES ('{session["user"]["userinfo"]["name"]}','{session["user"]["userinfo"]["email"]}','{session["user"]["userinfo"]["picture"]}')""")
-            # CS.execute('''INSERT INTO TABLE_NAME VALUES (2, 'Arthor')''')
-            mysql.connection.commit()
-            CS.execute(f"""SELECT * FROM user where email='{session["user"]["userinfo"]["email"]}'""")
-            Executed_DATA = CS.fetchall()
-            print(Executed_DATA)
-            return render_template("home.html", session=Executed_DATA,
-                                   pretty="")
+    if 'email' in session:
+        return render_template('home.html', email = session['email'])
     else:
-        return render_template("home.html", session="",
-                               pretty="")
-    # return render_template("home.html")
-
+        return redirect(url_for('login'))
 
 @app.route("/signin-google")
 def googleCallback():
     # fetch access token and id token using authorization code
-    print("ok")
+   
     token = oauth.myApp.authorize_access_token()
     personDataUrl = "https://people.googleapis.com/v1/people/me?personFields=genders,birthdays"
     personData = requests.get(personDataUrl, headers={
@@ -102,24 +106,55 @@ def googleCallback():
     token["personData"] = personData
     # set complete user information in the session
     session["user"] = token
-    print(session["user"]["userinfo"]["email"])
+    
     return redirect(url_for("home"))
 
 
+    
 @app.route("/google-login")
 def googleLogin():
     if "user" in session:
         abort(404)
     return oauth.myApp.authorize_redirect(redirect_uri=url_for("googleCallback", _external=True))
 
-@app.route("/register")
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        email = request.form['email']
+        pwd = request.form['password']
+        cur = mysql.connection.cursor()
+        cur.execute(f"select email, password from user where email = '{email}'")
+        users = cur.fetchone()
+        cur.close()
+        if users and pwd == users[1]:
+            session['email'] = users[0]
+            return redirect(url_for('home'))
+        else:
+            return render_template('login.html', error = 'Invalid email or password')
+    return render_template('login.html')    
+
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template('register.html')
+    if request.method == "POST":
+        print("ok")
+        email = request.form['email']
+        password = request.form['password']
+
+        cur = mysql.connection.cursor()
+
+        cur.execute(f"INSERT INTO user (email, password) VALUES ('{email}','{password}')")
+        mysql.connection.commit()
+        cur.close()
+
+        # Đăng ký thành công, chuyển hướng đến trang đăng nhập
+        return redirect(url_for('login'))
+    else:
+        return render_template('register.html')
 
 @app.route("/logout")
 def logout():
     session.pop("user", None)
-    return redirect(url_for("home"))
+    return redirect(url_for("login"))
 
 
 @app.route("/classification")
