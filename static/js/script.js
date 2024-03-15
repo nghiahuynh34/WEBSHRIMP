@@ -53,8 +53,8 @@ function handleFiles(files) {
                         ) +
                         '</pre>'
                 );
-                document.getElementById('inferenceJson').innerHTML =
-                    InfoOfResult;
+                console.log(InfoOfResult)
+                document.getElementById('inferenceJson').innerHTML =InfoOfResult;
             } else {
                 alert('Error downloading image. Please check the URL.');
             }

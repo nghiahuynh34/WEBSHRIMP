@@ -24,7 +24,7 @@
             <div class="container n1">
                 <div class="form-box">
                     <div class="form-value">
-                        <form method="POST" action="/login">
+                        <form method="POST" action="/login" id="form">
                             <h2 style="color: white; margin-top: 10px">
                                 Login
                             </h2>
@@ -43,7 +43,6 @@
                                     type="password"
                                     id="password"
                                     name="password"
-                                    required
                                     autocomplete="password" />
 
                                 <label for="">Password</label>
@@ -57,14 +56,14 @@
                                 >
                             </div>
                             <button>Log in</button>
+                                </form>
                             <div class="or">
                                 <hr class="my-2.5" />
                                 <p>or</p>
                                 <hr class="my-2.5" />
                             </div>
                             <div class="n5">
-                                <button class="n6">
-                                    <a href="/google-login">
+                                <button class="n6" onclick="window.location.href = '/google-login'">
                                         <ion-icon
                                             class="icgg"
                                             name="logo-google"></ion-icon>
@@ -75,7 +74,7 @@
                                             "
                                             >Continue with Google</span
                                         >
-                                    </a>
+
                                 </button>
                             </div>
                             <div class="register">
@@ -84,7 +83,7 @@
                                     <a href="/register">Register</a>
                                 </p>
                             </div>
-                        </form>
+
                     </div>
                 </div>
             </div>
