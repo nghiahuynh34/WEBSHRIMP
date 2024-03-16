@@ -8,7 +8,6 @@ from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 from authlib.integrations.flask_client import OAuth
 from flask_mysqldb import MySQL
-from datetime import timedelta
 
 import my_YoloV8
 import json
@@ -65,12 +64,12 @@ oauth.register(
 def home():   
     if (session):
            
-        print(session)
+        # print(session)
         CS = mysql.connection.cursor()
         print(session["user"]["email"])
         CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
         Executed_DATA = CS.fetchall()
-        print("Executed_DATA",Executed_DATA)
+        print("Executed_DATA",session["provider"])
         if (Executed_DATA):
             return render_template("home.html", session=Executed_DATA)
         elif(session["provider"] == "Google"):
@@ -87,18 +86,12 @@ def home():
         print("no")
         return render_template("home.html", session="")
 
-# @app.route("/")
-# def home():
-#     if 'email' in session:
-#         return render_template('home.html', email = session['email'])
-#     else:
-#         return redirect(url_for('login'))
-
 @app.route("/signin-google")
 def googleCallback():
     # fetch access token and id token using authorization code
-   
+    print(session)
     token = oauth.myApp.authorize_access_token()
+    print(token)
     personDataUrl = "https://people.googleapis.com/v1/people/me?personFields=genders,birthdays"
     personData = requests.get(personDataUrl, headers={
         "Authorization": f"Bearer {token['access_token']}"
@@ -110,15 +103,17 @@ def googleCallback():
     session['provider'] = "Google"
     
     # print(session["user"])
-    print(session)
+    print("ok",session)
     return redirect(url_for("home"))
 
 
     
 @app.route("/google-login")
 def googleLogin():
+    print(session)
     if "user" in session:
         abort(404)
+
     return oauth.myApp.authorize_redirect(redirect_uri=url_for("googleCallback", _external=True))
 
 @app.route("/login", methods=["GET", "POST"])
@@ -137,9 +132,8 @@ def login():
             print(session)
             return redirect(url_for('home'))
         else:
-             # Trả về một thông báo lỗi dưới dạng JSON
-            return render_template('login.html', error = "Invalid")
-    return render_template('login.html')
+            return render_template('login.html', error = 'Invalid email or password')
+    return render_template('login.html')    
 
 
 
@@ -191,19 +185,18 @@ def check_email():
 
 @app.route("/logout")
 def logout():
-    session.pop("user", None)
+    session.clear()
     return redirect(url_for("login"))
 
 
 @app.route("/classification")
 def classification():
     if session:
-        print("olokokok")
         CS = mysql.connection.cursor()
         print(session["user"]["email"])
         CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
         Executed_DATA = CS.fetchone()
-        print(Executed_DATA[3])
+        print(Executed_DATA)
         return render_template('classification.html', session = Executed_DATA)
     else:
         return redirect(url_for('login'))
