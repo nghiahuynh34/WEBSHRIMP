@@ -15,6 +15,7 @@
         <link
             rel="stylesheet"
             href="{{ url_for('static', filename = 'css/home.css') }}" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Register Fage</title>
     </head>
     <body>
@@ -22,7 +23,7 @@
             <div class="container n1">
                 <div class="form-box">
                     <div class="form-value">
-                        <form method="POST">
+                        <form id="registerForm" method="POST">
                             <a href="login.html">
                                 <ion-icon
                                     class="icexit"
@@ -51,15 +52,19 @@
                             </div>
                             <div class="inputbox">
                                 <ion-icon name="lock-closed-outline"></ion-icon>
-                                <input type="text" type="password" />
-                                <label for="">Verify</label>
+                                <input
+                                    id="password1"
+                                    type="password"
+                                    name="password1"
+                                    required />
+                                <label for="password1">Verify</label>
                             </div>
                             <div class="forget">
                                 <label for=""
                                     ><input type="checkbox" />Remember Me</label
                                 >
                             </div>
-                            <button>Register</button>
+                            <button type="submit">Register</button>
                             <div class="or">
                                 <hr class="my-2.5" />
                                 <p>or</p>
@@ -82,7 +87,7 @@
                 </div>
             </div>
         </section>
-
+        <script src="{{url_for('static', filename='js/register.js')}}"></script>
         <script
             type="module"
             src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

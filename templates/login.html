@@ -14,12 +14,10 @@
         <link
             rel="stylesheet"
             href="{{ url_for('static', filename = 'css/home.css') }}" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Homepage</title>
     </head>
     <body>
-        {% if error %}
-        <p style="color: red">{{ error}}</p>
-        {% endif %}
         <section>
             <div class="container n1">
                 <div class="form-box">
@@ -34,7 +32,8 @@
                                     type="text"
                                     id="email"
                                     name="email"
-                                    autocomplete="email" />
+                                    autocomplete="email"
+                                    required />
                                 <label for="">Email</label>
                             </div>
                             <div class="inputbox">
@@ -56,27 +55,22 @@
                                     <a href="#">Forget Password</a></label
                                 >
                             </div>
-                            <button>Log in</button>
+                            <button class="n8">Log in</button>
                             <div class="or">
                                 <hr class="my-2.5" />
                                 <p>or</p>
                                 <hr class="my-2.5" />
                             </div>
-                            <div class="n5">
-                                <button class="n6">
-                                    <a href="/google-login">
-                                        <ion-icon
-                                            class="icgg"
-                                            name="logo-google"></ion-icon>
-                                        <span
-                                            style="
-                                                margin-top: 5px;
-                                                color: #0c2d57;
-                                            "
-                                            >Continue with Google</span
-                                        >
-                                    </a>
-                                </button>
+
+                            <div class="n8">
+                                <a class="n6" href="/google-login">
+                                    <ion-icon
+                                        class="icgg"
+                                        name="logo-google"></ion-icon>
+                                    <span style="margin-top: 5px"
+                                        >Continue with Google</span
+                                    >
+                                </a>
                             </div>
                             <div class="register">
                                 <p>
@@ -89,16 +83,16 @@
                 </div>
             </div>
         </section>
-        <!--<form method="POST" action="/login">
-            <label for="email">Email: </label>
-            <input type="text" id="email" name="email" required /><br /><br />
-            <label for="password">Password: </label>
-            <input
-                type="password"
-                id="password"
-                name="password"
-                required /><br /><br />
-            <input type="submit" value="Login" />
-        </form> -->
+        {% if error %}
+        <script>
+            Swal.fire({
+                title: 'Oops...',
+                text: 'Invalid email or password',
+                icon: 'warning',
+                confirmButtonText: 'Retype',
+            });
+        </script>
+        {% endif %}
+        <script src="{{url_for('static', filename='js/login.js')}}"></script>
     </body>
 </html>

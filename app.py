@@ -8,6 +8,7 @@ from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 from authlib.integrations.flask_client import OAuth
 from flask_mysqldb import MySQL
+from datetime import timedelta
 
 import my_YoloV8
 import json
@@ -25,7 +26,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
-
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 
 # app.secret_key = 'dhbsfbsdbc8223bd'
 app.config['MYSQL_HOST'] = 'localhost'
@@ -136,8 +137,11 @@ def login():
             print(session)
             return redirect(url_for('home'))
         else:
-            return render_template('login.html', error = 'Invalid email or password')
-    return render_template('login.html')    
+             # Trả về một thông báo lỗi dưới dạng JSON
+            return render_template('login.html', error = "Invalid")
+    return render_template('login.html')
+
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -146,17 +150,44 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
+
         cur = mysql.connection.cursor()
-        user_name = email.split('@')[0]
-        print(user_name)
-        cur.execute(f"INSERT INTO user (email,username, avatar, password) VALUES ('{email}','{user_name}','{'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745'}','{password}')")
-        mysql.connection.commit()
+        cur.execute(f"SELECT * FROM user WHERE email = '{email}'")
+        existing_user = cur.fetchone()
         cur.close()
 
-        # Đăng ký thành công, chuyển hướng đến trang đăng nhập
-        return redirect(url_for('login'))
+        if existing_user:
+            return render_template('register.html')
+        else:
+            cur = mysql.connection.cursor()
+            user_name = email.split('@')[0]
+            print(user_name)
+            cur.execute(f"INSERT INTO user (email,username, avatar, password) VALUES ('{email}','{user_name}','{'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745'}','{password}')")
+            mysql.connection.commit()
+            cur.close()
+
+                # Đăng ký thành công, chuyển hướng đến trang đăng nhập
+            return redirect(url_for('login'))
     else:
         return render_template('register.html')
+    
+@app.route("/check_email", methods=["POST"])
+def check_email():
+    email = request.json["email"]
+
+    cur = mysql.connection.cursor()
+    cur.execute(f"SELECT * FROM user WHERE email = '{email}'")
+    existing_user = cur.fetchone()
+    cur.close()
+
+    if existing_user:
+        return jsonify({"exists": True})
+    else:
+        return jsonify({"exists": False})
+        
+    
+
+    
 
 @app.route("/logout")
 def logout():

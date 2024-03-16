@@ -382,3 +382,17 @@ button {
 .or p {
     margin: 0 5px;
 }
+.n8 {
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 40px;
+}
+.n8:hover {
+    background-color: #9b9b9b;
+}
+.n8 a {
+    font-size: 1em;
+    font-weight: 600;
+    color: #0c2d57;
+    text-decoration: none;
+}
