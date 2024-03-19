@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 /* ---------------------------Xử lý mật khẩu trang Register ----------------------------*/
 // document
 //     .getElementById('registerForm')
@@ -44,15 +44,12 @@
 //         xhr.send(JSON.stringify({ email: email }));
 //     });
 
-=======
->>>>>>> 99ea71dedd55b5fbc0d5a83adb5f3847acece244
 document.getElementById('password1').addEventListener('blur', function () {
     console.log('ok');
     var password1 = document.getElementById('password').value;
     var password2 = document.getElementById('password1').value;
     var email = document.getElementById('email').value;
 
-<<<<<<< HEAD
     var xhr = new XMLHttpRequest();
     xhr.open('POST', '/check_email', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -87,7 +84,6 @@ document.getElementById('password1').addEventListener('blur', function () {
             }
         }
     };
-=======
     if (
         password1.length < 8 ||
         !/[!@#$%^&*(),.?":{}|<>0-9]/.test(password1) ||
@@ -114,7 +110,6 @@ document.getElementById('password1').addEventListener('blur', function () {
         }
     }
 
->>>>>>> 99ea71dedd55b5fbc0d5a83adb5f3847acece244
     xhr.send(JSON.stringify({ email: email }));
 });
 
