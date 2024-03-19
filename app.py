@@ -10,7 +10,14 @@ from ultralytics import YOLO
 from werkzeug.utils import secure_filename
 from authlib.integrations.flask_client import OAuth
 from flask_mysqldb import MySQL
+<<<<<<< HEAD
 
+=======
+from flask_login import (
+    logout_user,
+)
+from datetime import timedelta
+>>>>>>> 99ea71dedd55b5fbc0d5a83adb5f3847acece244
 import my_YoloV8
 import json
 import cv2
@@ -27,7 +34,11 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
+<<<<<<< HEAD
 # app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
+=======
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
+>>>>>>> 99ea71dedd55b5fbc0d5a83adb5f3847acece244
 
 # app.secret_key = 'dhbsfbsdbc8223bd'
 app.config['MYSQL_HOST'] = 'localhost'
@@ -180,10 +191,13 @@ def check_email():
         return jsonify({"exists": True})
     else:
         return jsonify({"exists": False})
+<<<<<<< HEAD
         
     
 
     
+=======
+>>>>>>> 99ea71dedd55b5fbc0d5a83adb5f3847acece244
 
 @app.route("/logout")
 def logout():
