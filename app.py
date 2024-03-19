@@ -1,6 +1,8 @@
+from datetime import timedelta
 from io import BytesIO
 from urllib.parse import urlparse
 
+import numpy as np
 from flask import Flask, render_template, request, redirect, jsonify, Response, url_for, session, abort
 from flask_cors import CORS
 import os
@@ -25,7 +27,7 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = "static"
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
+# app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=5)
 
 # app.secret_key = 'dhbsfbsdbc8223bd'
 app.config['MYSQL_HOST'] = 'localhost'
@@ -204,12 +206,13 @@ def classification():
 
 @app.route("/video_feed")
 def video_feed():
-    return Response(generate(), mimetype="multipart/x-mixed-replace; boundary=frame")
+    return Response(generate(videoPath=0,CAP_DSHOWN=cv2.CAP_DSHOW,colors=random_color()
+), mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
 @app.route('/classify', methods=['POST'])
 def upload_file():
-    print(request.files)
+    print(request.files.getlist('uploadFile[]'))
     if 'uploadFile[]' not in request.files:
         return redirect(request.url)
 
@@ -279,7 +282,7 @@ def download():
         data = request.get_json()
         url = data['url']
         print(url)
-        r = requests.get(url, stream=True)
+        r = requests.get(url)
         # url = data.get('url')
         if not url:
             raise ValueError("URL is missing in the request data.")
@@ -317,21 +320,25 @@ def download():
             # It's an image
             print(f"Detected image type: {file_type}")
 
-            # Read the image using OpenCV
+            # # Read the image using OpenCV
             frame = cv2.imread(image_path)
-
-            # Perform image prediction using the 'model'
+            print(frame)
+            #
+            # # Perform image prediction using the 'model'
             results = model.predict_img(frame)
             print(f"Image prediction results: {results}")
 
             # Display the results with custom colors
-            result_img = model.custom_display(colors=color())
 
+            result_img = model.custom_display(colors=color())
+    
             # If there are positive results, count objects and save the image
             if len(results) > 0:
                 dictObject, save_name = model.count_object(results, upload_folder, result_img)
+                msg = 'File predict successfully'
                 print(f"Saved result image to: {save_name}")
-                return jsonify({'success': True, 'file_path': f"static/yolov8/{save_name}", "Info": dictObject})
+                return jsonify({'success': True,  "Info": dictObject,
+                                'htmlresponse': render_template('response.html', is_video=False, msg=msg, filenames=[save_name])})
         else:
             # Check the image type using imghdr
             totalCount, dictObject, save_file = model.predict_video(video_path=image_path,
@@ -341,113 +348,23 @@ def download():
                                                                     display='custom',
                                                                     colors=color())
             video = model.convert_video(save_file, app.config['UPLOAD_FOLDER'] + "/videoOut/")
-
-            return jsonify({'success': True, 'image_path': f"static/yolov8/{video}", "Info": dictObject})
-
+            msg = 'File predict successfully'
+            return jsonify({'success': True, "Info": dictObject,
+                            'htmlresponse': render_template('response.html', is_video=True, msg=msg,
+                                                            filenames=[video])})
+    
         return jsonify({'success': True, 'image_path': "No positive results", "Info": {}})
-
+    
     except requests.RequestException as req_err:
         return jsonify({'success': False, 'error': f"Request error: {str(req_err)}"})
-
+    
     except Exception as e:
         return jsonify({'success': False, 'error': f"An error occurred: {str(e)}"})
 
 
-# Function to generate video frames
-#
-# def generate():
-#     cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-#     # path = os.path.join()
-#     shrimp_detection_model = YOLO("best1686.pt")
-#     while True:
-#         ret, frame = cap.read()
-#
-#         if ret:
-#             detections = shrimp_detection_model(frame, stream=True)
-#             class_names = shrimp_detection_model.names
-#
-#             for detection in detections:
-#                 boxes = detection.boxes
-#
-#                 for box in boxes:
-#                     x1, y1, x2, y2 = box.xyxy[0]
-#                     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-#
-#                     # Draw rectangle on frame
-#                     rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
-#
-#                     class_index = int(box.cls)
-#                     label = class_names[class_index]
-#
-#                     # Add label to the rectangle
-#                     cv2.putText(
-#                         frame,
-#                         label,
-#                         (x1, y1),
-#                         cv2.FONT_HERSHEY_COMPLEX,
-#                         0.4,
-#                         (0, 0, 255),
-#                         1,
-#                         cv2.LINE_AA,
-#                     )
-#                     (flag, encodedImage) = cv2.imencode(".jpg", frame)
-#                     if not flag:
-#                         continue
-#                     yield (
-#                             b"--frame\r\n"
-#                             b"Content-Type: image/jpeg\r\n\r\n"
-#                             + bytearray(encodedImage)
-#                             + b"\r\n"
-#                     )
-#     cap.release()
 
-
-def generate():
-    video_path = "GA67XBluaYotwT4DAA_3CBFm4wlRbmdjAAAF.mp4"
-    cap = cv2.VideoCapture(video_path)
-
-    # shrimp_detection_model = YOLO("best1686.pt")
-
-
-    while True:
-        ret, frame = cap.read()
-
-        if ret:
-            detections = model.predict_img(frame,stream=True)
-            class_names = model.names
-
-            for detection in detections:
-                boxes = detection.bogitgxes
-
-                for box in boxes:
-                    x1, y1, x2, y2 = box.xyxy[0]
-                    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-
-                    # Draw rectangle on frame
-                    rec = cv2.rectangle(frame, (x1, y1), (x2, y2), random_color(), 2)
-
-                    class_index = int(box.cls)
-                    label = class_names[class_index]
-
-                    # Add label to the rectangle
-                    cv2.putText(
-                        frame,
-                        label,
-                        (x1, y1),
-                        cv2.FONT_HERSHEY_COMPLEX,
-                        2, (0, 0, 255), 2,
-                        cv2.LINE_AA,
-                    )
-                    (flag, encodedImage) = cv2.imencode(".jpg", frame)
-                    if not flag:
-                        continue
-                    yield (
-                        b"--frame\r\n"
-                        b"Content-Type: image/jpeg\r\n\r\n"
-                        + bytearray(encodedImage)
-                        + b"\r\n"
-                    )
-    cap.release()
+def generate(videoPath=0,CAP_DSHOWN=None,colors=None):
+    return model.predict_videoStream(videoPath, CAP_DSHOWN,colors)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS

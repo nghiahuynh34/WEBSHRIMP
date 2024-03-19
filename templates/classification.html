@@ -132,7 +132,7 @@ block content %}
                     <form
                         id="uploadImage"
                         method="post"
-                        action="/project"
+                        action="/classify"
                         enctype="multipart/form-data">
                         <div class="form-group">
                             <input
@@ -210,6 +210,7 @@ block content %}
             </div>
             <div id="targetLayer" style="display: none">
                 <img src="" id="webcam" autoplay style="margin-top: 40px" />
+
             </div>
             <img
                 id="displayedImage"
@@ -269,56 +270,7 @@ block content %}
     <!-- Copyright -->
 </div>
 <script>
-    $(document).ready(function () {
-        $('#uploadImage').submit(function (event) {
-            $('#inferenceJson').empty().append('');
-            if ($('#uploadFile').val()) {
-                event.preventDefault();
-                $('#displayedImage').show();
-                $('#targetLayer').hide();
-                $(this).ajaxSubmit({
-                    target: '#targetLayer',
-                    beforeSubmit: function () {
-                        $('.progress-bar').width('50%');
-                    },
-                    uploadProgress: function (
-                        event,
-                        position,
-                        total,
-                        percentageComplete
-                    ) {
-                        $('.progress-bar').animate(
-                            {
-                                width: percentageComplete + '%',
-                            },
-                            {
-                                duration: 1000,
-                            }
-                        );
-                    },
-                    success: function (data) {
-                        $('#displayedImage').hide();
-                        $('#targetLayer').show();
-                        $('#targetLayer').append(data.htmlresponse);
-                        var InfoOfResult = data.Info.map(
-                            (val, index) =>
-                                "<pre class='jsonOutput'>" +
-                                JSON.stringify(
-                                    { ['Image' + (index + 1)]: val },
-                                    null,
-                                    2
-                                ) +
-                                '</pre>'
-                        );
 
-                        $('#inferenceJson').append(InfoOfResult.join(''));
-                    },
-                    resetForm: true,
-                });
-            }
-            return false;
-        });
-    });
 
     function downloadImage() {
         var imageURL = document.getElementById('imageURL').value;
@@ -334,8 +286,10 @@ block content %}
             .then((data) => {
                 if (data.success) {
                 console.log(data)
-                    document.getElementById('displayedImage').src =
-                        data.file_path;
+                 document.getElementById('displayedImage').style.display =
+                    'none';
+                 document.getElementById('targetLayer').style.display = 'block';
+                document.getElementById('targetLayer').innerHTML =data.htmlresponse;
                     document.getElementById(
                         'inferenceJson'
                     ).innerHTML = `<pre class='jsonOutput'>${JSON.stringify(
@@ -388,4 +342,5 @@ block content %}
     processImage();
 </script>
 <!--     <script src="{{url_for('static', filename='js/script.js')}}"></script>-->
+
 {% endblock %}

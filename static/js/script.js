@@ -1,4 +1,54 @@
 // Drop handler
+$(document).ready(function () {
+        $('#uploadImage').submit(function (event) {
+            $('#inferenceJson').empty().append('');
+            if ($('#uploadFile').val()) {
+                event.preventDefault();
+                $('#displayedImage').show();
+                $('#targetLayer').hide();
+                $(this).ajaxSubmit({
+                    target: '#targetLayer',
+                    beforeSubmit: function () {
+                        $('.progress-bar').width('50%');
+                    },
+                    uploadProgress: function (
+                        event,
+                        position,
+                        total,
+                        percentageComplete
+                    ) {
+                        $('.progress-bar').animate(
+                            {
+                                width: percentageComplete + '%',
+                            },
+                            {
+                                duration: 1000,
+                            }
+                        );
+                    },
+                    success: function (data) {
+                        $('#displayedImage').hide();
+                        $('#targetLayer').show();
+                        $('#targetLayer').append(data.htmlresponse);
+                        var InfoOfResult = data.Info.map(
+                            (val, index) =>
+                                "<pre class='jsonOutput'>" +
+                                JSON.stringify(
+                                    { ['Image' + (index + 1)]: val },
+                                    null,
+                                    2
+                                ) +
+                                '</pre>'
+                        );
+
+                        $('#inferenceJson').append(InfoOfResult.join(''));
+                    },
+                    resetForm: true,
+                });
+            }
+            return false;
+        });
+    });
 
 /* ***********----------------------******************* */
 function dropHandler(event) {

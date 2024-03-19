@@ -52,7 +52,7 @@ class YOLOv8_ObjectDetector:
         if labels == None:
             self.labels = self.model.names
 
-    def predict_img(self, img, verbose=True, stream=False):
+    def predict_img(self, img, verbose=True):
         """
         Runs object detection on a single image.
 
@@ -74,7 +74,7 @@ class YOLOv8_ObjectDetector:
         """
 
         # Run the model on the input image with the given parameters
-        results = self.model(img, classes=self.classes,conf=self.conf, iou=self.iou,  verbose=verbose,stream=stream)
+        results = self.model(img, classes=self.classes,conf=self.conf, iou=self.iou,  verbose=verbose)
 
         # Save the original image and the results for further analysis if needed
         self.orig_img = img
@@ -414,8 +414,8 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
         print(totalCount)
         # print("ok", dictObject)
         return len(totalCount), dictObject, save_file
-    def predict_videoStream(self, video_path,
-                      display='custom', verbose=True, **display_args):
+    def predict_videoStream(self, video_path,colors=[],
+                      show_cls=True, show_conf=True, CAP_DSHOW=None,verbose=True):
 
         """
     Runs object detection on a video file and saves the output as a new video file.
@@ -432,76 +432,75 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
     Returns:
         None
         """
-        cap = cv2.VideoCapture(video_path)
+        cap = cv2.VideoCapture(video_path,CAP_DSHOW)
         # Get video name
         if not cap.isOpened():
             print("Error opening video stream or file")
         # Initialize object tracker
         # Tracker = tracker.Tracker()
         # Initialize variables for object counting
-        totalCount = []
-        dictObject = {}
 
         # Read the video frames
-        while cap.isOpened():
-
-            detections = np.empty((0, 5))
+        while True:
             ret, frame = cap.read()
+            bbx_thickness = (frame.shape[0] + frame.shape[1]) // 350
+            if ret:
+                detections = self.predict_img(frame)
 
-            # If the frame was not read successfully, break the loop
-            if not ret:
-                print("Error reading frame")
-                break
+                for detection in detections:
+                    boxes = detection.boxes
 
-            # Run object detection on the frame and calculate FPS
-            results = self.predict_img(frame, verbose=False)
-            if results == None:
-                print('***********************************************')
+                    for box in boxes:
+                        textString = ""
 
-            for boxs in results.boxes:
-                # score = box.conf.item() * 100
-                class_id = int(boxs.cls.item())
-                x1, y1, x2, y2 = np.squeeze(boxs.xyxy.numpy()).astype(int)
-            # print(resultsTracker)
-                for result in boxs:
-                    # print(type(result))
-                    # print(result)
-                    # Get the tracker results
-                    x1, y1, x2, y2,cl_id, id = result
-                    x1, y1, x2, y2, id = int(x1), int(y1), int(x2), int(y2), int(id)
-                    w, h = x2 - x1, y2 - y1
-                    cx, cy = x1 + w // 2, y1 + h // 2
-                    id_txt = f"ID: {str(id)}"
-                    # print(id_txt)
-                    cv2.putText(frame, id_txt, (cx, cy), 4, 0.5, (0, 0, 255), 1)
-                    # Display detection results
-                    if display == 'default':
-                        frame = self.default_display(**display_args)
+                        # Extract object class and confidence score
+                        score = box.conf.item() * 100
+                        class_id = int(box.cls.item())
 
-                    elif display == 'custom':
-                        frame == self.custom_display(**display_args)
+                        x1, y1, x2, y2 = np.squeeze(box.xyxy.numpy()).astype(int)
+                        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-            # # Display FPS on frame
-            # frame = cv2.putText(frame, f"FPS : {fps:,.2f}",
-            #                     (5, 55), cv2.FONT_HERSHEY_COMPLEX,
-            #                     0.5, (0, 255, 255), 1, cv2.LINE_AA)
+                        # Print detection info
+                        if show_cls:
+                            textString += f"{self.labels[class_id]}"
 
-            # Display Counting results
-                    count_txt = f"TOTAL COUNT : {len(totalCount)}"
-                    cv2.putText(frame, count_txt, (5, 45), cv2.FONT_HERSHEY_COMPLEX, 2, (0, 0, 255), 2)
-                    (flag, encodedImage) = cv2.imencode(".jpg", frame)
-                    if not flag:
-                        continue
-                    yield (
-                        b"--frame\r\n"
-                                            b"Content-Type: image/jpeg\r\n\r\n"
-                                            + bytearray(encodedImage)
-                                            + b"\r\n"
-                                        )
+                        if show_conf:
+                            textString += f" {score:,.2f}%"
 
-        # After the loop release the cap
+                        # Calculate font scale based on object size
+                        font = cv2.FONT_HERSHEY_COMPLEX
+                        fontScale = (((x2 - x1) / frame.shape[0]) + ((y2 - y1) / frame.shape[1])) / 2 * 3.5
+                        fontThickness = 1
+                        textSize, baseline = cv2.getTextSize(textString, font, fontScale, fontThickness)
+
+                        # Draw bounding box, a centroid and label on the image
+                        print(bbx_thickness)
+                        print(colors)
+                        img = cv2.rectangle(frame, (x1, y1), (x2, y2), int(colors), int(bbx_thickness))
+                        center_coordinates = ((x1 + x2) // 2, (y1 + y2) // 2)
+
+                        img = cv2.circle(img, center_coordinates, 4, (0, 0, 255), -1)
+
+                        # If there are no details to show on the image
+                        if textString != "":
+                            if (y1 < textSize[1]):
+                                y1 = y1 + textSize[1]
+                            else:
+                                y1 -= 2
+                            # show the details text in a filled rectangle
+                            img = cv2.rectangle(img, (x1, y1), (x1 + textSize[0], y1 - textSize[1]), colors,
+                                                cv2.FILLED)
+                            img = cv2.putText(img, textString,
+                                              (x1, y1), font,
+                                              fontScale, (0, 0, 0), fontThickness, cv2.LINE_AA)
+
+                        (flag, encodedImage) = cv2.imencode(".jpg", frame)
+                        if not flag:
+                            continue
+                        yield (
+                                b"--frame\r\n"
+                                b"Content-Type: image/jpeg\r\n\r\n"
+                                + bytearray(encodedImage)
+                                + b"\r\n"
+                        )
         cap.release()
-        # print(len(totalCount))
-        # print(totalCount)
-        # # print("ok", dictObject)
-        # return len(totalCount), dictObject
