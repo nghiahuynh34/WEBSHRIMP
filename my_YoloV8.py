@@ -39,7 +39,7 @@ class YOLOv8_ObjectDetector:
     """
 
     def __init__(self, model_file='yolov8n.pt',
-                 labels=None, classes=None,conf=0.55, iou=0.55):
+                 labels=None, classes=None,conf=0.5, iou=0.55):
 
         self.classes = classes
         self.conf = conf
@@ -316,7 +316,7 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
         # define an output VideoWriter  object
         out = cv2.VideoWriter(save_file,
                               cv2.VideoWriter_fourcc(*"MJPG"),
-                              30, (width, height))
+                              50, (width, height))
 
         # Check if the video is opened correctly
         if not cap.isOpened():
@@ -348,7 +348,7 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
             results = self.predict_img(frame, verbose=False)
             if results == None:
                 print('***********************************************')
-            fps = 1 / (time.time() - beg)
+            # fps = 10 / (time.time() - beg)
 
             for box in results.boxes:
                 # score = box.conf.item() * 100
@@ -414,8 +414,8 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
         print(totalCount)
         # print("ok", dictObject)
         return len(totalCount), dictObject, save_file
-    def predict_videoStream(self, video_path,colors=[],
-                      show_cls=True, show_conf=True, CAP_DSHOW=None,verbose=True):
+    def predict_videoStream(self, video_path,colors,CAP_DSHOW=None,
+                      show_cls=True, show_conf=True, verbose=True):
 
         """
     Runs object detection on a video file and saves the output as a new video file.
@@ -433,7 +433,8 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
         None
         """
         cap = cv2.VideoCapture(video_path,CAP_DSHOW)
-        # Get video name
+        # Get video
+        print(video_path,CAP_DSHOW)
         if not cap.isOpened():
             print("Error opening video stream or file")
         # Initialize object tracker
@@ -443,6 +444,7 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
         # Read the video frames
         while True:
             ret, frame = cap.read()
+            print(frame)
             bbx_thickness = (frame.shape[0] + frame.shape[1]) // 350
             if ret:
                 detections = self.predict_img(frame)
@@ -474,9 +476,9 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
                         textSize, baseline = cv2.getTextSize(textString, font, fontScale, fontThickness)
 
                         # Draw bounding box, a centroid and label on the image
-                        print(bbx_thickness)
-                        print(colors)
-                        img = cv2.rectangle(frame, (x1, y1), (x2, y2), int(colors), int(bbx_thickness))
+                        # print(bbx_thickness)
+                        # print(colors)
+                        img = cv2.rectangle(frame, (x1, y1), (x2, y2), colors[class_id], bbx_thickness)
                         center_coordinates = ((x1 + x2) // 2, (y1 + y2) // 2)
 
                         img = cv2.circle(img, center_coordinates, 4, (0, 0, 255), -1)
@@ -488,7 +490,7 @@ class YOLOv8_ObjectCounter(YOLOv8_ObjectDetector):
                             else:
                                 y1 -= 2
                             # show the details text in a filled rectangle
-                            img = cv2.rectangle(img, (x1, y1), (x1 + textSize[0], y1 - textSize[1]), colors,
+                            img = cv2.rectangle(img, (x1, y1), (x1 + textSize[0], y1 - textSize[1]), colors[class_id],
                                                 cv2.FILLED)
                             img = cv2.putText(img, textString,
                                               (x1, y1), font,

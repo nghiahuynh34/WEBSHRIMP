@@ -202,10 +202,8 @@ class Sort(object):
 
     # get predicted locations from existing trackers.
     trks = np.zeros((len(self.trackers), 5))
-    # print(dets)
     to_del = []
     ret = []
-    oldid=[]
     for t, trk in enumerate(trks):
       pos = self.trackers[t].predict()[0]
       trk[:] = [pos[0], pos[1], pos[2], pos[3], 0]
@@ -227,7 +225,7 @@ class Sort(object):
     i = len(self.trackers)
     for trk in reversed(self.trackers):
       d = trk.get_state()[0]
-      if (trk.time_since_update < 1) and (trk.hit_streak >= self.min_hits or self.frame_count <= self.min_hits):
+      if (trk.time_since_update < 2) and (trk.hit_streak >= self.min_hits or self.frame_count <= self.min_hits):
         # ret.append(np.concatenate((d, [trk.class_id,trk.id + 1])).reshape(1, -1))
         ret.append(np.concatenate((d, [trk.class_id, trk.id + 1])))
       i -= 1

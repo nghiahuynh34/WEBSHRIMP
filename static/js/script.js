@@ -1,35 +1,56 @@
 // Drop handler
+console.log('hello');
 $(document).ready(function () {
-        $('#uploadImage').submit(function (event) {
-            $('#inferenceJson').empty().append('');
-            if ($('#uploadFile').val()) {
-                event.preventDefault();
-                $('#displayedImage').show();
-                $('#targetLayer').hide();
-                $(this).ajaxSubmit({
-                    target: '#targetLayer',
-                    beforeSubmit: function () {
-                        $('.progress-bar').width('50%');
-                    },
-                    uploadProgress: function (
-                        event,
-                        position,
-                        total,
-                        percentageComplete
-                    ) {
-                        $('.progress-bar').animate(
-                            {
-                                width: percentageComplete + '%',
-                            },
-                            {
-                                duration: 1000,
-                            }
+    $('#uploadImage').submit(function (event) {
+        $('#inferenceJson').empty().append('');
+        if ($('#uploadFile').val()) {
+            console.log($('#uploadFile').val());
+            event.preventDefault();
+            $('#displayedImage').show();
+            $('#targetLayer').hide();
+            //$('#displayedImage').hide();
+            //                        $('#targetLayer').show();
+            //                 $('#webcam').attr('src', '/classify');
+            $(this).ajaxSubmit({
+                target: '#targetLayer',
+                beforeSubmit: function () {
+                    $('.progress-bar').width('50%');
+                    console.log('ok');
+                },
+                uploadProgress: function (
+                    event,
+                    position,
+                    total,
+                    percentageComplete
+                ) {
+                    $('.progress-bar').animate(
+                        {
+                            width: percentageComplete + '%',
+                        },
+                        {
+                            duration: 1000,
+                        }
+                    );
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#displayedImage').hide();
+                    $('#targetLayer').show();
+                    if (data.video) {
+                        console.log(
+                            "<img src='/video_feed/" +
+                                data.file +
+                                "' id='webcam' autoplay style='margin-top: 40px' />'"
                         );
-                    },
-                    success: function (data) {
-                        $('#displayedImage').hide();
-                        $('#targetLayer').show();
+
+                        $('#targetLayer').append(
+                            "<img src='/video_feed/" +
+                                data.file +
+                                "' id='webcam' autoplay style='margin-top: 40px' />'"
+                        );
+                    } else {
                         $('#targetLayer').append(data.htmlresponse);
+
                         var InfoOfResult = data.Info.map(
                             (val, index) =>
                                 "<pre class='jsonOutput'>" +
@@ -42,13 +63,14 @@ $(document).ready(function () {
                         );
 
                         $('#inferenceJson').append(InfoOfResult.join(''));
-                    },
-                    resetForm: true,
-                });
-            }
-            return false;
-        });
+                    }
+                },
+                resetForm: true,
+            });
+        }
+        return false;
     });
+});
 
 /* ***********----------------------******************* */
 function dropHandler(event) {
@@ -91,20 +113,35 @@ function handleFiles(files) {
                 document.getElementById('displayedImage').style.display =
                     'none';
                 document.getElementById('targetLayer').style.display = 'block';
-                document.getElementById('targetLayer').innerHTML =
-                    data.htmlresponse;
-                var InfoOfResult = data.Info.map(
-                    (val, index) =>
-                        "<pre class='jsonOutput'>" +
-                        JSON.stringify(
-                            { ['Image' + (index + 1)]: val },
-                            null,
-                            2
-                        ) +
-                        '</pre>'
-                );
-                console.log(InfoOfResult)
-                document.getElementById('inferenceJson').innerHTML =InfoOfResult;
+                if (data.video) {
+                    console.log(
+                        "<img src='/video_feed/" +
+                            data.file +
+                            "' id='webcam' autoplay style='margin-top: 40px' />'"
+                    );
+
+                    $('#targetLayer').append(
+                        "<img src='/video_feed/" +
+                            data.file +
+                            "' id='webcam' autoplay style='margin-top: 40px' />'"
+                    );
+                } else {
+                    document.getElementById('targetLayer').innerHTML =
+                        data.htmlresponse;
+                    var InfoOfResult = data.Info.map(
+                        (val, index) =>
+                            "<pre class='jsonOutput'>" +
+                            JSON.stringify(
+                                { ['Image' + (index + 1)]: val },
+                                null,
+                                2
+                            ) +
+                            '</pre>'
+                    );
+                    console.log(InfoOfResult);
+                    document.getElementById('inferenceJson').innerHTML =
+                        InfoOfResult;
+                }
             } else {
                 alert('Error downloading image. Please check the URL.');
             }
@@ -127,7 +164,10 @@ function toggleWebcam() {
     if (isWebcamVisible) {
         $('#webcam').attr('src', '');
     } else {
-        $('#webcam').attr('src', '/video_feed');
+        $('#webcam').attr(
+            'src',
+            '/video_feed/https://www.facebook.com/100011446841179/videos/pcb.941243397229645/3068464763289472'
+        );
     }
     // Sử dụng jQuery để thay đổi thuộc tính display của video từ webcam
     $('#webcam').toggle();
