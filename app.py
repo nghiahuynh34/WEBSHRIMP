@@ -118,6 +118,8 @@ def googleLogin():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if session:
+        return redirect(url_for('home'))
     if request.method == "POST":
         email = request.form['email']
         pwd = request.form['password']
@@ -139,6 +141,8 @@ def login():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if session:
+        return redirect(url_for('home'))
     if request.method == "POST":
         print("ok")
         email = request.form['email']
@@ -184,6 +188,9 @@ def logout():
     session.clear()
     return redirect(url_for("login"))
 
+@app.route("/settings")
+def settings():
+    return render_template('settings.html')
 
 @app.route("/classification")
 def classification():
@@ -381,7 +388,25 @@ def color():
 def random_color():
     return tuple(random.randint(0, 255) for _ in range(3))
 
+@app.route("/change-password", methods=["POST"])
+def change_password():
+    if "user" in session:
+        current_pwd = request.form['current_password']
+        new_pwd = request.form['new_password']
 
+        cur = mysql.connection.cursor()
+        cur.execute(f"SELECT password FROM user WHERE email = '{session['user']['email']}'")
+        user_data = cur.fetchone()
+
+        if user_data and current_pwd == user_data[0]:
+            cur.execute(f"UPDATE user SET password = '{new_pwd}' WHERE email = '{session['user']['email']}'")
+            mysql.connection.commit()
+            cur.close()
+            return redirect(url_for('home'))
+        else:
+            return render_template('settings.html', error='Current password is incorrect')
+    else:
+        return redirect(url_for('login'))
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=appConf.get(
         "FLASK_PORT"), debug=True)

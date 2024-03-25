@@ -432,3 +432,47 @@ body {
         transform: translateY(12px); /* Dừng lại ở vị trí xuống 200px */
     }
 }
+
+.account-dropdown {
+    background-color: #070f2b;
+    position: relative;
+    width: 180px;
+    height: 100%;
+}
+
+.account-dropdown:hover {
+    background-color: #122b52;
+}
+.account-dropdown .nav__text a:hover {
+    text-decoration: none;
+}
+
+.dropdown-content {
+    position: absolute;
+    width: 180px;
+    background-color: #ffffff;
+    min-width: 100px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    border: 1px solid black;
+}
+
+.account-dropdown:hover .dropdown-content {
+    opacity: 1; /* Khi hover, hiển thị dropdown */
+    visibility: visible; /* Hiển thị dropdown */
+}
+
+.dropdown-content a {
+    display: block;
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #122b52;
+    color: white;
+    text-decoration: none;
+}
