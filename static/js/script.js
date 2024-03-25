@@ -3,9 +3,13 @@ $(document).ready(function () {
         $('#uploadImage').submit(function (event) {
             $('#inferenceJson').empty().append('');
             if ($('#uploadFile').val()) {
+            console.log($('#uploadFile').val())
                 event.preventDefault();
                 $('#displayedImage').show();
                 $('#targetLayer').hide();
+//$('#displayedImage').hide();
+//                        $('#targetLayer').show();
+//                 $('#webcam').attr('src', '/classify');
                 $(this).ajaxSubmit({
                     target: '#targetLayer',
                     beforeSubmit: function () {
@@ -27,9 +31,16 @@ $(document).ready(function () {
                         );
                     },
                     success: function (data) {
+                    console.log(data)
                         $('#displayedImage').hide();
                         $('#targetLayer').show();
+                        if(data.video){
+                        console.log("<img src='/video_feed/"+data.file+"' id='webcam' autoplay style='margin-top: 40px' />'")
+
+                         $('#targetLayer').append("<img src='/video_feed/"+data.file+"' id='webcam' autoplay style='margin-top: 40px' />'" );
+                        }else{
                         $('#targetLayer').append(data.htmlresponse);
+
                         var InfoOfResult = data.Info.map(
                             (val, index) =>
                                 "<pre class='jsonOutput'>" +
@@ -42,6 +53,7 @@ $(document).ready(function () {
                         );
 
                         $('#inferenceJson').append(InfoOfResult.join(''));
+                        }
                     },
                     resetForm: true,
                 });
@@ -127,7 +139,7 @@ function toggleWebcam() {
     if (isWebcamVisible) {
         $('#webcam').attr('src', '');
     } else {
-        $('#webcam').attr('src', '/video_feed');
+        $('#webcam').attr('src', '/video_feed/https://www.facebook.com/100011446841179/videos/pcb.941243397229645/3068464763289472');
     }
     // Sử dụng jQuery để thay đổi thuộc tính display của video từ webcam
     $('#webcam').toggle();

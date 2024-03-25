@@ -1,5 +1,4 @@
 from urllib.parse import urlparse
-
 from flask import Flask, render_template, request, redirect, jsonify, Response, url_for, session, abort
 from flask_cors import CORS
 import os
@@ -34,7 +33,7 @@ app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'yolov8shrimp'
 mysql = MySQL(app)
 
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686_338.pt")
 
 appConf = {
     "OAUTH2_CLIENT_ID": "791126823139-piql3f0tr6ig8l0afd2guaro6td57tal.apps.googleusercontent.com",
@@ -63,10 +62,7 @@ oauth.register(
 @app.route("/")
 def home():   
     if (session):
-           
-        # print(session)
         CS = mysql.connection.cursor()
-        print(session["user"]["email"])
         CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
         Executed_DATA = CS.fetchall()
         print("Executed_DATA",session["provider"])
@@ -79,7 +75,6 @@ def home():
             mysql.connection.commit()
             CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
             Executed_DATA = CS.fetchall()
-            print("okokoko",Executed_DATA)
             return render_template("home.html", session=Executed_DATA
                                )
     else:
@@ -89,9 +84,7 @@ def home():
 @app.route("/signin-google")
 def googleCallback():
     # fetch access token and id token using authorization code
-    print(session)
     token = oauth.myApp.authorize_access_token()
-    print(token)
     personDataUrl = "https://people.googleapis.com/v1/people/me?personFields=genders,birthdays"
     personData = requests.get(personDataUrl, headers={
         "Authorization": f"Bearer {token['access_token']}"
@@ -106,18 +99,17 @@ def googleCallback():
     print("ok",session)
     return redirect(url_for("home"))
 
-
-    
 @app.route("/google-login")
 def googleLogin():
     print(session)
     if "user" in session:
         abort(404)
-
     return oauth.myApp.authorize_redirect(redirect_uri=url_for("googleCallback", _external=True))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if session:
+        return redirect(url_for("home"))
     if request.method == "POST":
         email = request.form['email']
         pwd = request.form['password']
@@ -125,25 +117,22 @@ def login():
         cur.execute(f"select * from user where email = '{email}'")
         users = cur.fetchone()
         cur.close()
-        print(users)
         if users and pwd == users[3]:
             session['user'] = {"email":users[0]}
             session["provider"] = "sql"
-            print(session)
             return redirect(url_for('home'))
         else:
             return render_template('login.html', error = 'Invalid email or password')
     return render_template('login.html')    
 
 
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if session:
+        return redirect(url_for("home"))
     if request.method == "POST":
-        print("ok")
         email = request.form['email']
         password = request.form['password']
-
 
         cur = mysql.connection.cursor()
         cur.execute(f"SELECT * FROM user WHERE email = '{email}'")
@@ -159,8 +148,6 @@ def register():
             cur.execute(f"INSERT INTO user (email,username, avatar, password) VALUES ('{email}','{user_name}','{'https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745'}','{password}')")
             mysql.connection.commit()
             cur.close()
-
-                # Đăng ký thành công, chuyển hướng đến trang đăng nhập
             return redirect(url_for('login'))
     else:
         return render_template('register.html')
@@ -189,7 +176,6 @@ def logout():
 def classification():
     if session:
         CS = mysql.connection.cursor()
-        print(session["user"]["email"])
         CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
         Executed_DATA = CS.fetchone()
         print(Executed_DATA)
@@ -198,18 +184,21 @@ def classification():
         return redirect(url_for('login'))
 
 
-@app.route("/video_feed")
-def video_feed():
-    return Response(generate(videoPath=0,CAP_DSHOWN=cv2.CAP_DSHOW,colors=random_color()
-), mimetype="multipart/x-mixed-replace; boundary=frame")
+@app.route("/video_feed/<path:subpath>")
+def video_feed(subpath):
+    if( subpath=="camera"):
+        print(subpath)
+        return Response(generate(colors=color()),
+                    mimetype="multipart/x-mixed-replace; boundary=frame")
+    else:
+        return Response(generate(videoPath=subpath,CAP_DSHOWN=None,colors=color()),
+                        mimetype="multipart/x-mixed-replace; boundary=frame")
 
-
-@app.route('/classify', methods=['POST'])
+@app.route('/classify', methods=['GET','POST'])
 def upload_file():
     print(request.files.getlist('uploadFile[]'))
     if 'uploadFile[]' not in request.files:
         return redirect(request.url)
-
     files = request.files.getlist('uploadFile[]')
     if files:
         file_names = []
@@ -230,44 +219,41 @@ def upload_file():
                     dictObject, save_name = model.count_object(results, app.config['UPLOAD_FOLDER'], result_img)
                     results_pre_temp.append(dictObject)
                     file_names.append(save_name)
-                    # Trả về kết quả
-                # else:
-                #     msg = 'Invalid Uplaod only png, jpg, jpeg, gif'
-                #     return {'htmlresponse': render_template('response.html', msg=msg, filenames=file_names)}
             else:
                 is_video = True
                 path_save = os.path.join(app.config['UPLOAD_FOLDER'] + "/image/img_process/", file.filename)
                 file.save(path_save)
                 print(path_save)
                 msg = 'File predict successfully'
-                totalCount, dictObject, save_file = model.predict_video(video_path=path_save,
-                                                                        save_dir=app.config[
-                                                                                     'UPLOAD_FOLDER'] + "/video/",
-                                                                        save_format="avi",
-                                                                        display='custom',
-                                                                        colors=color())
-                video = model.convert_video(save_file, app.config['UPLOAD_FOLDER'] + "/videoOut/")
-                file_names.append(video)
+
+                # totalCount, dictObject, save_file = model.predict_video(video_path=path_save,
+                #                                                         save_dir=app.config[
+                #                                                                      'UPLOAD_FOLDER'] + "/video/",
+                #                                                         save_format="avi",
+                #                                                         display='custom',
+                #                                                         colors=color())
+                # video = model.convert_video(save_file, app.config['UPLOAD_FOLDER'] + "/videoOut/")
+                file_names.append(path_save)
         if results_pre_temp.__len__() > 0:
             if results_pre.__len__() > 0:
                 results_pre.clear()
             results_pre.extend(results_pre_temp)
             results_pre_temp.clear()
-        return jsonify(
-            {'htmlresponse': render_template('response.html', is_video=is_video, msg=msg, filenames=file_names),
-             "Info": results_pre,
-             'success': True, })
+        if(is_video):
+            # generate(, CAP_DSHOWN=None, colors=color())
+            return jsonify(
+                {"video": True,
+                 'success': True,
+                 "file":file_names[0]})
+        else:
+            return jsonify(
+                {'htmlresponse': render_template('response.html', msg=msg, filenames=file_names),
+                 "Info": results_pre,
+                 "video": False,
+                 'success': True, })
     else:
         return {'htmlresponse': 'Error!',
                 'success': False, }
-
-
-# def _get_files():
-#     file_list = os.path.join(app.config['UPLOAD_FOLDER'], 'files.json')
-#     if os.path.exists(file_list):
-#         with open(file_list) as fh:
-#             return json.load(fh)
-#     return {}
 
 @app.route('/download', methods=['POST'])
 def download():
@@ -275,27 +261,15 @@ def download():
         # Ensure the 'url' key is present in the JSON data
         data = request.get_json()
         url = data['url']
-        print(url)
         r = requests.get(url)
-        # url = data.get('url')
         if not url:
             raise ValueError("URL is missing in the request data.")
 
         print(f"Downloading image from: {url}")
 
-        # Fetch the image from the given URL
-        # response = requests.get(url)
-        # response.raise_for_status()  # Raise an error for bad responses
-
-        # Create a BytesIO object from the image content
-        # img_data = BytesIO(response.content)
-
-        # Ensure the upload folder exists
         upload_folder = app.config['UPLOAD_FOLDER']
         if not os.path.exists(upload_folder):
             os.makedirs(upload_folder)
-
-        # Generate a filename based on the URL
         filename = get_filename_from_url(url)
         image_path = os.path.join(upload_folder, filename)
 
@@ -305,25 +279,17 @@ def download():
                 if chunk:
                     f.write(chunk)
 
-        print(f"Saved file to: {image_path}")
-
         # Check the file type using imghdr
         file_type = imghdr.what(image_path)
 
         if file_type:
-            # It's an image
-            print(f"Detected image type: {file_type}")
-
             # # Read the image using OpenCV
             frame = cv2.imread(image_path)
-            print(frame)
-            #
             # # Perform image prediction using the 'model'
             results = model.predict_img(frame)
             print(f"Image prediction results: {results}")
 
             # Display the results with custom colors
-
             result_img = model.custom_display(colors=color())
     
             # If there are positive results, count objects and save the image
@@ -346,7 +312,6 @@ def download():
             return jsonify({'success': True, "Info": dictObject,
                             'htmlresponse': render_template('response.html', is_video=True, msg=msg,
                                                             filenames=[video])})
-    
         return jsonify({'success': True, 'image_path': "No positive results", "Info": {}})
     
     except requests.RequestException as req_err:
@@ -355,14 +320,13 @@ def download():
     except Exception as e:
         return jsonify({'success': False, 'error': f"An error occurred: {str(e)}"})
 
-
-
-def generate(videoPath=0,CAP_DSHOWN=None,colors=None):
-    return model.predict_videoStream(videoPath, CAP_DSHOWN,colors)
+def generate(videoPath=0,CAP_DSHOWN=cv2.CAP_DSHOW,colors=None):
+    print(videoPath)
+    print(CAP_DSHOWN)
+    return model.predict_videoStream(videoPath,colors, CAP_DSHOWN)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 def get_filename_from_url(url):
     parsed_url = urlparse(url)
