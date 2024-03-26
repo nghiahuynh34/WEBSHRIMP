@@ -15,7 +15,7 @@ import requests
 # from random import random
 # Khởi tạo Flask Server Backend
 app = Flask(__name__)
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4','webp'])
 # Apply Flask CORS
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -33,7 +33,7 @@ app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'yolov8shrimp'
 mysql = MySQL(app)
 
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686_338.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686.pt")
 
 appConf = {
     "OAUTH2_CLIENT_ID": "791126823139-piql3f0tr6ig8l0afd2guaro6td57tal.apps.googleusercontent.com",
@@ -321,8 +321,6 @@ def download():
         return jsonify({'success': False, 'error': f"An error occurred: {str(e)}"})
 
 def generate(videoPath=0,CAP_DSHOWN=cv2.CAP_DSHOW,colors=None):
-    print(videoPath)
-    print(CAP_DSHOWN)
     return model.predict_videoStream(videoPath,colors, CAP_DSHOWN)
 
 def allowed_file(filename):

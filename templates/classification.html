@@ -269,6 +269,10 @@ block content %}
     </div>
     <!-- Copyright -->
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
+
+<!-- Add the WebGPU backend to the global backend registry -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/dist/tf-backend-webgpu.js"></script>
 <script>
 
 
@@ -337,6 +341,21 @@ block content %}
             }
         }, intervalTime);
     }
+    function loadModel(){
+    let model
+tf.setBackend("webgpu").then(async () => {
+       model = await tf.loadGraphModel("models/model.json", {
+        onProgress: (fractions) => {
+         console.log(model)
+        },})
+
+      })
+      const dummyInput = tf.ones(model.inputs[0].shape);
+      const warmupResults = model.execute(dummyInput);
+      tf.dispose([warmupResults, dummyInput]);
+
+}
+<!--loadModel()-->
 
     // Call function to start processing image
     processImage();

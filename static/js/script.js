@@ -1,5 +1,8 @@
-// Drop handler
+//import * as tf from '@tensorflow/tfjs-core';
+// Adds the WebGL backend to the global backend registry.
+//import '@tensorflow/tfjs-backend-webgl';
 $(document).ready(function () {
+
         $('#uploadImage').submit(function (event) {
             $('#inferenceJson').empty().append('');
             if ($('#uploadFile').val()) {
@@ -139,7 +142,7 @@ function toggleWebcam() {
     if (isWebcamVisible) {
         $('#webcam').attr('src', '');
     } else {
-        $('#webcam').attr('src', '/video_feed/https://www.facebook.com/100011446841179/videos/pcb.941243397229645/3068464763289472');
+        $('#webcam').attr('src', '/video_feed/camera');
     }
     // Sử dụng jQuery để thay đổi thuộc tính display của video từ webcam
     $('#webcam').toggle();
@@ -201,3 +204,4 @@ window.onclick = function (event) {
         }
     }
 };
+
