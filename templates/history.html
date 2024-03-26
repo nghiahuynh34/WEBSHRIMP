@@ -1,0 +1,22 @@
+{% extends "MainBase.html" %} {% block title %} History {% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <h2 class="chart-heading">Shrimp kind pie chart</h2>
+    <div class="shrimp-stats">
+        <div class="chart-container">
+            <canvas class="my-chart">
+
+            </canvas>
+        </div>
+        <div class="details">
+            <ul>
+                <li>BigShrimp: <span class="percentage">30%</span></li>
+                <li>MediumShrimp: <span class="percentage">30%</span></li>
+                <li>SmallShrimp: <span class="percentage">30%</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename= '/js/pie_chart_history.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
