@@ -1,76 +1,74 @@
-// Drop handler
-console.log('hello');
-$(document).ready(function () {
-    $('#uploadImage').submit(function (event) {
-        $('#inferenceJson').empty().append('');
-        if ($('#uploadFile').val()) {
-            console.log($('#uploadFile').val());
-            event.preventDefault();
-            $('#displayedImage').show();
-            $('#targetLayer').hide();
-            //$('#displayedImage').hide();
-            //                        $('#targetLayer').show();
-            //                 $('#webcam').attr('src', '/classify');
-            $(this).ajaxSubmit({
-                target: '#targetLayer',
-                beforeSubmit: function () {
-                    $('.progress-bar').width('50%');
-                    console.log('ok');
-                },
-                uploadProgress: function (
-                    event,
-                    position,
-                    total,
-                    percentageComplete
-                ) {
-                    $('.progress-bar').animate(
-                        {
-                            width: percentageComplete + '%',
-                        },
-                        {
-                            duration: 1000,
-                        }
-                    );
-                },
-                success: function (data) {
-                    console.log(data);
-                    $('#displayedImage').hide();
-                    $('#targetLayer').show();
-                    if (data.video) {
-                        console.log(
-                            "<img src='/video_feed/" +
-                                data.file +
-                                "' id='webcam' autoplay style='margin-top: 40px' />'"
-                        );
+// // Drop handler
+// $(document).ready(function () {
+//     $('#uploadImage').submit(function (event) {
+//         $('#inferenceJson').empty().append('');
+//         if ($('#uploadFile').val()) {
+//             console.log($('#uploadFile').val());
+//             event.preventDefault();
+//             $('#displayedImage').show();
+//             $('#targetLayer').hide();
+//             //$('#displayedImage').hide();
+//             //                        $('#targetLayer').show();
+//             //                 $('#webcam').attr('src', '/classify');
+//             $(this).ajaxSubmit({
+//                 target: '#targetLayer',
+//                 beforeSubmit: function () {
+//                     $('.progress-bar').width('50%');
+//                 },
+//                 uploadProgress: function (
+//                     event,
+//                     position,
+//                     total,
+//                     percentageComplete
+//                 ) {
+//                     $('.progress-bar').animate(
+//                         {
+//                             width: percentageComplete + '%',
+//                         },
+//                         {
+//                             duration: 1000,
+//                         }
+//                     );
+//                 },
+//                 success: function (data) {
+//                     console.log(data);
+//                     $('#displayedImage').hide();
+//                     $('#targetLayer').show();
+//                     if (data.video) {
+//                         console.log(
+//                             "<img src='/video_feed/" +
+//                                 data.file +
+//                                 "' id='webcam' autoplay style='margin-top: 40px' />'"
+//                         );
 
-                        $('#targetLayer').append(
-                            "<img src='/video_feed/" +
-                                data.file +
-                                "' id='webcam' autoplay style='margin-top: 40px' />'"
-                        );
-                    } else {
-                        $('#targetLayer').append(data.htmlresponse);
+//                         $('#targetLayer').append(
+//                             "<img src='/video_feed/" +
+//                                 data.file +
+//                                 "' id='webcam' autoplay style='margin-top: 40px' />'"
+//                         );
+//                     } else {
+//                         $('#targetLayer').append(data.htmlresponse);
 
-                        var InfoOfResult = data.Info.map(
-                            (val, index) =>
-                                "<pre class='jsonOutput'>" +
-                                JSON.stringify(
-                                    { ['Image' + (index + 1)]: val },
-                                    null,
-                                    2
-                                ) +
-                                '</pre>'
-                        );
+//                         var InfoOfResult = data.Info.map(
+//                             (val, index) =>
+//                                 "<pre class='jsonOutput'>" +
+//                                 JSON.stringify(
+//                                     { ['Image' + (index + 1)]: val },
+//                                     null,
+//                                     2
+//                                 ) +
+//                                 '</pre>'
+//                         );
 
-                        $('#inferenceJson').append(InfoOfResult.join(''));
-                    }
-                },
-                resetForm: true,
-            });
-        }
-        return false;
-    });
-});
+//                         $('#inferenceJson').append(InfoOfResult.join(''));
+//                     }
+//                 },
+//                 resetForm: true,
+//             });
+//         }
+//         return false;
+//     });
+// });
 
 /* ***********----------------------******************* */
 function dropHandler(event) {
@@ -108,6 +106,7 @@ function handleFiles(files) {
     })
         .then((response) => response.json())
         .then((data) => {
+            console.log('ok nè');
             console.log(data);
             if (data.success) {
                 document.getElementById('displayedImage').style.display =
