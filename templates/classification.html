@@ -1,4 +1,4 @@
-{% extends "MainBase.html" %} {% block title %} Classification {% endblock %} {%
+{% extends "base.html" %} {% block title %} Classification {% endblock %} {%
 block content %}
 <div class="container-fluid">
     <div class="row confix-margin">
@@ -132,7 +132,7 @@ block content %}
                     <form
                         id="uploadImage"
                         method="post"
-                        action="/classify"
+                        action="/project"
                         enctype="multipart/form-data">
                         <div class="form-group">
                             <input
@@ -187,6 +187,76 @@ block content %}
             </div>
         </div>
 
+        <!--               Cho Mobile -->
+        <div class="container tool-mb train_2">
+            <div class="row up_normal">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6">
+                    <form
+                        id="uploadImage"
+                        method="post"
+                        action="/project"
+                        enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input
+                                type="file"
+                                name="uploadFile[]"
+                                multiple="true"
+                                id="uploadFile"
+                                accept=".jpg, .png, .mp4"
+                                hidden="True" />
+                            <label for="uploadFile" class="input_file">
+                                <i
+                                    style="
+                                        font-weight: 300;
+                                        padding: 0 10px;
+                                        border-radius: 5px;
+                                    "
+                                    class="fa fa-cloud-upload"
+                                    aria-hidden="true"></i>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <input
+                                type="submit"
+                                id="uploadSubmit"
+                                value="Upload"
+                                class="btn btn-info" />
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-6 wbc">
+                    <button
+                        class="upload_button"
+                        id="webcam_button"
+                        onclick="toggleWebcam()">
+                        <i class="fa-solid fa-video"></i>
+                        Webcam
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10">
+                    <form class="form_url">
+                        <div class="centered-elements">
+                            <i
+                                style="align-items: center"
+                                class="fa fa-link"
+                                aria-hidden="true"></i>
+                            <input
+                                id="imageURL"
+                                name="imageURL"
+                                class="input-link"
+                                type="text"
+                                placeholder="Paste a link..." />
+                        </div>
+                    </form>
+                </div>
+                <div class="col-2 smI_button">
+                    <button class="smI" onclick="downloadImage()">UP</button>
+                </div>
+            </div>
+        </div>
+
         <!-- ----------------------------------Row 2 ----------------------------------------- -->
 
         <div
@@ -210,7 +280,6 @@ block content %}
             </div>
             <div id="targetLayer" style="display: none">
                 <img src="" id="webcam" autoplay style="margin-top: 40px" />
-
             </div>
             <img
                 id="displayedImage"
@@ -274,7 +343,56 @@ block content %}
 <!-- Add the WebGPU backend to the global backend registry -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/dist/tf-backend-webgpu.js"></script>
 <script>
+    $(document).ready(function () {
+        $('#uploadImage').submit(function (event) {
+            $('#inferenceJson').empty().append('');
+            if ($('#uploadFile').val()) {
+                event.preventDefault();
+                $('#displayedImage').show();
+                $('#targetLayer').hide();
+                $(this).ajaxSubmit({
+                    target: '#targetLayer',
+                    beforeSubmit: function () {
+                        $('.progress-bar').width('50%');
+                    },
+                    uploadProgress: function (
+                        event,
+                        position,
+                        total,
+                        percentageComplete
+                    ) {
+                        $('.progress-bar').animate(
+                            {
+                                width: percentageComplete + '%',
+                            },
+                            {
+                                duration: 1000,
+                            }
+                        );
+                    },
+                    success: function (data) {
+                        $('#displayedImage').hide();
+                        $('#targetLayer').show();
+                        $('#targetLayer').append(data.htmlresponse);
+                        var InfoOfResult = data.Info.map(
+                            (val, index) =>
+                                "<pre class='jsonOutput'>" +
+                                JSON.stringify(
+                                    { ['Image' + (index + 1)]: val },
+                                    null,
+                                    2
+                                ) +
+                                '</pre>'
+                        );
 
+                        $('#inferenceJson').append(InfoOfResult.join(''));
+                    },
+                    resetForm: true,
+                });
+            }
+            return false;
+        });
+    });
 
     function downloadImage() {
         var imageURL = document.getElementById('imageURL').value;
@@ -289,11 +407,8 @@ block content %}
             .then((response) => response.json())
             .then((data) => {
                 if (data.success) {
-                console.log(data)
-                 document.getElementById('displayedImage').style.display =
-                    'none';
-                 document.getElementById('targetLayer').style.display = 'block';
-                document.getElementById('targetLayer').innerHTML =data.htmlresponse;
+                    document.getElementById('displayedImage').src =
+                        data.file_path;
                     document.getElementById(
                         'inferenceJson'
                     ).innerHTML = `<pre class='jsonOutput'>${JSON.stringify(
@@ -360,6 +475,5 @@ tf.setBackend("webgpu").then(async () => {
     // Call function to start processing image
     processImage();
 </script>
-<!--     <script src="{{url_for('static', filename='js/script.js')}}"></script>-->
-
+<!--     <script src="{{url_for('static', filename='js/script.js')}}"></script>
 {% endblock %}
