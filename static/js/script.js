@@ -1,76 +1,117 @@
-// // Drop handler
-// $(document).ready(function () {
-//     $('#uploadImage').submit(function (event) {
-//         $('#inferenceJson').empty().append('');
-//         if ($('#uploadFile').val()) {
-//             console.log($('#uploadFile').val());
-//             event.preventDefault();
-//             $('#displayedImage').show();
-//             $('#targetLayer').hide();
-//             //$('#displayedImage').hide();
-//             //                        $('#targetLayer').show();
-//             //                 $('#webcam').attr('src', '/classify');
-//             $(this).ajaxSubmit({
-//                 target: '#targetLayer',
-//                 beforeSubmit: function () {
-//                     $('.progress-bar').width('50%');
-//                 },
-//                 uploadProgress: function (
-//                     event,
-//                     position,
-//                     total,
-//                     percentageComplete
-//                 ) {
-//                     $('.progress-bar').animate(
-//                         {
-//                             width: percentageComplete + '%',
-//                         },
-//                         {
-//                             duration: 1000,
-//                         }
-//                     );
-//                 },
-//                 success: function (data) {
-//                     console.log(data);
-//                     $('#displayedImage').hide();
-//                     $('#targetLayer').show();
-//                     if (data.video) {
-//                         console.log(
-//                             "<img src='/video_feed/" +
-//                                 data.file +
-//                                 "' id='webcam' autoplay style='margin-top: 40px' />'"
-//                         );
+$(document).ready(function () {
+    console.log('kn');
+    $('#uploadFile').change(function (event) {
+        console.log('Kieu ne');
+        $('#inferenceJson').empty().append('');
+        if ($('#uploadFile').val()) {
+            $('#uploadImage').submit(function (e) {
+                e.preventDefault();
+                console.log(event.target.files);
+                $('#displayedImage').show();
+                $('#targetLayer').hide();
+                handleFiles(event.target.files);
+            });
 
-//                         $('#targetLayer').append(
-//                             "<img src='/video_feed/" +
-//                                 data.file +
-//                                 "' id='webcam' autoplay style='margin-top: 40px' />'"
-//                         );
-//                     } else {
-//                         $('#targetLayer').append(data.htmlresponse);
+            //$('#displayedImage').hide();
+            //                        $('#targetLayer').show();
+            //                 $('#webcam').attr('src', '/classify');
 
-//                         var InfoOfResult = data.Info.map(
-//                             (val, index) =>
-//                                 "<pre class='jsonOutput'>" +
-//                                 JSON.stringify(
-//                                     { ['Image' + (index + 1)]: val },
-//                                     null,
-//                                     2
-//                                 ) +
-//                                 '</pre>'
-//                         );
+            $(this).ajaxSubmit({
+                target: '#targetLayer',
+                beforeSubmit: function () {
+                    $('.progress-bar').width('50%');
+                    console.log('Kieu ne');
+                },
+                uploadProgress: function (
+                    event,
+                    position,
+                    total,
+                    percentageComplete
+                ) {
+                    $('.progress-bar').animate(
+                        {
+                            width: percentageComplete + '%',
+                        },
+                        {
+                            duration: 1000,
+                        }
+                    );
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#displayedImage').hide();
+                    $('#targetLayer').show();
+                    if (data.video) {
+                        console.log(
+                            "<img src='/video_feed/" +
+                                data.file +
+                                "' id='webcam' autoplay style='margin-top: 40px' />'"
+                        );
 
-//                         $('#inferenceJson').append(InfoOfResult.join(''));
-//                     }
-//                 },
-//                 resetForm: true,
-//             });
-//         }
-//         return false;
-//     });
-// });
+                        $('#targetLayer').append(
+                            "<img src='/video_feed/" +
+                                data.file +
+                                "' id='webcam' autoplay style='margin-top: 40px' />'"
+                        );
+                    } else {
+                        $('#targetLayer').append(data.htmlresponse);
 
-/* ***********----------------------******************* */
+                        var InfoOfResult = data.Info.map(
+                            (val, index) =>
+                                "<pre class='jsonOutput'>" +
+                                JSON.stringify(
+                                    { ['Image' + (index + 1)]: val },
+                                    null,
+                                    2
+                                ) +
+                                '</pre>'
+                        );
+
+                        $('#inferenceJson').append(InfoOfResult.join(''));
+                    }
+                },
+                resetForm: true,
+            });
+        }
+        return false;
+    });
+});
+function downloadImage() {
+    var imageURL = document.getElementById('imageURL').value;
+    document.getElementById('inferenceJson').innerHTML = '';
+    fetch('/download', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: imageURL }),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.success) {
+                console.log(data);
+                document.getElementById('displayedImage').style.display =
+                    'none';
+                document.getElementById('targetLayer').style.display = 'block';
+                document.getElementById('targetLayer').innerHTML =
+                    data.htmlresponse;
+                document.getElementById(
+                    'inferenceJson'
+                ).innerHTML = `<pre class='jsonOutput'>${JSON.stringify(
+                    { Image1: data.Info },
+                    null,
+                    2
+                )}</pre>`;
+            } else {
+                alert('Error downloading image. Please check the URL.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('An unexpected error occurred.');
+        });
+}
+
 function dropHandler(event) {
     event.preventDefault();
     document.getElementById('drop-area').style.border = '2px dashed #ccc';

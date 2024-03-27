@@ -15,15 +15,13 @@ block content %}
                         <p class="user_n">{{ session[1] }}</p>
                     </div>
 
-                    <a
-                        href="/hunh-hu-ngha/adminitrative-subdivision"
-                        class="nav-link">
+                    <a href="/history" class="nav-link">
                         <div class="label">
                             <div class="icon">
                                 <i class="fa fa-book" aria-hidden="true"></i>
                             </div>
                             <span class="text"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;Overview</span
+                                >&nbsp;&nbsp;&nbsp;&nbsp;History</span
                             >
                         </div>
                     </a>
@@ -107,7 +105,7 @@ block content %}
         <!--                <div class="col-lg-1"></div>-->
         <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12 tool">
             <div class="train_1">
-                <span class="title">&nbsp;&nbsp;&nbsp;&nbsp;Webcam</span>
+                <span class="title">&nbsp;&nbsp;&nbsp;&nbsp;History</span>
 
                 <div class="layout_img">
                     <button
@@ -270,113 +268,6 @@ block content %}
 </div>
 <script>
     // Drop handler
-    console.log('Kieu ne');
-    $(document).ready(function () {
-        $('#uploadImage').submit(function (event) {
-            $('#inferenceJson').empty().append('');
-            if ($('#uploadFile').val()) {
-                console.log($('#uploadFile').val());
-                event.preventDefault();
-                $('#displayedImage').show();
-                $('#targetLayer').hide();
-                //$('#displayedImage').hide();
-                //                        $('#targetLayer').show();
-                //                 $('#webcam').attr('src', '/classify');
-                $(this).ajaxSubmit({
-                    target: '#targetLayer',
-                    beforeSubmit: function () {
-                        $('.progress-bar').width('50%');
-                    },
-                    uploadProgress: function (
-                        event,
-                        position,
-                        total,
-                        percentageComplete
-                    ) {
-                        $('.progress-bar').animate(
-                            {
-                                width: percentageComplete + '%',
-                            },
-                            {
-                                duration: 1000,
-                            }
-                        );
-                    },
-                    success: function (data) {
-                        console.log(data);
-                        $('#displayedImage').hide();
-                        $('#targetLayer').show();
-                        if (data.video) {
-                            console.log(
-                                "<img src='/video_feed/" +
-                                    data.file +
-                                    "' id='webcam' autoplay style='margin-top: 40px' />'"
-                            );
-
-                            $('#targetLayer').append(
-                                "<img src='/video_feed/" +
-                                    data.file +
-                                    "' id='webcam' autoplay style='margin-top: 40px' />'"
-                            );
-                        } else {
-                            $('#targetLayer').append(data.htmlresponse);
-
-                            var InfoOfResult = data.Info.map(
-                                (val, index) =>
-                                    "<pre class='jsonOutput'>" +
-                                    JSON.stringify(
-                                        { ['Image' + (index + 1)]: val },
-                                        null,
-                                        2
-                                    ) +
-                                    '</pre>'
-                            );
-
-                            $('#inferenceJson').append(InfoOfResult.join(''));
-                        }
-                    },
-                    resetForm: true,
-                });
-            }
-            return false;
-        });
-    });
-    function downloadImage() {
-        var imageURL = document.getElementById('imageURL').value;
-        document.getElementById('inferenceJson').innerHTML = '';
-        fetch('/download', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ url: imageURL }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    console.log(data);
-                    document.getElementById('displayedImage').style.display =
-                        'none';
-                    document.getElementById('targetLayer').style.display =
-                        'block';
-                    document.getElementById('targetLayer').innerHTML =
-                        data.htmlresponse;
-                    document.getElementById(
-                        'inferenceJson'
-                    ).innerHTML = `<pre class='jsonOutput'>${JSON.stringify(
-                        { Image1: data.Info },
-                        null,
-                        2
-                    )}</pre>`;
-                } else {
-                    alert('Error downloading image. Please check the URL.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('An unexpected error occurred.');
-            });
-    }
 
     // Function to update progress bar-------------------------------------
     function updateProgressBar(percentage) {
