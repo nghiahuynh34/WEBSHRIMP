@@ -1,108 +1,16 @@
-<<<<<<< HEAD
-//import * as tf from '@tensorflow/tfjs-core';
-// Adds the WebGL backend to the global backend registry.
-//import '@tensorflow/tfjs-backend-webgl';
-$(document).ready(function () {
 
-        $('#uploadImage').submit(function (event) {
-            $('#inferenceJson').empty().append('');
-            if ($('#uploadFile').val()) {
-            console.log($('#uploadFile').val())
-                event.preventDefault();
-                $('#displayedImage').show();
-                $('#targetLayer').hide();
-//$('#displayedImage').hide();
-//                        $('#targetLayer').show();
-//                 $('#webcam').attr('src', '/classify');
-                $(this).ajaxSubmit({
-                    target: '#targetLayer',
-                    beforeSubmit: function () {
-                        $('.progress-bar').width('50%');
-                    },
-                    uploadProgress: function (
-                        event,
-                        position,
-                        total,
-                        percentageComplete
-                    ) {
-                        $('.progress-bar').animate(
-                            {
-                                width: percentageComplete + '%',
-                            },
-                            {
-                                duration: 1000,
-                            }
-=======
-// Drop handler
-console.log('hello');
 $(document).ready(function () {
-    $('#uploadImage').submit(function (event) {
+    $('#uploadFile').change(function (event) {
         $('#inferenceJson').empty().append('');
         if ($('#uploadFile').val()) {
-            console.log($('#uploadFile').val());
-            event.preventDefault();
+        $('#uploadImage').submit(function (e) {
+         e.preventDefault();
+            console.log(event.target.files)
             $('#displayedImage').show();
             $('#targetLayer').hide();
-            //$('#displayedImage').hide();
-            //                        $('#targetLayer').show();
-            //                 $('#webcam').attr('src', '/classify');
-            $(this).ajaxSubmit({
-                target: '#targetLayer',
-                beforeSubmit: function () {
-                    $('.progress-bar').width('50%');
-                    console.log('ok');
-                },
-                uploadProgress: function (
-                    event,
-                    position,
-                    total,
-                    percentageComplete
-                ) {
-                    $('.progress-bar').animate(
-                        {
-                            width: percentageComplete + '%',
-                        },
-                        {
-                            duration: 1000,
-                        }
-                    );
-                },
-                success: function (data) {
-                    console.log(data);
-                    $('#displayedImage').hide();
-                    $('#targetLayer').show();
-                    if (data.video) {
-                        console.log(
-                            "<img src='/video_feed/" +
-                                data.file +
-                                "' id='webcam' autoplay style='margin-top: 40px' />'"
->>>>>>> 634ee939787e906e04fcf9897ccaa91bf9442bf8
-                        );
+            handleFiles(event.target.files)
 
-                        $('#targetLayer').append(
-                            "<img src='/video_feed/" +
-                                data.file +
-                                "' id='webcam' autoplay style='margin-top: 40px' />'"
-                        );
-                    } else {
-                        $('#targetLayer').append(data.htmlresponse);
-
-                        var InfoOfResult = data.Info.map(
-                            (val, index) =>
-                                "<pre class='jsonOutput'>" +
-                                JSON.stringify(
-                                    { ['Image' + (index + 1)]: val },
-                                    null,
-                                    2
-                                ) +
-                                '</pre>'
-                        );
-
-                        $('#inferenceJson').append(InfoOfResult.join(''));
-                    }
-                },
-                resetForm: true,
-            });
+            })
         }
         return false;
     });
@@ -200,14 +108,12 @@ function toggleWebcam() {
     if (isWebcamVisible) {
         $('#webcam').attr('src', '');
     } else {
-<<<<<<< HEAD
         $('#webcam').attr('src', '/video_feed/camera');
-=======
+
         $('#webcam').attr(
             'src',
             '/video_feed/https://www.facebook.com/100011446841179/videos/pcb.941243397229645/3068464763289472'
         );
->>>>>>> 634ee939787e906e04fcf9897ccaa91bf9442bf8
     }
     // Sử dụng jQuery để thay đổi thuộc tính display của video từ webcam
     $('#webcam').toggle();
@@ -221,15 +127,15 @@ function toggleHiddenDiv() {
         hiddenDiv.style.display = 'none';
     }
 }
-// Xử lý sự kiện khi click vào hộp người dùng
-document.getElementById('userBox').addEventListener('click', function () {
-    var dropdownContent = document.getElementById('dropdownContent');
-    if (dropdownContent.style.display === 'block') {
-        dropdownContent.style.display = 'none';
-    } else {
-        dropdownContent.style.display = 'block';
-    }
-});
+//// Xử lý sự kiện khi click vào hộp người dùng
+//document.getElementById('userBox').addEventListener('click', function () {
+//    var dropdownContent = document.getElementById('dropdownContent');
+//    if (dropdownContent.style.display === 'block') {
+//        dropdownContent.style.display = 'none';
+//    } else {
+//        dropdownContent.style.display = 'block';
+//    }
+//});
 
 // Đóng hộp thả xuống khi click ra ngoài
 window.onclick = function (event) {
@@ -246,16 +152,16 @@ window.onclick = function (event) {
 
 /*-------------------------------------------*/
 // Xử lý sự kiện khi click vào hộp người dùng
-document.getElementById('userBox').addEventListener('click', function () {
-    var dropdownContent = document.getElementById('dropdownContent');
-    if (dropdownContent.style.display === 'none') {
-        console.log('noit ok');
-        dropdownContent.style.display = 'none';
-    } else {
-        console.log('ok');
-        dropdownContent.style.display = 'block';
-    }
-});
+//document.getElementById('userBox').addEventListener('click', function () {
+//    var dropdownContent = document.getElementById('dropdownContent');
+//    if (dropdownContent.style.display === 'none') {
+//        console.log('noit ok');
+//        dropdownContent.style.display = 'none';
+//    } else {
+//        console.log('ok');
+//        dropdownContent.style.display = 'block';
+//    }
+//});
 
 // Đóng hộp thả xuống khi click ra ngoài
 window.onclick = function (event) {
@@ -268,5 +174,5 @@ window.onclick = function (event) {
             }
         }
     }
-};
+}
 

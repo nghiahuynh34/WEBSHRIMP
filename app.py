@@ -33,7 +33,7 @@ app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'yolov8shrimp'
 mysql = MySQL(app)
 
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best_91_8.pt")
 
 appConf = {
     "OAUTH2_CLIENT_ID": "791126823139-piql3f0tr6ig8l0afd2guaro6td57tal.apps.googleusercontent.com",

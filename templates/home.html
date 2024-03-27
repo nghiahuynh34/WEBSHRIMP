@@ -12,19 +12,21 @@
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-        <link
-            rel="stylesheet"
-            href="{{ url_for('static', filename = 'css/home.css') }}" />
+            <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/home.css')}}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <title>Homepage</title>
     </head>
-    <body>
-        <div id="wrapper">
+    <body >
+        <div id="wrapper" >
             <div class="container-fluid home-hero">
                 <div class="navbar-logo-left">
                     <div class="nav__default">
-                        <a href="">
+                        <a href="/">
                             <img
-                                src="{{url_for('static', filename = 'image/logo.png')}}"
+                                src="{{url_for('static', filename='image/logo.png')}}"
                                 alt="Roboflow"
                                 width="pz"
                                 height="192"
@@ -33,24 +35,22 @@
                         <div class="nav__main">
                             <div class="nav__touch w-drop-downdown">
                                 <div class="nav__text">
-                                    <a href="/classification">Classfication</a>
+                                     {% if session %}
+                    <a href="/classification">Classfication</a>
+                    {% else %}
+                    <a href="/login">Classfication</a>
+                    {% endif %}
+
                                     <span
                                         ><i class="fa-solid fa-chevron-down"></i
                                     ></span>
                                 </div>
                             </div>
-                            <div class="nav__touch w-drop-downdown">
-                                <div class="nav__text">
-                                    <a href="">YOLOv8</a>
-                                    <span
-                                        ><i class="fa-solid fa-chevron-down"></i
-                                    ></span>
-                                </div>
-                            </div>
+
                         </div>
                         <div class="nav__main__actions">
-                            {% if session %}
-                            <a
+                             {% if session %}
+                     <a
                                 href="{{url_for('logout')}}"
                                 class="rf-button-white outline-button mobile-hide">
                                 Logout
@@ -58,8 +58,8 @@
                                     ><i class="fa-solid fa-arrow-right"></i
                                 ></span>
                             </a>
-                            {% else %}
-                            <a
+                    {% else %}
+                   <a
                                 href="{{url_for('login')}}"
                                 class="rf-button-white outline-button mobile-hide">
                                 Login
@@ -67,74 +67,53 @@
                                     ><i class="fa-solid fa-arrow-right"></i
                                 ></span>
                             </a>
-                            {% endif %}
+                    {% endif %}
+
+
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="container ct">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
 
-                <div class="home-hero-views">
-                    <div class="home-hero-section">
-                        <div class="hero-container">
-                            <div class="hero-split">
-                                <h1 class="hero-heading">
-                                    Classify shrimp types based on YOLOv8 model
-                                </h1>
-                                <p class="home-hero-subtext">
-                                    "Developed by students of Thuy Loi
-                                    University"
-                                </p>
-                            </div>
-                        </div>
                     </div>
+                    <div class="col-md-6 col-sm-12 vd d-none d-lg-block">
+                        <video width="100%" height="100%" autoplay>
+  <source src="{{url_for('static', filename='BQPUIvUg.mp4')}}" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
-                    <div class="home-hero-video">
-                        <video
-                            controls
-                            autoplay
-                            muted
-                            loop
-                            style="object-fit: cover">
-                            <source
-                                src="{{ url_for('static', filename='video/video1.mp4') }}"
-                                type="video/mp4" />
-                        </video>
                     </div>
                 </div>
-
-                <div class="widget-button-container">
+                <div class="nav__main__actions go">
+                    {% if session %}
+                     <a
+                        href="{{url_for('classification')}}"
+                        class="rf-button-white outline-button mobile-hide">
+                        Classfication
+                    </a>
+                    {% else %}
                     <a
-                        href=""
-                        class="widget-button-home w-button"
-                        style="float: left; margin-left: 30px"
-                        >Try on Mobile</a
-                    >
+                        href="{{url_for('login')}}"
+                        class="rf-button-white outline-button mobile-hide">
+                        Classfication
+                    </a>
+                    {% endif %}
+                    <a
+                    href="{{url_for('login')}}"
+                    class="rf-button-white outline-button mobile-hide">
+                    Try on Mobile
+                     </a>
+
                 </div>
+
             </div>
-        </div>
-        <!--  -->
-        <div id="container content">
-            <div class="row introduce">
-                <div class="col-lg-4 col-md-4 col-xs-4 col-4 introduce-image">
-                    <img
-                        src="https://images.unsplash.com/photo-1552728089-57bdde30beb3?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="" />
-                    <h3>Classfication</h3>
+
                 </div>
-                <div class="col-lg-4 col-md-4 col-xs-4 col-4 introduce-image">
-                    <img
-                        src="https://images.unsplash.com/photo-1490718720478-364a07a997cd?q=80&w=1839&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="" />
-                    <h3>Identification</h3>
-                </div>
-                <div class="col-lg-4 col-md-4 col-xs-4 col-4 introduce-image">
-                    <img
-                        src="https://images.unsplash.com/photo-1551336631-7de698b111f8?q=80&w=1951&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="" />
-                    <h3>Counting</h3>
-                </div>
-            </div>
-        </div>
-        <!--  -->
-        <div id="footer"></div>
+
+
+
     </body>
 </html>
