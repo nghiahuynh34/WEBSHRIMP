@@ -376,6 +376,7 @@ def color():
 def random_color():
     return tuple(random.randint(0, 255) for _ in range(3))
 
+# Hồng Anh viết Đổi mật khẩu và tên đăng nhâp
 @app.route("/change-password", methods=["POST"])
 def change_password():
     if "user" in session:
@@ -395,6 +396,31 @@ def change_password():
             return render_template('settings.html', error='Current password is incorrect')
     else:
         return redirect(url_for('login'))
+
+@app.route("/change-username", methods=["POST"])
+def change_username():
+    if "user" in session:
+        new_username = request.form['current_username']
+
+        cur = mysql.connection.cursor()
+        cur.execute(f"SELECT username FROM user WHERE email = '{session['user']['email']}'")
+        user_data = cur.fetchone()
+
+        if user_data:
+            cur.execute(f"UPDATE user SET username = '{new_username}' WHERE email = '{session['user']['email']}'")
+            mysql.connection.commit()
+            cur.close()
+            return redirect(url_for('home'))
+        else:
+            return render_template('settings.html', error='Current user is incorrect')
+    else:
+        return redirect(url_for('login'))    
+
+
+@app.route("/history", methods=["GET", "POST"])
+def history():
+    return render_template('history.html')
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=appConf.get(
         "FLASK_PORT"), debug=True)
