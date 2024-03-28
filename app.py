@@ -18,7 +18,7 @@ import requests
 # from random import random
 # Khởi tạo Flask Server Backend
 app = Flask(__name__)
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'mp4','webp'])
 # Apply Flask CORS
 CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -36,7 +36,7 @@ app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'yolov8shrimp'
 mysql = MySQL(app)
 
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686_338.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best_91_8.pt")
 
 appConf = {
     "OAUTH2_CLIENT_ID": "791126823139-piql3f0tr6ig8l0afd2guaro6td57tal.apps.googleusercontent.com",
@@ -177,7 +177,14 @@ def logout():
 
 @app.route("/settings")
 def settings():
-    return render_template('settings.html')
+    if session:
+        CS = mysql.connection.cursor()
+        CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
+        Executed_DATA = CS.fetchone()
+        print(Executed_DATA[1])
+        return render_template('settings.html', session = Executed_DATA)
+    else:
+        return redirect(url_for('login'))
 
 @app.route("/classification")
 def classification():
@@ -384,8 +391,6 @@ def download():
         return jsonify({'success': False, 'error': f"An error occurred: {str(e)}"})
 
 def generate(videoPath=0,CAP_DSHOWN=cv2.CAP_DSHOW,colors=None):
-    print(videoPath)
-    print(CAP_DSHOWN)
     return model.predict_videoStream(videoPath,colors, CAP_DSHOWN)
 
 def allowed_file(filename):
@@ -408,6 +413,7 @@ def color():
 def random_color():
     return tuple(random.randint(0, 255) for _ in range(3))
 
+# Hồng Anh viết Đổi mật khẩu và tên đăng nhâp
 @app.route("/change-password", methods=["POST"])
 def change_password():
     if "user" in session:
@@ -421,26 +427,6 @@ def change_password():
 
         if user_data and current_pwd == user_data[0]:
             cur.execute(f"UPDATE user SET password = '{new_pwd}' WHERE email = '{session['user']['email']}'")
-            mysql.connection.commit()
-            cur.close()
-            return redirect(url_for('home'))
-        else:
-            return render_template('settings.html', error='Current password is incorrect')
-    else:
-        return redirect(url_for('login'))
-    
-@app.route("/change-username", methods=["POST"])
-def change_username():
-    if "user" in session:
-        current_username = request.form['current_username']
-        email = session['user']['email']
-
-        cur = mysql.connection.cursor()
-        cur.execute(f"SELECT username FROM user WHERE email = '{session['user']['email']}'")
-        user_data = cur.fetchone()
-
-        if user_data:
-            cur.execute(f"UPDATE user SET username = '{current_username}' WHERE email = '{session['user']['email']}'")
             mysql.connection.commit()
             cur.close()
             return redirect(url_for('home'))

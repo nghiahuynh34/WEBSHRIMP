@@ -7,7 +7,6 @@ block content %}
     <div class="row confix-margin">
         <div class="col-xl-2 col-lg-2 tool-lg">
             <div class="train_1 sidebarNavigation">
-                <span class="title tl3">&nbsp;&nbsp;&nbsp;&nbsp;UNIVERSE</span>
 
                 <nav class="slidebar">
                     <div class="user_info">
@@ -24,102 +23,31 @@ block content %}
                                 <i class="fa fa-book" aria-hidden="true"></i>
                             </div>
                             <span class="text"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;History</span
-                            >
+                            > &nbsp;&nbsp;Setting</span>
+
                         </div>
                     </a>
-
-                    <a
-                        href="/hunh-hu-ngha/adminitrative-subdivision/browse"
+                     <a
+                        href="/hunh-hu-ngha/adminitrative-subdivision"
                         class="nav-link">
                         <div class="label">
                             <div class="icon">
-                                <i
-                                    class="fa fa-file-image-o"
-                                    aria-hidden="true"></i>
+                                <i class="fa fa-book" aria-hidden="true"></i>
                             </div>
                             <span class="text"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;Images</span
-                            >
-                        </div>
-                        <span class="count">246</span>
-                    </a>
-
-                    <a
-                        href="/hunh-hu-ngha/adminitrative-subdivision/dataset/1"
-                        class="nav-link">
-                        <div class="label">
-                            <div class="icon">
-                                <i
-                                    class="fa fa-folder-open-o"
-                                    aria-hidden="true"></i>
-                            </div>
-                            <span class="text"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;Dataset</span
-                            >
-                        </div>
-                        <span class="count">1</span>
-                    </a>
-
-                    <a
-                        href="/hunh-hu-ngha/adminitrative-subdivision/model/1"
-                        class="nav-link selected">
-                        <div class="label">
-                            <div class="icon">
-                                <i class="fa fa-rocket" aria-hidden="true"></i>
-                            </div>
-                            <span class="text"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;Model</span
+                                >&nbsp;&nbsp;  Logout</span
                             >
                         </div>
                     </a>
 
-                    <a
-                        href="/hunh-hu-ngha/adminitrative-subdivision/model/1/documentation"
-                        class="nav-link">
-                        <div class="label">
-                            <div class="icon">
-                                <i class="fa fa-code" aria-hidden="true"></i>
-                            </div>
-                            <span class="text"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;API Docs</span
-                            >
-                        </div>
-                    </a>
 
-                    <a
-                        href="/hunh-hu-ngha/adminitrative-subdivision/health"
-                        id="health"
-                        class="nav-link animated">
-                        <div class="label">
-                            <div class="icon">
-                                <i
-                                    class="fa fa-heartbeat"
-                                    aria-hidden="true"></i>
-                            </div>
-                            <span class="text"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;Health Check</span
-                            >
-                        </div>
-                    </a>
                 </nav>
             </div>
         </div>
         <!--                <div class="col-lg-1"></div>-->
         <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12 tool">
-            <div class="train_1">
-                <span class="title">&nbsp;&nbsp;&nbsp;&nbsp;History</span>
 
-                <div class="layout_img">
-                    <button
-                        class="upload_button"
-                        id="webcam_button"
-                        onclick="toggleWebcam()">
-                        <i class="fa-solid fa-video"></i>
-                        Webcam
-                    </button>
-                </div>
-            </div>
+
 
             <div class="train_1">
                 <span class="title">&nbsp;&nbsp;&nbsp;&nbsp;Upload Files</span>
@@ -142,7 +70,8 @@ block content %}
                                 multiple="true"
                                 id="uploadFile"
                                 accept=".jpg, .png, .mp4"
-                                hidden="True" />
+                                hidden="True"
+                            />
                             <label for="uploadFile" class="input_file">
                                 <i
                                     style="
@@ -206,7 +135,13 @@ block content %}
 
             <div id="targetLayer" style="display: none">
                 <img src="" id="webcam" autoplay style="margin-top: 40px" />
+                 <video
+            autoPlay
+            muted
+            id="videoRef"></video>
+<canvas id="canvasRef" ></canvas>
             </div>
+
             <img
                 id="displayedImage"
                 src="{{url_for('static', filename = 'image/logo/logoshrimp.jpg')}}"
@@ -216,26 +151,16 @@ block content %}
         <!-- ----------------------------------Row 3----------------------------------------- -->
 
         <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12 result">
-            <div class="train_1">
+            <div class="train_1" style="text-align: center">
                 <span class="title"
-                    >&nbsp;&nbsp;&nbsp;&nbsp;Confidence Threshold:</span
+                    >Result</span
                 >
-                <div class="flex items-center flex-row gap-2">
-                    <p class="font-mono text-xs">0%</p>
-                    <input
-                        type="range"
-                        min="1"
-                        max="99"
-                        value="50"
-                        class="slider"
-                        id="confidenceSlider" />
-                    <p class="font-mono text-xs">100%</p>
-                </div>
+
             </div>
             <div
                 class="train_1"
                 id="inferenceJson"
-                style="height: 550px; overflow: auto">
+                style="height: 90%; overflow: auto">
                 <!-- <h2 style="font-family: Georgia">Sample</h2> -->
             </div>
         </div>
@@ -243,19 +168,19 @@ block content %}
 </div>
 
 <div class="container-ft">
-    <div class="row ct-ft confix-margin">
-        <div class="col-lg-4 ftx ft1">
-            <h5>ABOUT COMPANY</h5>
-            <p>
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                blanditiis praesentium voluptatum deleniti atque corrupti.
-                Blanditiis praesentium voluptatum deleniti atque corrupti quos
-                dolores et quas molestias.
-            </p>
-        </div>
-        <div class="col-lg-4 ftx ft2"></div>
-        <div class="col-lg-4 ftx ft3"></div>
-    </div>
+<!--    <div class="row ct-ft confix-margin">-->
+<!--        <div class="col-lg-4 ftx ft1">-->
+<!--            <h5>ABOUT COMPANY</h5>-->
+<!--            <p>-->
+<!--                At vero eos et accusamus et iusto odio dignissimos ducimus qui-->
+<!--                blanditiis praesentium voluptatum deleniti atque corrupti.-->
+<!--                Blanditiis praesentium voluptatum deleniti atque corrupti quos-->
+<!--                dolores et quas molestias.-->
+<!--            </p>-->
+<!--        </div>-->
+<!--        <div class="col-lg-4 ftx ft2"></div>-->
+<!--        <div class="col-lg-4 ftx ft3"></div>-->
+<!--    </div>-->
     <div class="ft-text-center">
         © 2024 Copyright:
         <a class="text-white" href="https://www.instagram.com/tedvkieu/"
@@ -264,7 +189,56 @@ block content %}
     </div>
     <!-- Copyright -->
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
+
+<!-- Add the WebGPU backend to the global backend registry -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/dist/tf-backend-webgpu.js"></script>
 <script>
+
+    function downloadImage() {
+        var imageURL = document.getElementById('imageURL').value;
+        document.getElementById('inferenceJson').innerHTML = '';
+        fetch('/download', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url: imageURL }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.success) {
+                    document.getElementById('displayedImage').src =
+                        data.file_path;
+                        if (data.video) {
+                        console.log(
+                            "<img src='/video_feed/" +
+                                data.file +
+                                "' id='webcam' autoplay style='margin-top: 40px' />'"
+                        );
+
+                        $('#targetLayer').append(
+                            "<img src='/video_feed/" +
+                                data.file +
+                                "' id='webcam' autoplay style='margin-top: 40px' />'"
+                        );
+                    }else{
+                    document.getElementById(
+                        'inferenceJson'
+                    ).innerHTML = `<pre class='jsonOutput'>${JSON.stringify(
+                        { Image1: data.Info },
+                        null,
+                        2
+                    )}</pre>`;}
+                } else {
+                    alert('Error downloading image. Please check the URL.');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+            });
+    }
     // Drop handler
 
     // Function to update progress bar-------------------------------------
@@ -297,6 +271,7 @@ block content %}
             }
         }, intervalTime);
     }
+
 
     // Call function to start processing image
     processImage();
