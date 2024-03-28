@@ -36,7 +36,7 @@ app.config['MYSQL_PASSWORD'] = '12345678'
 app.config['MYSQL_DB'] = 'yolov8shrimp'
 mysql = MySQL(app)
 
-model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best_91_8.pt")
+model = my_YoloV8.YOLOv8_ObjectCounter(model_file="best1686.pt")
 
 appConf = {
     "OAUTH2_CLIENT_ID": "791126823139-piql3f0tr6ig8l0afd2guaro6td57tal.apps.googleusercontent.com",
@@ -169,6 +169,23 @@ def check_email():
         return jsonify({"exists": True})
     else:
         return jsonify({"exists": False})
+@app.route("/check_password", methods=["POST"])
+def check_pass():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+
+    # Thực hiện truy vấn để kiểm tra mật khẩu
+    cur = mysql.connection.cursor()
+    cur.execute(f"SELECT password FROM user WHERE email = '{email}'")
+    user_data = cur.fetchone()
+    cur.close()
+
+    # So sánh mật khẩu trong cơ sở dữ liệu với mật khẩu được cung cấp
+    if user_data and user_data[0] == password:
+        return jsonify({"valid": True})
+    else:
+        return jsonify({"valid": False})
 
 @app.route("/logout")
 def logout():
@@ -178,11 +195,12 @@ def logout():
 @app.route("/settings")
 def settings():
     if session:
-        CS = mysql.connection.cursor()
-        CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
-        Executed_DATA = CS.fetchone()
-        print(Executed_DATA[1])
-        return render_template('settings.html', session = Executed_DATA)
+        # CS = mysql.connection.cursor()
+        # CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
+        # Executed_DATA = CS.fetchone()
+        # print(Executed_DATA[1])
+        # return render_template('settings.html', session = Executed_DATA)
+        return render_template('settings.html')
     else:
         return redirect(url_for('login'))
 
@@ -413,7 +431,6 @@ def color():
 def random_color():
     return tuple(random.randint(0, 255) for _ in range(3))
 
-# Hồng Anh viết Đổi mật khẩu và tên đăng nhâp
 @app.route("/change-password", methods=["POST"])
 def change_password():
     if "user" in session:
@@ -427,6 +444,26 @@ def change_password():
 
         if user_data and current_pwd == user_data[0]:
             cur.execute(f"UPDATE user SET password = '{new_pwd}' WHERE email = '{session['user']['email']}'")
+            mysql.connection.commit()
+            cur.close()
+            return redirect(url_for('home'))
+        else:
+            return render_template('settings.html', error='Current password is incorrect')
+    else:
+        return redirect(url_for('login'))
+    
+@app.route("/change-username", methods=["POST"])
+def change_username():
+    if "user" in session:
+        current_username = request.form['current_username']
+        email = session['user']['email']
+
+        cur = mysql.connection.cursor()
+        cur.execute(f"SELECT username FROM user WHERE email = '{session['user']['email']}'")
+        user_data = cur.fetchone()
+
+        if user_data:
+            cur.execute(f"UPDATE user SET username = '{current_username}' WHERE email = '{session['user']['email']}'")
             mysql.connection.commit()
             cur.close()
             return redirect(url_for('home'))

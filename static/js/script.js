@@ -1,9 +1,7 @@
 let model;
 let labels = ['Tom binh thuong', 'tom binh'];
-$(document).ready(function () {
-    var progressBar = $('#progress-bar');
-    progressBar.width('0%');
 
+$(document).ready(function () {
     $('#uploadFile').change(function (event) {
         $('#inferenceJson').empty().append('');
         if ($('#uploadFile').val()) {
