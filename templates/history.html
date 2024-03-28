@@ -101,6 +101,14 @@ content %}
                             <div class="col-sm-12">
                                 <div
                                     class="statistics-details d-flex align-items-center justify-content-center">
+                                    <div class="history-id">
+                                        <p class="statistics-title title">
+                                            ID
+                                        </p>
+                                        <p class="statistics-title">
+                                            {{row[0]}}
+                                        </p>
+                                    </div>
                                     <div class="history-image">
                                         <img src="/static/yolov8/{{row[1]}}" />
                                     </div>
@@ -133,6 +141,12 @@ content %}
                                         class="statistics-title details"
                                         onclick="openModal('{{row[1]}}','{{row[2]}}', '{{row[3]}}','{{row[4]}}')"
                                         >Details</a
+                                    >
+                                    <a
+                                        href="#"
+                                        class="statistics-title details"
+                                        onclick="deleteData('{{row[0]}}')"
+                                        >Delete</a
                                     >
                                     <div id="myModal" class="modal">
                                         <span class="close">&times;</span>
@@ -184,6 +198,17 @@ content %}
                 </div>
             </div>
         </div>
+        <div class="page" style="text-align: center;">
+            <a href="#">&laquo;</a>
+            <a href="#">1</a>
+            <a href="#" class="active">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#">6</a>
+            <a href="#">&raquo;</a>
+        </div>
+
     </div>
 </div>
 <!-- Script để load google charts và vẽ biểu đồ -->
@@ -263,5 +288,52 @@ content %}
             modal.style.display = 'none';
         }
     };
+
+
+    function deleteData(id) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+            });
+            swalWithBootstrapButtons.fire({
+            title: `Delete saved ${id}! Are you sure?`,
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+            reverseButtons: true
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/delete_data',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function(response) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Deleted!",
+                            text: "Your file has been deleted.",
+                            icon: "success"
+                        }).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        swalWithBootstrapButtons.fire({
+                            title: "Error",
+                            text: "An error occurred while deleting the file.",
+                            icon: "error"
+                        });
+                    }
+                });
+            } else {
+            }
+        });
+    }
+
+
 </script>
 {% endblock %}

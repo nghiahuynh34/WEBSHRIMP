@@ -1,281 +1,175 @@
 {% extends "MainBase.html" %} {% block title %} Classification {% endblock %} {%
-block content %}
-<link
-    rel="stylesheet"
-    href="{{url_for('static', filename='styles/style.css')}}" />
-<div class="container-fluid">
-    <div class="row confix-margin">
-        <div class="col-xl-2 col-lg-2 tool-lg">
-            <div class="train_1 sidebarNavigation">
-
-                <nav class="slidebar">
-                    <div class="user_info">
-                        <img
-                            class="img_user"
-                            src="{{ session[2] }}"
-                            alt="no found" />
-                        <p class="user_n">{{ session[1] }}</p>
+    block content %}
+    <div class="container-fluid">
+        <div class="row confix-margin">
+            <!-- DROP AREA -->
+            <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-xs-12 tool">
+                <div class="train_1">
+                    <div class="train_2 get_history">
+                        <span class="title"> &nbsp;&nbsp;&nbsp;Welcome,{{ session[1] }} </span>
+                        <div class="user_info">
+                            <img
+                                class="img_user"
+                                src="{{ session[2] }}"
+                                alt="no found" />
+                        </div>
                     </div>
-
-                    <a href="/settings" class="nav-link">
-                        <div class="label">
-                            <div class="icon">
-                                <i class="fa fa-book" aria-hidden="true"></i>
-                            </div>
-                            <span class="text"
-                            > &nbsp;&nbsp;Setting</span>
-
-                        </div>
-                    </a>
-                     <a
-                        href="/hunh-hu-ngha/adminitrative-subdivision"
-                        class="nav-link">
-                        <div class="label">
-                            <div class="icon">
-                                <i class="fa fa-book" aria-hidden="true"></i>
-                            </div>
-                            <span class="text"
-                                >&nbsp;&nbsp;  Logout</span
-                            >
-                        </div>
-                    </a>
-
-
-                </nav>
-            </div>
-        </div>
-        <!--                <div class="col-lg-1"></div>-->
-        <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12 tool">
-
-
-
-            <div class="train_1">
-                <span class="title">&nbsp;&nbsp;&nbsp;&nbsp;Upload Files</span>
-                <div
-                    class="train_2"
-                    style="text-align: center"
-                    ondragover="dragOverHandler(event)"
-                    ondrop="dropHandler(event)"
-                    id="drop-area">
-                    <span class="title tl2">Drop File Here or</span>
-                    <form
-                        id="uploadImage"
-                        method="post"
-                        action="/classify"
-                        enctype="multipart/form-data">
-                        <div class="form-group">
-                            <input
-                                type="file"
-                                name="uploadFile[]"
-                                multiple="true"
-                                id="uploadFile"
-                                accept=".jpg, .png, .mp4"
-                                hidden="True"
-                            />
-                            <label for="uploadFile" class="input_file">
+                </div>
+                <div class="train_1">
+                    <div class="train_2 url_form">
+                        <span class="title"> &nbsp;&nbsp;&nbsp;Paste URL</span>
+                        <form class="form_url">
+                            <div class="centered-elements">
                                 <i
-                                    style="
-                                        font-weight: 500;
-                                        padding: 0 20px;
-                                        border-radius: 5px;
-                                    "
-                                    class="fa fa-cloud-upload"
+                                    style="align-items: center"
+                                    class="fa fa-link"
                                     aria-hidden="true"></i>
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <input
-                                type="submit"
-                                id="uploadSubmit"
-                                value="Upload"
-                                class="btn btn-info" />
-                        </div>
-                    </form>
+                                <input
+                                    id="imageURL"
+                                    name="imageURL"
+                                    class="input-link"
+                                    type="text"
+                                    placeholder="Paste a link..." />
+                            </div>
+                        </form>
+                        <button class="smI" onclick="downloadImage()">
+                            Download
+                        </button>
+                        <!-- <div class="form-group">
+                            <input type="submit" id="uploadSubmit" value="Upload" class="btn btn-info" onclick="downloadImage()" />
+                        </div> -->
+                    </div>
+                </div>
+                <div class="train_1">
+                    <!-- <span class="title">&nbsp;&nbsp;&nbsp;&nbsp;Upload Files</span> -->
+                    <div
+                        class="train_2"
+                        style="text-align: center"
+                        ondragover="dragOverHandler(event)"
+                        ondrop="dropHandler(event)"
+                        id="drop-area">
+                        <span class="title tl2">Drop File Here or</span>
+                        <form
+                            id="uploadImage"
+                            method="post"
+                            action="/classify"
+                            enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input
+                                    type="file"
+                                    name="uploadFile[]"
+                                    multiple="true"
+                                    id="uploadFile"
+                                    accept=".jpg, .png, .mp4"
+                                    hidden="True" />
+                                <label for="uploadFile" class="input_file">
+                                    <i
+                                        style="
+                                            font-weight: 500;
+                                            padding: 0 20px;
+                                            border-radius: 5px;
+                                        "
+                                        class="fa fa-cloud-upload"
+                                        aria-hidden="true"></i>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <input
+                                    type="submit"
+                                    id="uploadSubmit"
+                                    value="Upload"
+                                    class="btn btn-info" />
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div class="train_1">
-                <span class="title"> &nbsp;&nbsp;&nbsp;&nbsp;Paste URL</span>
-                <div class="train_2">
-                    <form class="form_url">
-                        <div class="centered-elements">
-                            <i
-                                style="align-items: center"
-                                class="fa fa-link"
-                                aria-hidden="true"></i>
-                            <input
-                                id="imageURL"
-                                name="imageURL"
-                                class="input-link"
-                                type="text"
-                                placeholder="Paste a link..." />
-                        </div>
-                    </form>
-                    <button class="smI" onclick="downloadImage()">
-                        Download and Display
-                    </button>
+            <!-- DROP AREA -->
+    
+            <!-- DISPLAY  -->
+            <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-xs-12 process_img">
+                <div class="progress">
+                    <div
+                        class="progress-bar progress-bar-striped bg-success"
+                        id="progress-bar"
+                        role="progressbar"
+                        aria-valuenow="0"
+                        aria-valuemin="0"
+                        aria-valuemax="100"></div>
                 </div>
+                <img
+                    id="displayedImage"
+                    src="{{url_for('static', filename = 'image/logo/logotom.jpg')}}"
+                    alt="Downloaded Image" />
             </div>
-        </div>
-
-        <!-- ----------------------------------Row 2 ----------------------------------------- -->
-
-        <div
-            class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12 process_img">
-            <!--<div class="progress">
+            <!-- DISPLAY  -->
+    
+            <!-- RESULTS -->
+            <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12 result">
+                <!-- <div class="train_1">
+                    <span class="title"
+                        >&nbsp;&nbsp;&nbsp;&nbsp;Confidence Threshold:</span
+                    >
+                    <div class="flex items-center flex-row gap-2">
+                        <p class="font-mono text-xs">0%</p>
+                        <input
+                            type="range"
+                            min="1"
+                            max="99"
+                            value="50"
+                            class="slider"
+                            id="confidenceSlider" />
+                        <p class="font-mono text-xs">100%</p>
+                    </div>
+                </div> -->
                 <div
-                    class="progress-bar progress-bar-striped bg-success"
-                    role="progressbar"
-                    aria-valuenow="0"
-                    aria-valuemin="0"
-                    aria-valuemax="100"></div>
-            </div> -->
-            <div id="myProgress">
-                <div id="myBar">10%</div>
-            </div>
-
-            <div id="targetLayer" style="display: none">
-                <img src="" id="webcam" autoplay style="margin-top: 40px" />
-                 <video
-            autoPlay
-            muted
-            id="videoRef"></video>
-<canvas id="canvasRef" ></canvas>
-            </div>
-
-            <img
-                id="displayedImage"
-                src="{{url_for('static', filename = 'image/logo/logoshrimp.jpg')}}"
-                alt="Downloaded Image" />
-        </div>
-
-        <!-- ----------------------------------Row 3----------------------------------------- -->
-
-        <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12 result">
-            <div class="train_1" style="text-align: center">
-                <span class="title"
-                    >Result</span
-                >
-
-            </div>
-            <div
-                class="train_1"
-                id="inferenceJson"
-                style="height: 90%; overflow: auto">
-                <!-- <h2 style="font-family: Georgia">Sample</h2> -->
+                    class="train_1"
+                    id="inferenceJson"
+                    style="overflow: auto">
+                    <span class="title"> &nbsp;&nbsp;&nbsp;&nbsp;Result</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
-<div class="container-ft">
-<!--    <div class="row ct-ft confix-margin">-->
-<!--        <div class="col-lg-4 ftx ft1">-->
-<!--            <h5>ABOUT COMPANY</h5>-->
-<!--            <p>-->
-<!--                At vero eos et accusamus et iusto odio dignissimos ducimus qui-->
-<!--                blanditiis praesentium voluptatum deleniti atque corrupti.-->
-<!--                Blanditiis praesentium voluptatum deleniti atque corrupti quos-->
-<!--                dolores et quas molestias.-->
-<!--            </p>-->
-<!--        </div>-->
-<!--        <div class="col-lg-4 ftx ft2"></div>-->
-<!--        <div class="col-lg-4 ftx ft3"></div>-->
-<!--    </div>-->
-    <div class="ft-text-center">
-        © 2024 Copyright:
-        <a class="text-white" href="https://www.instagram.com/tedvkieu/"
-            >tedvkieu</a
-        >
-    </div>
-    <!-- Copyright -->
-</div>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs/dist/tf.min.js"> </script>
-
-<!-- Add the WebGPU backend to the global backend registry -->
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgpu/dist/tf-backend-webgpu.js"></script>
-<script>
-
-    function downloadImage() {
-        var imageURL = document.getElementById('imageURL').value;
-        document.getElementById('inferenceJson').innerHTML = '';
-        fetch('/download', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ url: imageURL }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.success) {
-                    document.getElementById('displayedImage').src =
-                        data.file_path;
-                        if (data.video) {
-                        console.log(
-                            "<img src='/video_feed/" +
-                                data.file +
-                                "' id='webcam' autoplay style='margin-top: 40px' />'"
-                        );
-
-                        $('#targetLayer').append(
-                            "<img src='/video_feed/" +
-                                data.file +
-                                "' id='webcam' autoplay style='margin-top: 40px' />'"
-                        );
-                    }else{
-                    document.getElementById(
-                        'inferenceJson'
-                    ).innerHTML = `<pre class='jsonOutput'>${JSON.stringify(
-                        { Image1: data.Info },
-                        null,
-                        2
-                    )}</pre>`;}
-                } else {
-                    alert('Error downloading image. Please check the URL.');
+    
+    <script>
+        // Drop handler
+    
+        // Function to update progress bar-------------------------------------
+        function updateProgressBar(percentage) {
+            // Select progress bar element
+            var progressBar = document.getElementById('progress-bar');
+            // Set width of progress bar based on percentage
+            progressBar.style.width = percentage + '%';
+            // Update aria-valuenow attribute
+            progressBar.setAttribute('aria-valuenow', percentage);
+        }
+    
+        // Simulate image processing
+        function processImage() {
+            // Assume processing takes 5 seconds (5000 milliseconds)
+            var totalTime = 5000;
+            var currentTime = 0;
+            var intervalTime = 100; // Update progress every 100 milliseconds
+            var percentage = 0;
+    
+            // Update progress every intervalTime milliseconds
+            var interval = setInterval(function () {
+                currentTime += intervalTime;
+                percentage = Math.round((currentTime / totalTime) * 100);
+                updateProgressBar(percentage);
+                if (currentTime >= totalTime) {
+                    clearInterval(interval);
+                    // Processing complete
+                    console.log('Image processing complete!');
                 }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('An unexpected error occurred.');
-            });
-    }
-    // Drop handler
-
-    // Function to update progress bar-------------------------------------
-    function updateProgressBar(percentage) {
-        // Select progress bar element
-        var progressBar = document.getElementById('progress-bar');
-        // Set width of progress bar based on percentage
-        progressBar.style.width = percentage + '%';
-        // Update aria-valuenow attribute
-        progressBar.setAttribute('aria-valuenow', percentage);
-    }
-
-    // Simulate image processing
-    function processImage() {
-        // Assume processing takes 5 seconds (5000 milliseconds)
-        var totalTime = 5000;
-        var currentTime = 0;
-        var intervalTime = 100; // Update progress every 100 milliseconds
-        var percentage = 0;
-
-        // Update progress every intervalTime milliseconds
-        var interval = setInterval(function () {
-            currentTime += intervalTime;
-            percentage = Math.round((currentTime / totalTime) * 100);
-            updateProgressBar(percentage);
-            if (currentTime >= totalTime) {
-                clearInterval(interval);
-                // Processing complete
-                console.log('Image processing complete!');
-            }
-        }, intervalTime);
-    }
-
-
-    // Call function to start processing image
-    processImage();
-</script>
-<!--     <script src="{{url_for('static', filename='js/script.js')}}"></script>-->
-
-{% endblock %}
+            }, intervalTime);
+        }
+    
+        // Call function to start processing image
+        processImage();
+    </script>
+    <!--     <script src="{{url_for('static', filename='js/script.js')}}"></script>-->
+    
+    {% endblock %}
+    

@@ -195,12 +195,12 @@ def logout():
 @app.route("/settings")
 def settings():
     if session:
-        # CS = mysql.connection.cursor()
-        # CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
-        # Executed_DATA = CS.fetchone()
-        # print(Executed_DATA[1])
-        # return render_template('settings.html', session = Executed_DATA)
-        return render_template('settings.html')
+        print(session)
+        CS = mysql.connection.cursor()
+        CS.execute(f"""SELECT * FROM user where email='{session["user"]["email"]}'""")
+        Executed_DATA = CS.fetchone()
+        print(Executed_DATA)
+        return render_template('settings.html', session = Executed_DATA)
     else:
         return redirect(url_for('login'))
 
@@ -256,6 +256,19 @@ def history():
  
     else:
         return redirect(url_for('login'))
+@app.route('/delete_data', methods=['POST'])
+def delete_data():
+    id = request.form['id']
+    CS = mysql.connection.cursor()
+    try:
+        CS.execute(f"""DELETE FROM history WHERE id = '{id}'""")
+        mysql.connection.commit()
+        CS.close()
+        return jsonify({'success': True})
+    except Exception as e:
+        mysql.connection.rollback()
+        CS.close()
+        return jsonify({'success': False, 'error': str(e)})
 
 @app.route("/video_feed/<path:subpath>")
 def video_feed(subpath):

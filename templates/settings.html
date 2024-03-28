@@ -28,15 +28,15 @@
                             <hr class="border-light m-0">
                             <form method="post" action="{{ url_for('change_username') }}">
                                 <label class="form-label">Username</label>
-                                <input type="text" class="form-control mb-1" id="current_username" name="current_username" value="{{ session['user']['username'] }}">
+                                <input type="text" class="form-control mb-1" id="current_username" name="current_username" value="{{ session[1] }}">
                                 <label class="form-label">Email</label>
-                                <input  type="text" class="form-control mb-1" value="{{ session['user']['email'] }}" readonly>
+                                <input  type="text" class="form-control mb-1" value="{{ session[0] }}" readonly>
                                 <button type="submit" class="btn btn-primary" style="margin: 20px 0px;">Save changes</button>
                             </form>
                         </div>
                         <div class="tab-pane fade" id="account-change-password">
                             <form method="post" action="{{ url_for('change_password') }}">
-                                <input style = "display:none;" id = "email_user" type="text" class="form-control mb-1" value="{{ session['user']['email'] }}" readonly>
+                                <input style = "display:none;" id = "email_user" type="text" class="form-control mb-1" value="{{ session[0] }}" readonly>
                                 <div class="form-group">
                                     <label for="current_password">Current Password</label>
                                     <input type="password" class="form-control" id="current_password" name="current_password" required>

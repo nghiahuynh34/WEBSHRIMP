@@ -22,6 +22,7 @@
         <link
             rel="stylesheet"
             href="{{ url_for('static', filename= '/css/classification.css') }}" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>{% block title %} Base {% endblock %}</title>
     </head>
 </html>
@@ -31,12 +32,7 @@
         <div class="navbar-logo-left">
             <div class="nav__default">
                 <a href="/">
-                    <img
-                        src="{{url_for('static', filename = 'image/logo.png')}}"
-                        alt="Roboflow"
-                        width="pz"
-                        height="192"
-                        class="nav__logo" />
+                    <p height="192" class="nav__logo">WEBSHRIMP</p>
                 </a>
                 <div class="nav__main">
                     <div class="nav__touch w-drop-downdown">
