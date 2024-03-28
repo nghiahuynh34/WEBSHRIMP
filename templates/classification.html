@@ -32,9 +32,7 @@
                                     placeholder="Paste a link..." />
                             </div>
                         </form>
-                        <button class="smI" onclick="downloadImage()">
-                            Download
-                        </button>
+                        <button id="downloadButton" class="smI" onclick="downloadImage()" disabled>Download</button>
                         <!-- <div class="form-group">
                             <input type="submit" id="uploadSubmit" value="Upload" class="btn btn-info" onclick="downloadImage()" />
                         </div> -->
@@ -78,7 +76,7 @@
                                     type="submit"
                                     id="uploadSubmit"
                                     value="Upload"
-                                    class="btn btn-info" />
+                                    class="btn btn-info" disabled/>
                             </div>
                         </form>
                     </div>

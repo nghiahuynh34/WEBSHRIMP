@@ -40,6 +40,7 @@ content %}
 <!-- Phần nội dung của tab -->
 <div class="tab-content">
     <!-- Tab Overview -->
+    {% if sessions %}
     <div
         class="tab-pane fade show active"
         id="overview"
@@ -94,6 +95,7 @@ content %}
         <div class="history">
             <div class="row justify-content-center">
                 <div class="history-container">
+                    
                     {% for row in sessions %}
                     <!-- Hiển thị thông tin từng phiên trong lịch sử -->
                     <div class="history-details">
@@ -210,6 +212,15 @@ content %}
         </div>
 
     </div>
+    {% else %}
+    <div style = "text-align: center;">
+        <img class = "img_blank"src="/static/image/logo/icon_sad.png"/>
+        <p class = "text_blank">You have no history of shrimp identification!</p>
+        <p class = "text_blank">...</p>
+        
+        
+    </div>
+    {% endif %}
 </div>
 <!-- Script để load google charts và vẽ biểu đồ -->
 <script

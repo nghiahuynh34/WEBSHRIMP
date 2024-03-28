@@ -1,3 +1,29 @@
+/* ------------ xU LY AN NUT ------------------*/
+function checkInputValue() {
+    var inputVal = document.getElementById('imageURL').value;
+    var downloadButton = document.getElementById('downloadButton');
+    if (inputVal.trim() === '') {
+        downloadButton.disabled = true;
+        downloadButton.style = 'background-color: black;';
+    } else {
+        downloadButton.disabled = false;
+    }
+}
+
+document.getElementById('uploadFile').addEventListener('change', function () {
+    var files = this.files;
+    var uploadSubmit = document.getElementById('uploadSubmit');
+
+    if (files.length > 0) {
+        // Nếu có ít nhất một file được chọn, cho phép nút Upload
+        uploadSubmit.disabled = false;
+    } else {
+        // Nếu không có file nào được chọn, vô hiệu hóa nút Upload
+        uploadSubmit.disabled = true;
+    }
+});
+document.getElementById('imageURL').addEventListener('input', checkInputValue);
+
 let model;
 let labels = ['Tom binh thuong', 'tom binh'];
 
