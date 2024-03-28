@@ -394,90 +394,183 @@ px .title_wc {
     font-family: sans-serif;
 }
 /*----------*/
+/* HISTORY */
+/* style.css */
+.user-box .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    border-radius: 10px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 5;
+    animation: jumpDown 1s forwards;
+}
 
-/*-------------------------------Responsive---------------------------------*/
-/*
-    BREAKPOINT
+.user-box .dropdown-content a {
+    display: block;
+    padding: 10px 40px;
+    text-decoration: none;
+    color: #333;
+}
 
-    mobile: width < 740px
-    tablet: width >= 740px and width < 1024px
-    pc: width >= 1024px
+.user-box .dropdown-content a:hover {
+    background-color: #c4c3c3;
+    border-radius: 10px;
+}
 
-*/
-@media only screen and (max-width: 739px) {
-    .tool-lg {
-        display: none;
+@keyframes jumpDown {
+    0% {
+        transform: translateY(0); /* Trạng thái ban đầu, không di chuyển */
     }
-    .tool {
-        display: none;
+    50% {
+        transform: translateY(12px); /* Di chuyển xuống 200px */
     }
-    .webcam_button {
-        width: 10px;
-    }
-    .wbc {
-        text-align: center;
-    }
-    .webcam_button {
-        text-align: center;
-        margin-top: 30px !important;
-    }
-    .up_normal {
-        text-align: center;
-    }
-    .webcam_button {
-        width: 10px;
-    }
-
-    #imageURL {
-        width: 95%;
-    }
-    .smI_button {
-        padding-left: 0;
-    }
-    .smI {
-        padding: 15px;
-        margin: 0;
+    100% {
+        transform: translateY(12px); /* Dừng lại ở vị trí xuống 200px */
     }
 }
 
-@media only screen and (min-width: 740px) and (max-width: 1023px) {
-    .tool-lg {
-        display: none;
-    }
-    .tool {
-        display: none;
-    }
-    .webcam_button {
-        width: 10px;
-    }
-
-    .wbc {
-        text-align: center;
-    }
-    .webcam_button {
-        text-align: center;
-        margin-top: 30px !important;
-    }
-    .up_normal {
-        text-align: center;
-    }
-    .webcam_button {
-        width: 10px;
-    }
-
-    #imageURL {
-        width: 95%;
-    }
-    .smI_button {
-        padding-left: 0;
-    }
-    .smI {
-        padding: 15px;
-        margin: 0;
-    }
+.account-dropdown {
+    background-color: #070f2b;
+    position: relative;
+    width: 200px;
+    height: 100%;
 }
-@media only screen and (min-width: 1024px) {
-    .tool-mb {
-        display: none;
-    }
+
+.account-dropdown:hover {
+    background-color: #122b52;
+}
+.account-dropdown .nav__text a:hover {
+    text-decoration: none;
+}
+
+.dropdown-content {
+    position: absolute;
+    width: 200px;
+    background-color: #ffffff;
+    min-width: 120px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+    border: 1px solid black;
+}
+
+.account-dropdown:hover .dropdown-content {
+    opacity: 1; /* Khi hover, hiển thị dropdown */
+    visibility: visible; /* Hiển thị dropdown */
+}
+
+.dropdown-content a {
+    display: block;
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #122b52;
+    color: white;
+    text-decoration: none;
+}
+
+/* --------------------------------HISTORY------------------------------ */
+.history-container {
+    width: 70%;
+}
+.get-history-details {
+    width: 40%;
+}
+.history-details {
+    margin-bottom: 50px;
+    margin: 10px 10px 15px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+.history-image {
+    width: 15%;
+}
+.history-image img {
+    width: 120px;
+    height: 80px;
+    border-radius: 5px;
+}
+.history-info {
+    width: 50%;
+    margin-left: 20px;
+}
+
+.history-total {
+    width: 10%;
+}
+
+.history-ctime {
+    width: 15%;
+}
+
+.statistics-title {
+    color: #8d8d8d;
+    font-size: 13px;
+    margin: 0px 0px 4px;
+}
+.title {
+    font-weight: 600;
+}
+.details {
+    margin-left: 10px;
+    text-decoration: underline;
+}
+.custom-margin-top {
+    margin-top: 50px;
+}
+/* -------------------------------------- */
+.modal {
+    display: none; /* Ẩn cửa sổ modal ban đầu */
+    position: fixed; /* Vị trí cố định trên màn hình */
+    z-index: 1; /* Hiển thị phía trên tất cả các phần khác */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0); /* Màu nền đen */
+    background-color: rgba(0, 0, 0, 0.9); /* Màu nền đen với độ mờ */
+}
+
+.model_con {
+    width: 40%;
+
+    position: absolute; /* Vị trí cố định trên màn hình */
+    z-index: 2;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    overflow: auto;
+    background-color: rgb(255, 255, 255); /* Màu nền đen */
+}
+
+.modal-content {
+    width: 40%;
+    margin: auto;
+    display: block;
+}
+
+.close {
+    position: absolute;
+    top: 20%;
+    right: 27%;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    z-index: 999;
+}
+
+.close:hover,
+.close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
 }

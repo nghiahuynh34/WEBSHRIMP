@@ -1,7 +1,8 @@
 $(document).ready(function () {
-    console.log('kn');
+    var progressBar = $('#progress-bar');
+    progressBar.width('0%');
+
     $('#uploadFile').change(function (event) {
-        console.log('Kieu ne');
         $('#inferenceJson').empty().append('');
         if ($('#uploadFile').val()) {
             $('#uploadImage').submit(function (e) {
@@ -11,71 +12,38 @@ $(document).ready(function () {
                 $('#targetLayer').hide();
                 handleFiles(event.target.files);
             });
-
-            //$('#displayedImage').hide();
-            //                        $('#targetLayer').show();
-            //                 $('#webcam').attr('src', '/classify');
-
-            $(this).ajaxSubmit({
-                target: '#targetLayer',
-                beforeSubmit: function () {
-                    $('.progress-bar').width('50%');
-                    console.log('Kieu ne');
-                },
-                uploadProgress: function (
-                    event,
-                    position,
-                    total,
-                    percentageComplete
-                ) {
-                    $('.progress-bar').animate(
-                        {
-                            width: percentageComplete + '%',
-                        },
-                        {
-                            duration: 1000,
-                        }
-                    );
-                },
-                success: function (data) {
-                    console.log(data);
-                    $('#displayedImage').hide();
-                    $('#targetLayer').show();
-                    if (data.video) {
-                        console.log(
-                            "<img src='/video_feed/" +
-                                data.file +
-                                "' id='webcam' autoplay style='margin-top: 40px' />'"
-                        );
-
-                        $('#targetLayer').append(
-                            "<img src='/video_feed/" +
-                                data.file +
-                                "' id='webcam' autoplay style='margin-top: 40px' />'"
-                        );
-                    } else {
-                        $('#targetLayer').append(data.htmlresponse);
-
-                        var InfoOfResult = data.Info.map(
-                            (val, index) =>
-                                "<pre class='jsonOutput'>" +
-                                JSON.stringify(
-                                    { ['Image' + (index + 1)]: val },
-                                    null,
-                                    2
-                                ) +
-                                '</pre>'
-                        );
-
-                        $('#inferenceJson').append(InfoOfResult.join(''));
-                    }
-                },
-                resetForm: true,
-            });
         }
         return false;
     });
 });
+
+var myButton = document.getElementById('btn-run');
+
+// Thêm sự kiện click vào button
+myButton.addEventListener('click', function () {
+    alert('Bạn đã click vào nút!');
+    move();
+});
+
+var i = 0;
+function move() {
+    if (i == 0) {
+        i = 1;
+        var elem = document.getElementById('myBar');
+        var width = 10;
+        var id = setInterval(frame, 10);
+        function frame() {
+            if (width >= 100) {
+                clearInterval(id);
+                i = 0;
+            } else {
+                width++;
+                elem.style.width = width + '%';
+                elem.innerHTML = width + '%';
+            }
+        }
+    }
+}
 function downloadImage() {
     var imageURL = document.getElementById('imageURL').value;
     document.getElementById('inferenceJson').innerHTML = '';

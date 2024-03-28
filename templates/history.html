@@ -1,72 +1,267 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <!-- Bootstrap  -->
+{% extends "MainBase.html" %} {% block title %} History {% endblock %} {% block
+content %}
+<!-- Phần tiêu đề và tab -->
+<div>
+    <!-- Phần dữ liệu tôm gọi lên trả về script-->
+    <div
+        id="data-container"
+        data-total="{{ total }}"
+        data-big="{{ big }}"
+        data-medium="{{ medium }}"
+        data-small="{{ small }}"></div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a
+                class="nav-link active"
+                id="overview-tab"
+                data-toggle="tab"
+                href="#overview"
+                role="tab"
+                aria-controls="overview"
+                aria-selected="true"
+                ><i class="fa fa-pie-chart" aria-hidden="true"></i> Overview</a
+            >
+        </li>
+        <li class="nav-item">
+            <a
+                class="nav-link"
+                id="audiences-tab"
+                data-toggle="tab"
+                href="#audiences"
+                role="tab"
+                aria-selected="false"
+                >History</a
+            >
+        </li>
+    </ul>
+</div>
+<!--  -->
 
-        <link
-            rel="stylesheet"
-            href="{{ url_for('static', filename= '/css/history.css') }}" />
-        <title>{% block title %} Base {% endblock %}</title>
-    </head>
-</html>
-<body>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Kind</th>
-            <th>Total</th>
-            <th>Time</th>
-        </tr>
-        <tr class="clickable-row">
-            <td>{{session[0]}}</td>
-            <td>
-                <img class="list_img" src="/static/yolov8/{{session[1]}}" />
-            </td>
-            <td><p class="tt">{{session[2]}}</p></td>
-            <td>{{session[3]}}</td>
+<!-- Phần nội dung của tab -->
+<div class="tab-content">
+    <!-- Tab Overview -->
+    <div
+        class="tab-pane fade show active"
+        id="overview"
+        role="tabpanel"
+        aria-labelledby="overview-tab">
+        <div style="margin-top: 50px; justify-items: center; margin-left: 50px">
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
+                    <div
+                        class="statistics-details d-flex align-items-center justify-content-between">
+                        <div>
+                            <p class="statistics-title">Total shrimp</p>
+                            <h6 class="rate-percentage">
+                                <strong>{{ total }}</strong>
+                            </h6>
+                        </div>
+                        <div>
+                            <p class="statistics-title">Big Shrimp</p>
+                            <h6 class="rate-percentage">
+                                <strong>{{ big }}</strong>
+                            </h6>
+                        </div>
+                        <div>
+                            <p class="statistics-title">Medium Shrimp</p>
+                            <h6 class="rate-percentage">
+                                <strong>{{medium}}</strong>
+                            </h6>
+                        </div>
+                        <div class="d-none d-md-block">
+                            <p class="statistics-title">Small Shrimp</p>
+                            <h6 class="rate-percentage">
+                                <strong>{{small}}</strong>
+                            </h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center custom-margin-top">
+            <div class="col-sm-4">
+                <div id="piechart"></div>
+            </div>
+        </div>
+    </div>
 
-            <td>{{session[4]}}</td>
-        </tr>
-        <tr class="clickable-row">
-            <td>{{session[0]}}</td>
-            <td>
-                <img class="list_img" src="/static/yolov8/{{session[1]}}" />
-            </td>
-            <td><p class="tt">{{session[2]}}</p></td>
-            <td>{{session[3]}}</td>
-            <td>{{session[4]}}</td>
-        </tr>
-    </table>
+    <!-- Tab History -->
+    <div
+        class="tab-pane fade"
+        id="audiences"
+        role="tabpanel"
+        aria-labelledby="audiences-tab">
+        <div class="history">
+            <div class="row justify-content-center">
+                <div class="history-container">
+                    {% for row in sessions %}
+                    <!-- Hiển thị thông tin từng phiên trong lịch sử -->
+                    <div class="history-details">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-12">
+                                <div
+                                    class="statistics-details d-flex align-items-center justify-content-center">
+                                    <div class="history-image">
+                                        <img src="/static/yolov8/{{row[1]}}" />
+                                    </div>
+                                    <div class="history-info">
+                                        <p class="statistics-title title">
+                                            Results
+                                        </p>
+                                        <p class="statistics-title">
+                                            {{row[2]}}
+                                        </p>
+                                    </div>
+                                    <div class="history-total">
+                                        <p class="statistics-title title">
+                                            Total
+                                        </p>
+                                        <p class="statistics-title">
+                                            {{row[3]}}
+                                        </p>
+                                    </div>
+                                    <div class="history-ctime">
+                                        <p class="statistics-title title">
+                                            Time
+                                        </p>
+                                        <p class="statistics-title">
+                                            {{row[4]}}
+                                        </p>
+                                    </div>
+                                    <a
+                                        href="#"
+                                        class="statistics-title details"
+                                        onclick="openModal('{{row[1]}}','{{row[2]}}', '{{row[3]}}','{{row[4]}}')"
+                                        >Details</a
+                                    >
+                                    <div id="myModal" class="modal">
+                                        <span class="close">&times;</span>
+                                        <div class="model_con">
+                                            <img
+                                                src="/static/yolov8/{{row[1]}}"
+                                                class="modal-content"
+                                                id="img01" />
+                                            <div style="margin-left: 10px">
+                                                <p
+                                                    style="display: inline"
+                                                    class="statistics-title title">
+                                                    Kind Shrimp:
+                                                </p>
+                                                <p
+                                                    style="display: inline"
+                                                    class="statistics-title"
+                                                    id="results_text"></p>
+                                            </div>
+                                            <div style="margin-left: 10px">
+                                                <p
+                                                    style="display: inline"
+                                                    class="statistics-title title">
+                                                    Total Shrimp:
+                                                </p>
+                                                <p
+                                                    style="display: inline"
+                                                    class="statistics-title"
+                                                    id="total_text"></p>
+                                            </div>
+                                            <div style="margin-left: 10px">
+                                                <p
+                                                    style="display: inline"
+                                                    class="statistics-title title">
+                                                    Time:
+                                                </p>
+                                                <p
+                                                    style="display: inline"
+                                                    class="statistics-title"
+                                                    id="time_text"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Script để load google charts và vẽ biểu đồ -->
+<script
+    type="text/javascript"
+    src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    var totalShrimp = document
+        .getElementById('data-container')
+        .getAttribute('data-total');
+    var totalBigShrimp = document
+        .getElementById('data-container')
+        .getAttribute('data-big');
+    var totalMediumShrimp = document
+        .getElementById('data-container')
+        .getAttribute('data-medium');
+    var totalSmallShrimp = document
+        .getElementById('data-container')
+        .getAttribute('data-small');
 
-    <img id="disImg" src="" />
-    <p id="thongso"></p>
+    // -------------------
+    var ratioBigShrimp = totalBigShrimp / totalShrimp;
+    var ratioMediumShrimp = totalMediumShrimp / totalShrimp;
+    var ratioSmallShrimp = totalSmallShrimp / totalShrimp;
+    // Load google charts
+    google.charts.load('current', { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
 
-    <script>
-        console.log('hi');
-        document.addEventListener('DOMContentLoaded', function () {
-            // Lấy danh sách các hàng có class là "clickable-row"
-            var rows = document.querySelectorAll('.clickable-row');
+    // Draw the chart and set the chart values
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Total shrimp'],
+            ['Big Shrimp', ratioBigShrimp],
+            ['Medium Shrimp', ratioMediumShrimp],
+            ['Small Shrimp', ratioSmallShrimp],
+        ]);
 
-            // Lặp qua từng hàng và thêm sự kiện click
-            rows.forEach(function (row) {
-                row.addEventListener('click', function () {
-                    // Lấy đường dẫn của ảnh từ thẻ img trong hàng được click
-                    var imgSrc = row.querySelector('.list_img').src;
+        // Optional; add a title and set the width and height of the chart
+        var options = {
+            title: 'Pie chart of total shrimps',
+            width: 550,
+            height: 400,
+        };
 
-                    // Thay đổi đường dẫn của thẻ img có id là "disImg" thành đường dẫn mới
-                    var disImg = document.getElementById('disImg');
-                    disImg.src = imgSrc;
+        // Display the chart inside the <div> element with id="piechart"
+        var chart = new google.visualization.PieChart(
+            document.getElementById('piechart')
+        );
+        chart.draw(data, options);
+    }
 
-                    var thongso = row.querySelector('.tt').textContent;
+    // xu ly xo anh
+    // Lấy các phần tử cần thiết
+    var modal = document.getElementById('myModal');
+    var span = document.getElementsByClassName('close')[0];
 
-                    // Thay đổi nội dung của thẻ p có id là "thongso" thành nội dung mới
-                    var thongsoElement = document.getElementById('thongso');
-                    thongsoElement.textContent = thongso;
-                });
-            });
-        });
-    </script>
-</body>
+    function openModal(imageSrc, rs, total, time) {
+        var modal = document.getElementById('myModal');
+        var modalImg = document.getElementById('img01');
+        var res = document.getElementById('results_text');
+        var tot = document.getElementById('total_text');
+        var timeText = document.getElementById('time_text');
+
+        modal.style.display = 'block';
+        modalImg.src = '/static/yolov8/' + imageSrc;
+        res.textContent = ' ' + rs;
+        tot.textContent = ' ' + total;
+        timeText.textContent = ' ' + time;
+    }
+
+    span.onclick = function () {
+        modal.style.display = 'none';
+    };
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+</script>
+{% endblock %}

@@ -194,10 +194,40 @@ def classification():
 def history():
     if session:
         CS = mysql.connection.cursor()
-        CS.execute(f"""SELECT * FROM history""")
-        Executed_DATA = CS.fetchone()
+        email = session['user']['email']
+        CS.execute(f"""SELECT * FROM history where email = '{email}'""")
+        Executed_DATA = CS.fetchall()
+        CS.execute(f"""SELECT * FROM user where email = '{email}'""")
+        user = CS.fetchone()
+
         print(Executed_DATA)
-        return render_template('history.html', session = Executed_DATA)
+        
+        # trả về tổng shrimp trong cả toàn bộ lịch sử nhận dạng
+        total_shrimp = 0
+        total_medium_shrimp = 0
+        total_big_shrimp = 0
+        total_small_shrimp = 0
+        for record in Executed_DATA:
+            # tong tom
+            shrimp_data = record[3]  # Assume shrimp data is always at index 2
+            total_shrimp += shrimp_data
+            
+            
+            shrimp_datakind = record[2]  # Giả sử dữ liệu của tôm luôn nằm ở chỉ mục 2
+            shrimp_data_dict = json.loads(shrimp_datakind)  # Chuyển đổi chuỗi JSON thành từ điển
+            shrimp_total_medium = shrimp_data_dict.get("MediumShrimp", 0) 
+            shrimp_total_big = shrimp_data_dict.get("BigShrimp", 0) 
+            shrimp_total_small = shrimp_data_dict.get("SmallShrimp", 0)
+            
+            total_medium_shrimp += shrimp_total_medium 
+            total_big_shrimp += shrimp_total_big
+            total_small_shrimp += shrimp_total_small
+
+        print("Tổng số lượng MediumShrimp:", total_medium_shrimp)
+        print("Tổng số lượng bigShrimp:", total_big_shrimp)
+        print("Tổng số lượng SmallShrimp:", total_small_shrimp)
+        
+        return render_template('history.html',session = user, sessions = Executed_DATA, total = total_shrimp,big = total_big_shrimp,medium = total_medium_shrimp,small = total_small_shrimp)
  
     else:
         return redirect(url_for('login'))
@@ -265,7 +295,9 @@ def upload_file():
                  "file":file_names[0]})
         else:
 
-            key = json.dumps(dictObject)
+            filtered_dict = {k: v for k, v in dictObject.items() if k != 'SumShrimp'}
+            key = json.dumps(filtered_dict)
+
             
             current_time = datetime.now()
             cur = mysql.connection.cursor()
@@ -383,11 +415,32 @@ def change_password():
         new_pwd = request.form['new_password']
 
         cur = mysql.connection.cursor()
+
         cur.execute(f"SELECT password FROM user WHERE email = '{session['user']['email']}'")
         user_data = cur.fetchone()
 
         if user_data and current_pwd == user_data[0]:
             cur.execute(f"UPDATE user SET password = '{new_pwd}' WHERE email = '{session['user']['email']}'")
+            mysql.connection.commit()
+            cur.close()
+            return redirect(url_for('home'))
+        else:
+            return render_template('settings.html', error='Current password is incorrect')
+    else:
+        return redirect(url_for('login'))
+    
+@app.route("/change-username", methods=["POST"])
+def change_username():
+    if "user" in session:
+        current_username = request.form['current_username']
+        email = session['user']['email']
+
+        cur = mysql.connection.cursor()
+        cur.execute(f"SELECT username FROM user WHERE email = '{session['user']['email']}'")
+        user_data = cur.fetchone()
+
+        if user_data:
+            cur.execute(f"UPDATE user SET username = '{current_username}' WHERE email = '{session['user']['email']}'")
             mysql.connection.commit()
             cur.close()
             return redirect(url_for('home'))
