@@ -1,0 +1,12 @@
+table {
+    border: 2px solid black;
+}
+th {
+    border: 5px dotted black;
+}
+td {
+    border: 1px dotted black;
+}
+.list_img {
+    width: 100px;
+}

@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %} Classification {% endblock %} {%
+{% extends "MainBase.html" %} {% block title %} Classification {% endblock %} {%
 block content %}
 <div class="container-fluid">
     <div class="row confix-margin">
@@ -14,16 +14,14 @@ block content %}
                         <p class="user_n">{{ session[1] }}</p>
                     </div>
 
-                    <a
-                        href="/hunh-hu-ngha/adminitrative-subdivision"
-                        class="nav-link">
+                    <a href="/history" class="nav-link">
                         <div class="label">
                             <div class="icon">
                                 <i class="fa fa-book" aria-hidden="true"></i>
                             </div>
                             <span class="text"
-                                >  Setting</span
-                            >
+                            > &nbsp;&nbsp;Setting</span>
+
                         </div>
                     </a>
                      <a
@@ -34,7 +32,7 @@ block content %}
                                 <i class="fa fa-book" aria-hidden="true"></i>
                             </div>
                             <span class="text"
-                                >  Logout</span
+                                >&nbsp;&nbsp;  Logout</span
                             >
                         </div>
                     </a>
@@ -45,6 +43,8 @@ block content %}
         </div>
         <!--                <div class="col-lg-1"></div>-->
         <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-xs-12 tool">
+
+
 
             <div class="train_1">
                 <span class="title">&nbsp;&nbsp;&nbsp;&nbsp;Upload Files</span>
@@ -58,7 +58,7 @@ block content %}
                     <form
                         id="uploadImage"
                         method="post"
-                        action="/project"
+                        action="/classify"
                         enctype="multipart/form-data">
                         <div class="form-group">
                             <input
@@ -114,8 +114,6 @@ block content %}
             </div>
         </div>
 
-
-
         <!-- ----------------------------------Row 2 ----------------------------------------- -->
 
         <div
@@ -139,7 +137,13 @@ block content %}
             </div>
             <div id="targetLayer" style="display: none">
                 <img src="" id="webcam" autoplay style="margin-top: 40px" />
+                 <video
+            autoPlay
+            muted
+            id="videoRef"></video>
+<canvas id="canvasRef" ></canvas>
             </div>
+
             <img
                 id="displayedImage"
                 src="{{url_for('static', filename = 'image/logo/logoshrimp.jpg')}}"
@@ -166,19 +170,19 @@ block content %}
 </div>
 
 <div class="container-ft">
-    <div class="row ct-ft confix-margin">
-        <div class="col-lg-4 ftx ft1">
-            <h5>ABOUT COMPANY</h5>
-            <p>
-                At vero eos et accusamus et iusto odio dignissimos ducimus qui
-                blanditiis praesentium voluptatum deleniti atque corrupti.
-                Blanditiis praesentium voluptatum deleniti atque corrupti quos
-                dolores et quas molestias.
-            </p>
-        </div>
-        <div class="col-lg-4 ftx ft2"></div>
-        <div class="col-lg-4 ftx ft3"></div>
-    </div>
+<!--    <div class="row ct-ft confix-margin">-->
+<!--        <div class="col-lg-4 ftx ft1">-->
+<!--            <h5>ABOUT COMPANY</h5>-->
+<!--            <p>-->
+<!--                At vero eos et accusamus et iusto odio dignissimos ducimus qui-->
+<!--                blanditiis praesentium voluptatum deleniti atque corrupti.-->
+<!--                Blanditiis praesentium voluptatum deleniti atque corrupti quos-->
+<!--                dolores et quas molestias.-->
+<!--            </p>-->
+<!--        </div>-->
+<!--        <div class="col-lg-4 ftx ft2"></div>-->
+<!--        <div class="col-lg-4 ftx ft3"></div>-->
+<!--    </div>-->
     <div class="ft-text-center">
         © 2024 Copyright:
         <a class="text-white" href="https://www.instagram.com/tedvkieu/"
@@ -237,6 +241,7 @@ block content %}
                 alert('An unexpected error occurred.');
             });
     }
+    // Drop handler
 
     // Function to update progress bar-------------------------------------
     function updateProgressBar(percentage) {
@@ -268,24 +273,11 @@ block content %}
             }
         }, intervalTime);
     }
-    function loadModel(){
-    let model
-tf.setBackend("webgpu").then(async () => {
-       model = await tf.loadGraphModel("models/model.json", {
-        onProgress: (fractions) => {
-         console.log(model)
-        },})
 
-      })
-      const dummyInput = tf.ones(model.inputs[0].shape);
-      const warmupResults = model.execute(dummyInput);
-      tf.dispose([warmupResults, dummyInput]);
-
-}
-<!--loadModel()-->
 
     // Call function to start processing image
     processImage();
 </script>
-<!--     <script src="{{url_for('static', filename='js/script.js')}}"></script>
+<!--     <script src="{{url_for('static', filename='js/script.js')}}"></script>-->
+
 {% endblock %}

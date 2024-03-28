@@ -1,0 +1,15 @@
+description: Ultralytics best model trained on /content/drive/MyDrive/datashrimp/mydataset.yaml
+author: Ultralytics
+license: AGPL-3.0 https://ultralytics.com/license
+date: '2024-03-02T03:56:19.469294'
+version: 8.1.20
+stride: 32
+task: detect
+batch: 1
+imgsz:
+- 640
+- 640
+names:
+  0: BigShrimp
+  1: MediumShrimp
+  2: SmallShrimp
